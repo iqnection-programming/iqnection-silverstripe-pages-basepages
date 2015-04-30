@@ -1,0 +1,6 @@
+Page:
+  extensions:
+    - IQBase_Page
+Page_Controller:
+  extensions:
+    - IQBase_Page_Controller
