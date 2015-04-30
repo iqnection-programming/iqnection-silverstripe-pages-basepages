@@ -2,7 +2,7 @@
 	"name": "iqnection-pages/basepages",
 	"description": "Base group of SilverStripe 3 PageTypes",
 	"type": "silverstripe-module",
-	"keywords": ["iqnection"],
+	"keywords": ["iqnection","pages"],
 	"authors": [
 		{
 			"name": "IQnection",
