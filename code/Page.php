@@ -51,7 +51,7 @@
 		);
 			
 		public function onAfterInit() {
-			$dir = ViewableData::ThemeDir();
+			$dir = "themes/mysite";
 			Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");			
 			Requirements::set_combined_files_folder($dir.'/combined');
 			
@@ -85,7 +85,7 @@
 		{
 			$dirs = array();
 			$dirs[] = "iq-".strtolower($this->owner->ClassName);
-			$dirs[] = ViewableData::ThemeDir();			
+			$dirs[] = "themes/mysite";		
 			return $dirs;
 		}
 		
@@ -106,7 +106,7 @@
 		function ResponsiveCSS()
 		{
 			$CSSFiles = array();
-			$CSSFiles[] = ViewableData::ThemeDir()."/css/responsive.css";
+			$CSSFiles[] = "themes/mysite/css/responsive.css";
 			foreach($this->GetPossibleDirs() as $dir)
 			{
 				if(file_exists($_SERVER['DOCUMENT_ROOT']."/".$dir."/css/pages/".$this->owner->ClassName."_responsive.css"))
