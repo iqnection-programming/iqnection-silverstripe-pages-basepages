@@ -1,0 +1,40 @@
+/* Change these to fit inside your contact page content area */
+#map_wrap						{ margin:25px auto 0; width:90%; height:400px; padding:2px;
+								-webkit-box-shadow: 4px 4px 5px rgba(50, 50, 50, 0.15);
+								-moz-box-shadow:    4px 4px 5px rgba(50, 50, 50, 0.15);
+								box-shadow:         4px 4px 5px rgba(50, 50, 50, 0.15); }
+#map_canvas						{ width:100%; height:100%; }
+
+#directions_wrap				{ margin:25px auto 0; width:90%; }
+#directions_ajax				{ margin:20px 0; }
+#directions_head				{ padding:15px; background:#dedede; background:rgba(0,0,0,0.15); margin-bottom:20px; }
+#directions_head p				{ margin:0 0 5px 0; }
+#directions_list				{ margin:0; padding:0; width:100%; }
+.step							{ clear:both; width:100%; margin:0 0 10px 0; padding:0 0 10px 0; border-bottom:1px #e2e2e2 dotted; }
+.step:after						{ content:"."; display:block; height:0; clear:both; zoom:1; visibility:hidden; }
+.step_number					{ float:left; font-weight:bold; margin-right:5px; }
+.step_text						{ float:left; width:75%; }
+.step_distance					{ float:right; }
+
+#directions_links				{ list-style:none; margin:15px 0 0; padding:0; }
+#directions_links li			{ margin:8px 0 0; padding:0; }
+#directions_links li:first-child{ margin-top:0; }
+.icon_link						{ display:block; height:16px; line-height:16px; }
+.icon_link img					{ float:left; margin-right:5px; }
+
+
+/* IF YOU WANT TO USE THESE, ADD THE 'stacked' CLASS TO YOUR CONTENT CONTAINER, AND THEN CUT AND PASTE THE STACKED FORM CODE INTO THE NORMAL FORM */
+.stacked #form_page_left		{ float:none; width:100%; }
+.stacked #form_page_right		{ float:none; width:100%; }
+.stacked .centeredForm			{ width:60%; }
+.stacked .formField				{ margin-bottom:15px; }
+.stacked .formRight:after		{ content:"."; display:block; height:0; clear:both; zoom:1; visibility:hidden; }
+.stacked label					{ text-align:left !important; }
+.stacked label.error			{ font-size:12px; }
+.stacked_input.col2				{ width:49%; float:left; margin-left:2%; }
+.stacked_input.col2:first-child	{ margin-left:0; }
+.stacked_input.col3				{ width:32%; float:left; margin-left:2%; }
+.stacked_input.col3:first-child	{ margin-left:0; }
+.stacked_input .sub_label		{ font-style:italic; margin:0; }
+.stacked_section				{ padding-top:25px; margin-top:25px; border-top:1px #CCC solid; }
+.stacked_section:first-child	{ padding:0; margin:0; border:none; }
