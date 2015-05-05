@@ -84,6 +84,7 @@
 		function GetPossibleDirs()
 		{
 			$dirs = array();
+			$dirs[] = "iq-basepages";
 			$dirs[] = "iq-".strtolower($this->owner->ClassName);
 			$dirs[] = "themes/mysite";		
 			return $dirs;
