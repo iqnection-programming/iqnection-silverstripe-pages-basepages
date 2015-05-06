@@ -121,7 +121,8 @@
         }
 		
 		public function SubmitForm($data, $form) {
-            $submission = new $form->controller->dataRecord->submission_class();
+			$submission_class = $this->ClassName."Submission";
+            $submission = new $submission_class;
             $form->saveInto($submission);
             $submission->write();
 			

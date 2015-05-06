@@ -1,8 +1,6 @@
 <?
 	class ContactPage extends FormPage
 	{
-		public $submission_class = "ContactFormSubmission";
-		
 		private static $db = array(
 			"MapZoom" => "Int",
 			"MapType" => "Varchar(255)",
@@ -23,7 +21,7 @@
 		}	
 	}	
 	
-	class ContactFormSubmission extends DataObject 
+	class ContactPageSubmission extends DataObject 
 	{
 		
         private static $db = array(
