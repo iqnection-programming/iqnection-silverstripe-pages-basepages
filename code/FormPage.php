@@ -62,7 +62,8 @@
 				new GridFieldDeleteAction(),
 				new GridFieldExportButton()
 			);
-			$fields->addFieldToTab('Root.Content.FormSubmissions', new GridField('FormSubmissions','Form Submissions',DataObject::get($this->submission_class),$submits_config));
+			$submission_class = $this->ClassName."Submission";
+			$fields->addFieldToTab('Root.Content.FormSubmissions', new GridField('FormSubmissions','Form Submissions',DataObject::get($submission_class),$submits_config));
 			return $fields;
 		}			
 	}	
