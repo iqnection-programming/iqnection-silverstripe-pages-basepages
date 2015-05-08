@@ -13,7 +13,7 @@
 		public function getCMSFields()
 		{
 			$fields = parent::getCMSFields();
-			$fields->removeFieldFromTab("Root.Content", "Content");
+			$fields->removeFieldFromTab("Root", "Content");
 			return $fields;
 		}			
 	}

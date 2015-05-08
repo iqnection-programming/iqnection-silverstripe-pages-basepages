@@ -2,12 +2,13 @@
 	class FormRecipient extends DataObject
 	{
 		private static $db = array(
+			'SortOrder' => 'Int',
 			"Title" => "Varchar(255)",
 			"Email" => "Varchar(255)"
 		);
 		
 		private static $has_one = array(
-			"FormPage" => "FormPage"
+			"Page" => "Page"
 		);
 		
 		private static $summary_fields = array(
@@ -41,6 +42,7 @@
 			$fields = parent::getCMSFields();
 					
 			$recips_config = GridFieldConfig::create()->addComponents(
+				new GridFieldSortableRows('SortOrder'),
 				new GridFieldToolbarHeader(),
 				new GridFieldAddNewButton('toolbar-header-right'),
 				new GridFieldSortableHeader(),
@@ -91,8 +93,18 @@
 			);
 		}
 		
+		public function FormFields()
+		{
+			return array();
+		}
+		
+		public function FormConfig()
+		{
+			return array();
+		}
+		
 		public function RenderForm() {
-			if($form_fields = $this->form_fields)
+			if($form_fields = $this->FormFields())
 			{
 				$fields = new FieldList();
 				$validator = new RequiredFields();
@@ -105,6 +117,7 @@
 						$method_home = method_exists($utils,$data['Value']) ? $utils : (method_exists($this,$data['Value']) ? $this : false);
 						$data['Value'] = $method_home ? $method_home->$data['Value']() : $data['Value'];
 					}
+
 					$field = new $data['FieldType']($FieldName,($data['Label']?$data['Label']:null),($data['Value']?$data['Value']:null),($data['Default']?$data['Default']:null));
 					if($data['ExtraClass'])$field->addExtraClass($data['ExtraClass']);
 					$fields->push($field);	
@@ -127,7 +140,7 @@
             $form->saveInto($submission);
             $submission->write();
 			
-			$form_config = $this->form_config;
+			$form_config = $this->FormConfig();
 			
 			// send email to this address if specified
 			if($form_config['sendToAll']){
@@ -158,6 +171,33 @@
 			
             return $this->redirect('thanks');
         }
+		
+		public function RecipientFieldConfig()
+		{
+			$recips = $this->FindRecipients();
+			if (count($recips))
+			{
+				$form_config = $this->FormConfig();
+				if ((count($recips) == 1) || ($form_config['sendToAll']))
+				{
+					return array(
+						'FieldType' => 'HiddenField',
+						'Value' => key($recips)
+					);
+				}
+				else
+				{
+					return array(
+						'FieldType' => 'DropdownField',
+						'Value' => $recips
+					);
+				}
+			}
+			return array(
+				'FieldType' => 'HiddenField',
+				'Value' => ''
+			);
+		}
 		
 		public function FindRecipients()
 		{

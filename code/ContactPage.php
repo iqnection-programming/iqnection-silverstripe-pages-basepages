@@ -12,10 +12,10 @@
 		{
 			$fields = parent::getCMSFields();
 			
-			$fields->addFieldToTab("Root.Content.MapDetails", new TextField("MapZoom", "Map Zoom Level (lower number = farther away)"));
-			$fields->addFieldToTab("Root.Content.MapDetails", new DropdownField("MapType", "Map Display Type", array("ROADMAP"=>"Roadmap","SATELLITE"=>"Satellite","HYBRID"=>"Hybrid","TERRAIN"=>"Terrain"),"Roadmap"));
-			$fields->addFieldToTab("Root.Content.MapDetails", new TextField("MapAddress", "Address for Map"));
-			$fields->addFieldToTab("Root.Content.MapDetails", new CheckboxField("MapDirections", "Display Directions Widget?"));
+			$fields->addFieldToTab("Root.MapDetails", new TextField("MapZoom", "Map Zoom Level (lower number = farther away)"));
+			$fields->addFieldToTab("Root.MapDetails", new DropdownField("MapType", "Map Display Type", array("ROADMAP"=>"Roadmap","SATELLITE"=>"Satellite","HYBRID"=>"Hybrid","TERRAIN"=>"Terrain"),"Roadmap"));
+			$fields->addFieldToTab("Root.MapDetails", new TextField("MapAddress", "Address for Map"));
+			$fields->addFieldToTab("Root.MapDetails", new CheckboxField("MapDirections", "Display Directions Widget?"));
 
 			return $fields;
 		}	
@@ -52,56 +52,55 @@
 	
 	class ContactPage_Controller extends FormPage_Controller
 	{	
-		
-		public $form_fields = array(
-			"FirstName" => array(
-				"FieldType" => "TextField",
-				"Required" => true	
-			),
-			"LastName" => array(
-				"FieldType" => "TextField",
-				"Required" => true	
-			),
-			"Address" => array(
-				"FieldType" => "TextField"
-			),
-			"Address2" => array(
-				"FieldType" => "TextField",
-				"Label" => "Address (line 2)"
-			),
-			"City" => array(
-				"FieldType" => "TextField"
-			),
-			"State" => array(
-				"FieldType" => "DropdownField",
-				"Value" => "GetStates",
-				"Default" => "PA"
-			),
-			"ZipCode" => array(
-				"FieldType" => "TextField",
-				"Label" => "Zip Code"	
-			),
-			"Phone" => array(
-				"FieldType" => "TextField"
-			),
-			"Email" => array(
-				"FieldType" => "EmailField",
-				"Required" => true	
-			),
-			"Recipient" => array(
-				"FieldType" => "DropdownField",
-				"Value" => "FindRecipients",
-			),
-			"Comments" => array(
-				"FieldType" => "TextAreaField"
-			),
-		);	
-		
 		private static $allowed_actions = array(
 			"directions",
 			"printview"			
-		);			
+		);	
 		
+		public function FormFields()
+		{
+			return array(
+				"FirstName" => array(
+					"FieldType" => "TextField",
+					"Required" => true	
+				),
+				"LastName" => array(
+					"FieldType" => "TextField",
+					"Required" => true	
+				),
+				"Address" => array(
+					"FieldType" => "TextField"
+				),
+				"Address2" => array(
+					"FieldType" => "TextField",
+					"Label" => "Address (line 2)"
+				),
+				"City" => array(
+					"FieldType" => "TextField"
+				),
+				"State" => array(
+					"FieldType" => "DropdownField",
+					"Value" => "GetStates",
+					"Default" => "PA"
+				),
+				"ZipCode" => array(
+					"FieldType" => "TextField",
+					"Label" => "Zip Code"	
+				),
+				"Phone" => array(
+					"FieldType" => "TextField"
+				),
+				"Email" => array(
+					"FieldType" => "EmailField",
+					"Required" => true	
+				),
+				"Recipient" => $this->RecipientFieldConfig(),
+				"Comments" => array(
+					"FieldType" => "TextAreaField"
+				),
+			);	
+		}
+				
 		public function init()
 		{
 			parent::init();
