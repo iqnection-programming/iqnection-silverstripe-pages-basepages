@@ -88,9 +88,37 @@
 			return array_merge(
 				parent::PageCSS(),
 				array(
+					$dir."/javascript/jquery.ui.themes.css",
 					$dir."/css/form.css"
 				)
 			);
+		}
+		
+		function PageJS()
+		{
+			$dir = ViewableData::ThemeDir();
+			return array_merge(
+				parent::PageJS(),
+				array(
+					$dir."/javascript/jquery.validate.nospam.js",
+					$dir."/javascript/jquery-ui.js",
+					$dir."/javascript/additional-methods.js"
+				)
+			);
+		}
+		
+		function CustomJS()
+		{
+			$JS = parent::CustomJS();
+			$FormConfig = $this->FormConfig();
+			$JS .= "
+$(document).ready(function(){
+	$(\"#Form_RenderForm\").validate({
+		".(($FormConfig['UseNoSpam']) ? "useNospam: true," : null)."
+	});
+});
+			";
+			return $JS;
 		}
 		
 		public function FormFields()

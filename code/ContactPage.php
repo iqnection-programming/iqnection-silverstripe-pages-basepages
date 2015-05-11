@@ -100,6 +100,13 @@
 				),
 			);	
 		}
+		
+		function FormConfig()
+		{
+			return array(
+				'UseNoSpam' => true
+			);
+		}
 				
 		public function init()
 		{

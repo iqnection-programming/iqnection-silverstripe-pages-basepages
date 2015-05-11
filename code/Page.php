@@ -67,16 +67,14 @@
 			
 			$BaseJS = array(
 				$dir."/javascript/jquery-1.9.1.min.js",
-				$dir."/javascript/jquery.easing.1.3.js",
-				$dir."/javascript/jquery.lettering.js",
 				$dir."/javascript/scripts.js",
 				$dir."/javascript/dropdowns.js",
 				$dir."/javascript/responsive.js"
 			);
 			Requirements::combine_files('Base.js', $BaseJS);	
-			
-			if($this->owner->PageCSS())Requirements::combine_files($this->owner->ClassName.'.css', $this->owner->PageCSS());
-			if($this->owner->PageJS())Requirements::combine_files($this->owner->ClassName.'.js', $this->owner->PageJS());
+
+			if($this->owner->ParsedPageCSS())Requirements::combine_files($this->owner->ClassName.'.css', $this->owner->ParsedPageCSS());
+			if($this->owner->ParsedPageJS())Requirements::combine_files($this->owner->ClassName.'.js', $this->owner->ParsedPageJS());
 			if($this->owner->CustomJS())Requirements::customScript($this->owner->CustomJS()); 
 			if($this->owner->ResponsiveCSS())Requirements::combine_files('Responsive.css', $this->owner->ResponsiveCSS());
 		}
@@ -88,6 +86,32 @@
 			$dirs[] = "iq-".strtolower($this->owner->ClassName);
 			$dirs[] = "themes/mysite";		
 			return $dirs;
+		}
+		
+		function ParsedPageCSS()
+		{
+			$CssFiles = array();
+			if ($files = $this->owner->PageCSS())
+			{
+				foreach($files as $file)
+				{
+					$CssFiles[$file] = $file;
+				}
+			}
+			return $CssFiles;
+		}
+		
+		function ParsedPageJS()
+		{
+			$JsFiles = array();
+			if ($files = $this->owner->PageJS())
+			{
+				foreach($files as $file)
+				{
+					$JsFiles[$file] = $file;
+				}
+			}
+			return $JsFiles;
 		}
 		
 		function PageCSS()
