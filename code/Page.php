@@ -9,7 +9,8 @@
 			"CenterColumn" => "HTMLText",
 			"RightColumn" => "HTMLText",
 			'AdditionalCode' => 'Text',
-			"Target" => "enum('_blank,_new,_parent,_self,_top','_self')"
+			"Target" => "enum('_blank,_new,_parent,_self,_top','_self')",
+			'URLRedirects' => 'Text'
 		);	
 		
 		private static $defaults = array(
@@ -20,7 +21,9 @@
 		{
 			if( permission::check('ADMIN') ){
 				$fields->addFieldToTab("Root.Content.Main", new CheckboxField("NoFollow", "Set nav link to no-follow?"),"MetaDescription");
-				$fields->addFieldToTab('Root.Content.AdditionalCode', new TextareaField('AdditionalCode','Additional HTML/JS/CSS Code',50) );
+				$fields->addFieldToTab('Root.Content.AdditionalCode', $codeField = new TextareaField('AdditionalCode','Additional HTML/JS/CSS Code',50) );
+				$codeField->setRows(45);
+				$fields->addFieldToTab('Root.Main.Metadata', new TextareaField('URLRedirects','301 Redirects') );
 			}
 					
 			if($this->owner->ClassName == "Page"){

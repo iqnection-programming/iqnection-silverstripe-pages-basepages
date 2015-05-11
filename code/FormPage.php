@@ -1,4 +1,12 @@
 <?
+
+	class FormPageSubmission extends DataObject
+	{
+		private static $has_one = array(
+			'FormPage' => 'FormPage'
+		);
+	}
+	
 	class FormRecipient extends DataObject
 	{
 		private static $db = array(
@@ -65,7 +73,7 @@
 				new GridFieldExportButton()
 			);
 			$submission_class = $this->ClassName."Submission";
-			$fields->addFieldToTab('Root.Content.FormSubmissions', new GridField('FormSubmissions','Form Submissions',DataObject::get($submission_class),$submits_config));
+			$fields->addFieldToTab('Root.Content.FormSubmissions', new GridField($submission_class,'Form Submissions',DataObject::get($submission_class),$submits_config));
 			return $fields;
 		}			
 	}	
@@ -131,25 +139,54 @@ $(document).ready(function(){
 			return array();
 		}
 		
-		public function RenderForm() {
+		public function RenderForm() 
+		{
 			if($form_fields = $this->FormFields())
 			{
 				$fields = new FieldList();
 				$validator = new RequiredFields();
-				
+				$utils = new FormUtilities();
+				$fieldGroups = array();
 				foreach($form_fields as $FieldName => $data)
 				{
-					if($data['Value'])
+					if ( ($data['Value']) && (is_string($data['Value'])) )
 					{
-						$utils = new FormUtilities();
-						$method_home = method_exists($utils,$data['Value']) ? $utils : (method_exists($this,$data['Value']) ? $this : false);
+						$method_home = method_exists($this,$data['Value']) ? $this : (method_exists($utils,$data['Value']) ? $utils : false);
 						$data['Value'] = $method_home ? $method_home->$data['Value']() : $data['Value'];
 					}
 
-					$field = new $data['FieldType']($FieldName,($data['Label']?$data['Label']:null),($data['Value']?$data['Value']:null),($data['Default']?$data['Default']:null));
-					if($data['ExtraClass'])$field->addExtraClass($data['ExtraClass']);
-					$fields->push($field);	
-					if($data['Required'])$validator->addRequiredField($FieldName);
+					$Label = ($data['Group']) ? '' : ($data['Label']?$data['Label']:null);
+					$field = new $data['FieldType']($FieldName,$Label,($data['Value']?$data['Value']:null),($data['Default']?$data['Default']:null));
+					if($data['ExtraClass'])$field->addExtraClass($data['ExtraClass']);	
+					if($data['Required'])
+					{
+						$validator->addRequiredField($FieldName);
+						$field->addExtraClass('required');
+					}
+					if($data['Group'])
+					{
+						if (!isset(${$data['Group']}))
+						{
+							${$data['Group']} = new FieldGroup($data['Group']);
+							$fields->push(${$data['Group']});
+							${$data['Group']}->FieldCount = 0;
+							$fieldGroups[] = ${$data['Group']};
+						}
+						$field->setRightTitle((($data['Label'])?$data['Label']:FormField::name_to_label($FieldName)));
+
+						${$data['Group']}->push($field);
+						${$data['Group']}->FieldCount++;
+					}
+					else
+					{
+						$fields->push($field);
+					}
+				}
+				
+				// update the class on the field groups to properly display the grouped fields horizontally
+				foreach($fieldGroups as $fieldGroup)
+				{
+					$fieldGroup->addExtraClass('stacked col'.$fieldGroup->FieldCount);
 				}
 
 				$actions = new FieldList(
@@ -164,15 +201,6 @@ $(document).ready(function(){
 		
 		public function SubmitForm($data, $form) 
 		{
-			$form_config = $this->FormConfig();
-			// magical spam protection
-			if ( (!FormUtilities::validateAjaxCode()) && ($form_config['useNospam']) )
-			{
-				Session::set("FormInfo.Form_RenderForm.data", $data);
-				Session::set("FormError", "Error, please enable javascript to use this form.");
-				return Director::redirect($this->Link());	
-			}
-			
 			$submission_class = $this->ClassName."Submission";
             $submission = new $submission_class;
             $form->saveInto($submission);
@@ -184,26 +212,21 @@ $(document).ready(function(){
 			if($form_config['sendToAll']){
 				$EmailFormTo = $this->FormRecipients()->toArray();	
 			}else{
-				$row = DataObject::get_one("FormRecipient","Title = '".$data['Recipient']."' AND FormPageID = '".$this->ID."'");
-				$EmailFormTo = $row->Email;
+				$EmailFormTo = $this->FormRecipients()->filter(array("Title" => $data['Recipient']));
 			}
 			
+			$utils = new FormUtilities();
 			// Email to site Admin
 			if( $EmailFormTo )
 			{
-				$utils = new FormUtilities();
-				if($form_config['sendToAll']){
-					foreach($EmailFormTo as $email){
-						$utils->SendSSEmail($this,$email->Email,$data);
-					}
-				}else{
-					$utils->SendSSEmail($this,$EmailFormTo,$data);				
+				foreach($EmailFormTo as $email)
+				{
+					$utils->SendSSEmail($this,$email->Email,$data);
 				}
 			}
 			
 			if(($as = $this->AutoResponderSubject) && $ab = ($this->AutoResponder))
 			{
-				$utils = new FormUtilities();
 				$utils->SendAutoResponder($as,$ab,$data['Email']);				
 			}
 			
