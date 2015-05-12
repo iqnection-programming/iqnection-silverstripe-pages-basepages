@@ -5,6 +5,10 @@
 		private static $has_one = array(
 			'FormPage' => 'FormPage'
 		);
+		
+		public function canDelete($member = null) { return true; }
+		public function canEdit($member = null)   { return true; }
+		public function canView($member = null)   { return true; }
 	}
 	
 	class FormRecipient extends DataObject
@@ -31,6 +35,11 @@
 				new TextField('Email', 'Email Address')
 			);
 		}
+		
+		public function canCreate($member = null) { return true; }
+		public function canDelete($member = null) { return true; }
+		public function canEdit($member = null)   { return true; }
+		public function canView($member = null)   { return true; }
 	}
 	
 	class FormPage extends Page

@@ -48,6 +48,10 @@
 		
 		private static $default_sort = "Created DESC";
 		
+		public function canDelete($member = null) { return true; }
+		public function canEdit($member = null)   { return true; }
+		public function canView($member = null)   { return true; }
+		
     }
 	
 	class ContactPage_Controller extends FormPage_Controller
