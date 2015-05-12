@@ -3,16 +3,16 @@
 	class IQBase_Page extends Extension{				
 		
 		private static $db = array(
-			"NoFollow" => "Boolean",
 			"SidebarContent" => "HTMLText",
 			"LeftColumn" => "HTMLText",
 			"CenterColumn" => "HTMLText",
 			"RightColumn" => "HTMLText",
 			'AdditionalCode' => 'Text',
 			"Target" => "enum('_blank,_new,_parent,_self,_top','_self')",
-			'URLRedirects' => 'Text',
-			'MetaKeywords' => 'Text'
 		);	
+		
+		private static $has_one = array(
+		);
 		
 		private static $defaults = array(
 			"Target" => "_self"
@@ -21,19 +21,15 @@
 		public function updateCMSFields(FieldList $fields)
 		{
 			if( permission::check('ADMIN') ){
-				$fields->addFieldToTab("Root.Main", new CheckboxField("NoFollow", "Set nav link to no-follow?"),"MetaDescription");
-				$fields->addFieldToTab('Root.Main.Metadata', $keywordsField = new TextareaField('MetaKeywords','Meta Keywords'),"ExtraMeta" );
-				$keywordsField->setRows(1);
-				$fields->addFieldToTab('Root.Main.Metadata', new TextareaField('URLRedirects','301 Redirects') );
 				$fields->addFieldToTab('Root.AdditionalCode', $codeField = new TextareaField('AdditionalCode','Additional HTML/JS/CSS Code',50) );
 				$codeField->setRows(45);
 			}
 					
 			if($this->owner->ClassName == "Page"){
-				$fields->addFieldToTab("Root.Content.Columns", new HTMLEditorField("LeftColumn", "Left Column Content"));  
-				$fields->addFieldToTab("Root.Content.Columns", new HTMLEditorField("CenterColumn", "Center Column Content"));  
-				$fields->addFieldToTab("Root.Content.Columns", new HTMLEditorField("RightColumn", "Right Column Content")); 
-				$fields->addFieldToTab("Root.Content.Sidebar", new HTMLEditorField("SidebarContent", "Sidebar Content"));
+				$fields->addFieldToTab("Root.Columns", new HTMLEditorField("LeftColumn", "Left Column Content"));  
+				$fields->addFieldToTab("Root.Columns", new HTMLEditorField("CenterColumn", "Center Column Content"));  
+				$fields->addFieldToTab("Root.Columns", new HTMLEditorField("RightColumn", "Right Column Content")); 
+				$fields->addFieldToTab("Root.Sidebar", new HTMLEditorField("SidebarContent", "Sidebar Content"));
 			}
 				
 			return $fields;
@@ -48,6 +44,7 @@
 			
 			return $fields;
 		}
+		
 	}
 	
 	class IQBase_Page_Controller extends Extension {
@@ -57,19 +54,7 @@
 		);
 			
 		public function onAfterInit() 
-		{
-			/*
-			 * Custom handler to redirect invalid url's to the home page, so we never have a 404 error
-			 * will first check if there is already a redirect provided for a specific page
-			 */
-			if ($this->owner->ErrorCode == 404)
-			{
-				$RedirectPage = $this->FindRedirectPage();
-				$response = new SS_HTTPResponse_Exception();
-				$response->getResponse()->redirect($RedirectPage?$RedirectPage->Link():"/", 301);
-				throw $response;
-			}
-			
+		{			
 			$dir = "themes/mysite";
 			Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");			
 			Requirements::set_combined_files_folder($dir.'/combined');
@@ -96,28 +81,9 @@
 			if($this->owner->ParsedPageJS())Requirements::combine_files($this->owner->ClassName.'.js', $this->owner->ParsedPageJS());
 			if($this->owner->CustomJS())Requirements::customScript($this->owner->CustomJS()); 
 			if($this->owner->ResponsiveCSS())Requirements::combine_files('Responsive.css', $this->owner->ResponsiveCSS());
-		}
 		
-		function FindRedirectPage()
-		{
-			$URL_Full = $_SERVER['REQUEST_URI'];
-			$URL_Parts = explode("?",$URL_Full);
-			$URL_Path = $URL_Parts[0];
-			// see fi there is a page with this URL as the redirect
-			$Filters = "URLRedirects LIKE '%".$URL_Full."%' OR URLRedirects LIKE '%".$URL_Path."%'";
-			$Results = DataList::create('Page')->where($Filters);
-			if ($Results->Count())
-			{
-				if ($Results->Count() == 1) return $Results->First();
-				foreach($Results as $Page)
-				{
-					// since our query used a wild card, check if we have a direct match to any page, return the first found
-					$RedirectURLs = explode("\n",$Page->URLRedirects);
-					if (in_array($URL_Full,$RedirectURLs) || in_array($URL_Path,$RedirectURLs)) return $Page;
-				}
-			}
 		}
-		
+				
 		function GetPossibleDirs()
 		{
 			$dirs = array();
@@ -210,10 +176,6 @@
 		{
 			$arr_path = explode(".", $_SERVER['HTTP_HOST']);	
 			return $arr_path[1].".".$arr_path[2];
-		}
-		
-		public function NavNoFollow(){
-			return $this->owner->NoFollow ? "rel='nofollow'" : "";	
 		}
 		
 		public function ColAmount(){
