@@ -210,6 +210,15 @@ $(document).ready(function(){
 		
 		public function SubmitForm($data, $form) 
 		{
+			$form_config = $this->FormConfig();
+			// magical spam protection
+			if ( (!FormUtilities::validateAjaxCode()) && ($form_config['useNospam']) )
+			{
+				Session::set("FormInfo.Form_RenderForm.data", $data);
+				Session::set("FormError", "Error, please enable javascript to use this form.");
+				return Director::redirect($this->Link());	
+			}
+			
 			$submission_class = $this->ClassName."Submission";
             $submission = new $submission_class;
             $form->saveInto($submission);
