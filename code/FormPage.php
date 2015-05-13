@@ -239,6 +239,12 @@ $(document).ready(function(){
 				$utils->SendAutoResponder($as,$ab,$data['Email']);				
 			}
 			
+			if($form_config['PageAfterSubmit'])
+			{
+				$page = $this->ClassName."_".$form_config['PageAfterSubmit'];
+				return $this->customise($data)->renderWith(array($page,'Page'));
+			}
+			
             return $this->redirect('thanks');
         }
 		
