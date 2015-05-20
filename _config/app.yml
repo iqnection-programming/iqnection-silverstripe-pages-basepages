@@ -4,3 +4,6 @@ Page:
 Page_Controller:
   extensions:
     - IQBase_Page_Controller
+LeftAndMain:
+  extra_requirements_css:
+    - iq-basepages/css/cms/leftandmainadditions.css
