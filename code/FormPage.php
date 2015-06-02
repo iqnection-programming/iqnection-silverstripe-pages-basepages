@@ -198,8 +198,14 @@ $(document).ready(function(){
 					$fieldGroup->addExtraClass('stacked col'.$fieldGroup->FieldCount);
 				}
 
+				$submitText = "Submit";
+				if($config = $this->FormConfig())
+				{
+					$submitText = $config['submitText'] ? $config['submitText'] : $submitText;
+				}
+
 				$actions = new FieldList(
-					new FormAction('SubmitForm', 'Submit')
+					new FormAction('SubmitForm', $submitText)
 				);
 	
 				return new Form($this, 'RenderForm', $fields, $actions, $validator);
