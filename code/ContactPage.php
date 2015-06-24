@@ -48,6 +48,7 @@
 		
 		private static $default_sort = "Created DESC";
 		
+		public function canCreate($member = null) { return false; }
 		public function canDelete($member = null) { return true; }
 		public function canEdit($member = null)   { return true; }
 		public function canView($member = null)   { return true; }
