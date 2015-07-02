@@ -131,7 +131,7 @@
 			$JS .= "
 $(document).ready(function(){
 	$(\"#Form_RenderForm\").validate({
-		".(($FormConfig['UseNoSpam']) ? "useNospam: true," : null)."
+		".(($FormConfig['useNospam']) ? "useNospam: true," : null)."
 	});
 });
 			";
@@ -153,6 +153,11 @@ $(document).ready(function(){
 			if($form_fields = $this->FormFields())
 			{
 				$fields = new FieldList();
+				if ($form_error = Session::get('FormError'))
+				{
+					Session::set('FormError',false);
+					$fields->push( new LiteralField('form_error','<p class="form-error">'.$form_error.'</p>'));
+				}
 				$validator = new RequiredFields();
 				$utils = new FormUtilities();
 				$fieldGroups = array();
@@ -208,7 +213,13 @@ $(document).ready(function(){
 					new FormAction('SubmitForm', $submitText)
 				);
 	
-				return new Form($this, 'RenderForm', $fields, $actions, $validator);
+				$form = new Form($this, 'RenderForm', $fields, $actions, $validator);
+				if ($defaults = Session::get("FormInfo.Form_RenderForm.data"))
+				{
+					$form->loadDataFrom($defaults);
+					Session::set("FormInfo.Form_RenderForm.data",false);
+				}
+				return $form;
 			}
 			
 			return false;
@@ -222,7 +233,7 @@ $(document).ready(function(){
 			{
 				Session::set("FormInfo.Form_RenderForm.data", $data);
 				Session::set("FormError", "Error, please enable javascript to use this form.");
-				return Director::redirect($this->Link());	
+				return $this->redirectBack();	
 			}
 			
 			$submission_class = $this->ClassName."Submission";
@@ -245,7 +256,7 @@ $(document).ready(function(){
 			{
 				foreach($EmailFormTo as $email)
 				{
-					$utils->SendSSEmail($this,$email->Email,$data);
+					$utils->SendSSEmail($this,$email->Email,$data,$submission);
 				}
 			}
 			

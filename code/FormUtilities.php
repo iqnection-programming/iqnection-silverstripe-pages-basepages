@@ -1,7 +1,7 @@
 <?
 	class FormUtilities extends DataObject
 	{
-		public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false){
+		public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null){
 			$arr_path = explode(".", $_SERVER['HTTP_HOST']);
 						
 			$email = new Email(
@@ -11,7 +11,7 @@
 			);
 			
 			$email_body = "<html><body>This is a form submission created by this page on your website:<br /><br />".$_SERVER['HTTP_REFERER']."<br /><br />";
-			$email_body .= self::FormDataToArray($post_vars);
+			$email_body .= self::FormDataToArray($post_vars,null,null,$submission);
 			$email_body .= "</body></html>";
 
 			$email->setBody($email_body);
@@ -37,7 +37,7 @@
 			$email->send();
 		}
 		
-		public function FormDataToArray($data, $level=0, $hide_empty=0)
+		public function FormDataToArray($data, $level=0, $hide_empty=0,$submission)
 		{
 			$ignore_keys = array(
 				"MAX_FILE_SIZE",
@@ -48,16 +48,28 @@
 			);
 			
 			$html = "";
-			foreach ($data as $k => $v)
+			foreach ($data as $fieldName => $v)
 			{
-				if(!($hide_empty && !$v) && !(in_array($k,$ignore_keys))){
-					$name = trim(preg_replace("/([A-Z]{1}[a-z]{1})/", " \\1", $k));
+				if(!($hide_empty && !$v) && !(in_array($fieldName,$ignore_keys)))
+				{
+					$name = trim(preg_replace("/([A-Z]{1}[a-z]{1})/", " \\1", $fieldName));
 					$html .= "<br />".str_repeat("&nbsp;", ($level * 4)).'<span style="font-weight:bold;">'.htmlspecialchars($name).': </span>';
 					
-					if (is_array($v))
-						$html .= self::FormDataToArray($v, $level+1);
+					//if (is_array($v))
+					//	$html .= self::FormDataToArray($v, $level+1,$hide_empty,$submission);
+					//else
+					if (!$fieldObject = $submission->relObject($fieldName))
+					{
+						$fieldObject = $submission->getComponent($fieldName);
+					}
+					if ($fieldObject instanceof File)
+					{
+						$html .= '<a href="'.$fieldObject->getAbsoluteURL().'">'.$fieldObject->getFilename().'</a>';
+					}
 					else
-						$html .= htmlspecialchars($v);
+					{
+						$html .= $fieldObject;
+					}
 				}
 			}
 			return $html;
