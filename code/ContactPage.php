@@ -64,7 +64,7 @@
 		
 		public function FormFields()
 		{
-			return array(
+			$fields = array(
 				"FirstName" => array(
 					"FieldType" => "TextField",
 					"Required" => true	
@@ -104,13 +104,18 @@
 					"FieldType" => "TextAreaField"
 				),
 			);	
+			
+			$this->extend('updateFormFields',$fields);
+			return $fields;
 		}
 		
 		function FormConfig()
 		{
-			return array(
+			$config = array(
 				'UseNoSpam' => true
 			);
+			$this->extend('updateFormConfig',$config);
+			return $config;
 		}
 				
 		public function init()
@@ -130,7 +135,7 @@
 					var MapDirections = ".$this->MapDirections.";
 					var MapLocationTitle = '';
 					var PageLink = '".$this->Link()."';";
-			
+			$this->extend('updateCustomJS',$js);
 			return $js;
 		}
 		

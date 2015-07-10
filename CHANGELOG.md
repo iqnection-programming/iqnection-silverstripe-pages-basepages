@@ -2,6 +2,9 @@
 # Change Log
 
 
+## [1.0.3]
+- Contact page is now has extendable methods FormFields [updateFormField(&$fields)] & FormConfig [use: updateFormConfig(&$config)]
+
 ## [1.0.2]
 - fixed problems with displaying form errors and saving form data on reload
 - support for file upload fields in submission email
