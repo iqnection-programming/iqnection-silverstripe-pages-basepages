@@ -6,6 +6,22 @@
 			'FormPage' => 'FormPage'
 		);
 		
+		public function getCMSFields()
+		{
+			$fields = parent::getCMSFields();
+			
+			// see if we have any File or Image upload fields
+			foreach($this->has_one() as $relName => $relObj)
+			{
+				if ($relObj == 'File' || $relObj == 'Image')
+				{
+					$fields->replaceField( $relName, new LiteralField($relName,'<div class="field"><label class="left">'.FormField::name_to_label($relName).'</label><div class="middleColumn"><span class="readonly text"><a href="'.$this->{$relName}()->getAbsoluteURL().'" target="_blank">'.$this->{$relName}()->getFilename().'</a></span></div></div>'));	
+				}
+			}
+			$fields->removeByName('FormPageID');
+			return $fields;
+		}
+		
 		public function canDelete($member = null) { return true; }
 		public function canEdit($member = null)   { return true; }
 		public function canView($member = null)   { return true; }

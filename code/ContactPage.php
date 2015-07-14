@@ -21,7 +21,7 @@
 		}	
 	}	
 	
-	class ContactPageSubmission extends DataObject 
+	class ContactPageSubmission extends FormPageSubmission 
 	{
 		
         private static $db = array(

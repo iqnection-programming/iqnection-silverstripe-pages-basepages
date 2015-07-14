@@ -2,6 +2,10 @@
 # Change Log
 
 
+## [1.0.4]
+- Further support for File Fields in Form Pages
+- Updated ContactFormSubmission class to extend FormPageSubmission
+
 ## [1.0.3]
 - Contact page is now has extendable methods FormFields [updateFormField(&$fields)] & FormConfig [use: updateFormConfig(&$config)]
 
