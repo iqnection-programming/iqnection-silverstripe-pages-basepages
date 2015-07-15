@@ -3,3 +3,4 @@
 #wp-login h1								{ width:274px; height:63px; text-indent:-99999px; overflow:hidden; display:block; background:url(/iq-basepages/images/wordpress-logo.png) no-repeat center top; margin:0 auto 30px; }
 #wp-login a									{ width:63px; height:31px; text-indent:-99999px; overflow:hidden; display:block; background:url(/iq-basepages/images/wordpress-login.png) no-repeat center top; margin:0 auto; }
 
+.field.optionset ul.vertical li 			{ display:block; float:none; }

@@ -2,6 +2,10 @@
 # Change Log
 
 
+## [1.0.5]
+- Added CSS class to verticall stack option set fields. Use $field->addExtraClass('vertical');
+- Added license
+
 ## [1.0.4]
 - Further support for File Fields in Form Pages
 - Updated ContactFormSubmission class to extend FormPageSubmission
