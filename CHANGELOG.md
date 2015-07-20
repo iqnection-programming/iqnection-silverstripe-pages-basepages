@@ -2,6 +2,9 @@
 # Change Log
 
 
+## [1.0.6]
+- Made page CSS, JS, CustomJS & ResponsiveCSS functions extendable
+
 ## [1.0.5]
 - Added CSS class to verticall stack option set fields. Use $field->addExtraClass('vertical');
 - Added license

@@ -129,7 +129,7 @@
 					$CSSFiles[] = $dir."/css/pages/".$this->owner->ClassName.".css";
 				}
 			}
-	
+			$this->owner->extend('updatePageCSS',$CSSFiles);
 			return $CSSFiles;
 		}
 		
@@ -144,7 +144,7 @@
 					$CSSFiles[] = $dir."/css/pages/".$this->owner->ClassName."_responsive.css";
 				}
 			}
-	
+			$this->owner->extend('updateResponsiveCSS',$CSSFiles);
 			return $CSSFiles;
 		}
 		
@@ -158,13 +158,15 @@
 					$JSFiles[] = $dir."/javascript/pages/".$this->owner->ClassName.".js";
 				}
 			}
-	
+			$this->owner->extend('updatePageJS',$JSFiles);
 			return $JSFiles;
 		}
 		
 		function CustomJS()
 		{
-			return null;
+			$js = null;
+			$this->owner->extend('updateCustomJS',$js);
+			return $js;
 		}
 		
 		public function CopyrightYear()
