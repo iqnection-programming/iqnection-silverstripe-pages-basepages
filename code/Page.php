@@ -7,7 +7,7 @@
 			"LeftColumn" => "HTMLText",
 			"CenterColumn" => "HTMLText",
 			"RightColumn" => "HTMLText",
-			'AdditionalCode' => 'Text',
+			'AdditionalCode' => 'HTMLText',
 			"Target" => "enum('_blank,_new,_parent,_self,_top','_self')",
 		);	
 		
@@ -193,4 +193,8 @@
 			return $this->owner->Customise(array());
 		}
 		
+		public function TemplateAdditionalCode()
+		{
+			return $this->owner->AdditionalCode;
+		}
 	}

@@ -2,6 +2,9 @@
 # Change Log
 
 
+## [1.0.7]
+- Corrected Additional Code so actual code is inserted into template, and not HTML safe code
+
 ## [1.0.6]
 - Made page CSS, JS, CustomJS & ResponsiveCSS functions extendable
 
