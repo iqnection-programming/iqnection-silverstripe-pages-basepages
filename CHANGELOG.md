@@ -2,6 +2,10 @@
 # Change Log
 
 
+## [1.0.7.1]
+- Added CSS so pages not in menu show differently in CMS site tree (lighter blue)
+
+
 ## [1.0.7]
 - Corrected Additional Code so actual code is inserted into template, and not HTML safe code
 
