@@ -1,6 +1,19 @@
 <?
 	class FormUtilities extends DataObject
 	{
+		public static function RequiredFields(&$fields,$requiredFields)
+		{
+			foreach($requiredFields as $requiredField)
+			{
+				if ($field = $fields->dataFieldByName($requiredField))
+				{
+					$field->addExtraClass('required');
+					$fields->replaceField($requiredField, $field);
+				}
+			}
+			return new RequiredFields($requiredFields);
+		}
+		
 		public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null){
 			$arr_path = explode(".", $_SERVER['HTTP_HOST']);
 						

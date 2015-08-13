@@ -2,9 +2,14 @@
 # Change Log
 
 
+
+## [1.0.7.2]
+- Updated/Corrected results page
+- Added helper function to Form Utilities for generating RequiredFields. This method returns the RequiredFields object needed as the validator, but it also adds the class "required" to each of the required fields, for jQuery validate
+- Updated default form field name to friendly name
+
 ## [1.0.7.1]
 - Added CSS so pages not in menu show differently in CMS site tree (lighter blue)
-
 
 ## [1.0.7]
 - Corrected Additional Code so actual code is inserted into template, and not HTML safe code

@@ -185,7 +185,7 @@ $(document).ready(function(){
 						$data['Value'] = $method_home ? $method_home->$data['Value']() : $data['Value'];
 					}
 
-					$Label = ($data['Group']) ? '' : ($data['Label']?$data['Label']:null);
+					$Label = ($data['Group']) ? '' : ($data['Label']?$data['Label']:FormField::name_to_label($FieldName));
 					$field = new $data['FieldType']($FieldName,$Label,($data['Value']?$data['Value']:null),($data['Default']?$data['Default']:null));
 					if($data['ExtraClass'])$field->addExtraClass($data['ExtraClass']);	
 					if($data['Required'])
@@ -307,7 +307,8 @@ $(document).ready(function(){
 				{
 					return array(
 						'FieldType' => 'DropdownField',
-						'Value' => $recips
+						'Value' => $recips,
+						'Label' => 'How May We Direct Your Inquiry'
 					);
 				}
 			}
