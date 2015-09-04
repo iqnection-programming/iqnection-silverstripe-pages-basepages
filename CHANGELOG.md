@@ -3,6 +3,9 @@
 
 
 
+## [1.0.8]
+- Added validation to FormRecipients in CMS
+
 ## [1.0.7.2]
 - Updated/Corrected results page
 - Added helper function to Form Utilities for generating RequiredFields. This method returns the RequiredFields object needed as the validator, but it also adds the class "required" to each of the required fields, for jQuery validate

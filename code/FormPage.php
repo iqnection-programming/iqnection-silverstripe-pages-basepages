@@ -56,6 +56,20 @@
 		public function canDelete($member = null) { return true; }
 		public function canEdit($member = null)   { return true; }
 		public function canView($member = null)   { return true; }
+		
+		function validate()
+		{
+			$result = parent::validate();
+			if (empty($this->Email))
+			{
+				$result->error('Please provide an Email address');
+			}
+			if (empty($this->Title))
+			{
+				$result->error('Please provide a Title');
+			}
+			return $result;
+		}
 	}
 	
 	class FormPage extends Page
