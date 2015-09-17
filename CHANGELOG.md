@@ -2,6 +2,8 @@
 # Change Log
 
 
+## [1.0.9]
+- Changed TemplateCode field to CodeEditorField
 
 ## [1.0.8]
 - Added validation to FormRecipients in CMS

@@ -1,6 +1,7 @@
 <?php
 	
-	class IQBase_Page extends Extension{				
+	class IQBase_Page extends Extension
+	{				
 		
 		private static $db = array(
 			"SidebarContent" => "HTMLText",
@@ -20,12 +21,16 @@
 		
 		public function updateCMSFields(FieldList $fields)
 		{
-			if( permission::check('ADMIN') ){
-				$fields->addFieldToTab('Root.AdditionalCode', $codeField = new TextareaField('AdditionalCode','Additional HTML/JS/CSS Code',50) );
+			if( permission::check('ADMIN') )
+			{
+				$fields->addFieldToTab('Root.AdditionalCode', $codeField = new CodeEditorField('AdditionalCode','Additional HTML/JS/CSS Code',50) );
+				$codeField->addExtraClass('stacked');
 				$codeField->setRows(45);
+				$codeField->setMode('html');
 			}
 					
-			if($this->owner->ClassName == "Page"){
+			if($this->owner->ClassName == "Page")
+			{
 				$fields->addFieldToTab("Root.Columns", new HTMLEditorField("LeftColumn", "Left Column Content"));  
 				$fields->addFieldToTab("Root.Columns", new HTMLEditorField("CenterColumn", "Center Column Content"));  
 				$fields->addFieldToTab("Root.Columns", new HTMLEditorField("RightColumn", "Right Column Content")); 
@@ -47,7 +52,8 @@
 		
 	}
 	
-	class IQBase_Page_Controller extends Extension {
+	class IQBase_Page_Controller extends Extension 
+	{
 		
 		private static $allowed_actions = array(
 			"thanks"			
@@ -193,8 +199,4 @@
 			return $this->owner->Customise(array());
 		}
 		
-		public function TemplateAdditionalCode()
-		{
-			return $this->owner->AdditionalCode;
-		}
 	}
