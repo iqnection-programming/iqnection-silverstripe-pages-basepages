@@ -7,3 +7,6 @@ Page_Controller:
 LeftAndMain:
   extra_requirements_css:
     - iq-basepages/css/cms/leftandmainadditions.css
+Injector:
+  MemberLoginForm:
+    class: MemberLoginForm_Extension

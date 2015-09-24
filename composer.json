@@ -10,7 +10,8 @@
 		}
 	],
 	"require": {
-		"silverstripe/framework": ">=3.0"
+		"silverstripe/framework": ">=3.0",
+		"nathancox/codeeditorfield" : "dev-master"
 	},
 	"extra": {
 		"installer-name": "iq-basepages"

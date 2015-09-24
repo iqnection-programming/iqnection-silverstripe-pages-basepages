@@ -1,6 +1,8 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.10]
+- Changed security login form email field to title Username
 
 ## [1.0.9]
 - Changed TemplateCode field to CodeEditorField
