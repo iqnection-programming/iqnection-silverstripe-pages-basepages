@@ -109,9 +109,14 @@
 				new GridFieldViewButton(),
 				new GridFieldDetailForm(),
 				new GridFieldDeleteAction(),
-				new GridFieldExportButton()
+				$exportBtn = new GridFieldExportButton()
 			);
 			$submission_class = $this->ClassName."Submission";
+			$export_fields = Config::inst()->get($submission_class, 'export_fields', Config::UNINHERITED);
+			if (!empty($export_fields))
+			{
+				$exportBtn->setExportColumns($export_fields);
+			}
 			$fields->addFieldToTab('Root.Content.FormSubmissions', new GridField($submission_class,'Form Submissions',DataObject::get($submission_class),$submits_config));
 			return $fields;
 		}			
@@ -312,24 +317,26 @@ $(document).ready(function(){
 				$form_config = $this->FormConfig();
 				if ((count($recips) == 1) || ($form_config['sendToAll']))
 				{
-					return array(
+					$config = array(
 						'FieldType' => 'HiddenField',
 						'Value' => key($recips)
 					);
 				}
 				else
 				{
-					return array(
+					$config = array(
 						'FieldType' => 'DropdownField',
 						'Value' => $recips,
 						'Label' => 'How May We Direct Your Inquiry'
 					);
 				}
+				return $config;
 			}
-			return array(
+			$config = array(
 				'FieldType' => 'HiddenField',
 				'Value' => ''
 			);
+			return $config;
 		}
 		
 		public function FindRecipients()

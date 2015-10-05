@@ -46,6 +46,21 @@
 			"Recipient" => "Recipient"
 		);
 		
+		private static $export_fields = array(
+			'Created' => 'Date',
+			'FirstName' => 'First Name',
+			'LastName' => 'Last Name',
+			'Address' => 'Address',
+			'Address2' => 'Address 2',
+			'City' => 'City',
+			'State' => 'State',
+			'ZipCode' => 'ZipCode',
+			'Email' => 'Email',
+			'Phone' => 'Phone',
+			'Recipient' => 'Recipient',
+			'Comments' => 'Comments'
+		);
+		
 		private static $default_sort = "Created DESC";
 		
 		public function canCreate($member = null) { return false; }

@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.11]
+- Export friendly, user private static $export_fields in your form submission class
+
 ## [1.0.10]
 - Changed security login form email field to title Username
 
