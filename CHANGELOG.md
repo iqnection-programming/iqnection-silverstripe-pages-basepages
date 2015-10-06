@@ -1,6 +1,10 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+
+## [1.0.12]
+- Bug fixes in FormPage.php
+
 ## [1.0.11]
 - Export friendly, user private static $export_fields in your form submission class
 

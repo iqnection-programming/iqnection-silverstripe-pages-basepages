@@ -117,7 +117,7 @@
 			{
 				$exportBtn->setExportColumns($export_fields);
 			}
-			$fields->addFieldToTab('Root.Content.FormSubmissions', new GridField($submission_class,'Form Submissions',DataObject::get($submission_class),$submits_config));
+			$fields->addFieldToTab('Root.Content.FormSubmissions', new GridField($submission_class,'Form Submissions',DataObject::get($submission_class,"FormPageID = ".$this->ID),$submits_config));
 			return $fields;
 		}			
 	}	
@@ -274,6 +274,7 @@ $(document).ready(function(){
 			$submission_class = $this->ClassName."Submission";
             $submission = new $submission_class;
             $form->saveInto($submission);
+			$submission->FormPageID = $this->ID;
             $submission->write();
 			
 			$form_config = $this->FormConfig();
@@ -306,7 +307,7 @@ $(document).ready(function(){
 				return $this->customise($data)->renderWith(array($page,'Page'));
 			}
 			
-            return $this->redirect('thanks');
+            return $this->redirect($this->Link('thanks'));
         }
 		
 		public function RecipientFieldConfig()
