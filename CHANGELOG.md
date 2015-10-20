@@ -2,6 +2,9 @@
 # Change Log
 
 
+## [1.0.13]
+- moved code editor field back into the installer module in composer requirements
+
 ## [1.0.12]
 - Bug fixes in FormPage.php
 
