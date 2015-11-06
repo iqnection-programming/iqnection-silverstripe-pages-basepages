@@ -301,12 +301,13 @@ $(document).ready(function(){
 				$utils->SendAutoResponder($as,$ab,$data['Email']);				
 			}
 			
+			$this->extend('onAfterSubmit',$submission);
+			
 			if($form_config['PageAfterSubmit'])
 			{
 				$page = $this->ClassName."_".$form_config['PageAfterSubmit'];
 				return $this->customise($data)->renderWith(array($page,'Page'));
 			}
-			
             return $this->redirect($this->Link('thanks'));
         }
 		

@@ -2,6 +2,9 @@
 # Change Log
 
 
+## [1.0.14]
+- added onAfterSubmit, passes extension class function the submission object for after form submit additions
+
 ## [1.0.13]
 - moved code editor field back into the installer module in composer requirements
 
