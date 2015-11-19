@@ -206,7 +206,14 @@ $(document).ready(function(){
 
 					$Label = ($data['Group']) ? '' : ($data['Label']?$data['Label']:FormField::name_to_label($FieldName));
 					$field = new $data['FieldType']($FieldName,$Label,($data['Value']?$data['Value']:null),($data['Default']?$data['Default']:null));
-					if($data['ExtraClass'])$field->addExtraClass($data['ExtraClass']);	
+					if($data['ExtraClass'])$field->addExtraClass($data['ExtraClass']);
+					if($data['Config'] && is_array($data['Config']))
+					{
+						foreach($data['Config'] as $key => $value)
+						{
+							$field->setConfig($key,$value);
+						}
+					}	
 					if($data['Required'])
 					{
 						$validator->addRequiredField($FieldName);

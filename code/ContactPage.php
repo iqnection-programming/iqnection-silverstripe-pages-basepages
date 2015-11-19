@@ -127,7 +127,7 @@
 		function FormConfig()
 		{
 			$config = array(
-				'UseNoSpam' => true
+				'useNospam' => true
 			);
 			$this->extend('updateFormConfig',$config);
 			return $config;

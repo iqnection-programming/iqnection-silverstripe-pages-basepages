@@ -2,6 +2,10 @@
 # Change Log
 
 
+## [1.0.15]
+- Form no spam bug on Contact Page
+- Added functionality to set config values on form fields when extending FromPage class
+
 ## [1.0.14]
 - added onAfterSubmit, passes extension class function the submission object for after form submit additions
 
