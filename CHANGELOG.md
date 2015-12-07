@@ -2,6 +2,9 @@
 # Change Log
 
 
+## [1.0.16]
+- CSS update, changed page_columns from Id attribute to element class
+
 ## [1.0.15]
 - Form no spam bug on Contact Page
 - Added functionality to set config values on form fields when extending FromPage class

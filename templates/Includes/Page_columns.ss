@@ -1,5 +1,5 @@
 <% if ColAmount %>
-	<div id="page_columns">
+	<div class="page_columns">
         <% if LeftColumn %>
             <div class="page_col cols_$ColAmount">
                 $LeftColumn

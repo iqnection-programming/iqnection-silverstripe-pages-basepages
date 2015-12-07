@@ -1,5 +1,7 @@
+.page_columns					{ clear:both; }
+.page_columns:after				{ content:"."; display:block; height:0; clear:both; zoom:1; visibility:hidden; }
 .page_col						{ float:left; margin-left:2%; }
-.page_col:first-child			{ margin-left:0; }
+* > .page_col:first-of-type		{ margin-left:0; }
 .cols_2							{ width:48%; }
 .cols_3							{ width:32%;  }
 #page_left						{ float:left; width:70%; }
