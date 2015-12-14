@@ -8,7 +8,7 @@
 			"LeftColumn" => "HTMLText",
 			"CenterColumn" => "HTMLText",
 			"RightColumn" => "HTMLText",
-			'AdditionalCode' => 'HTMLText',
+			'AdditionalCode' => 'Text',
 			"Target" => "enum('_blank,_new,_parent,_self,_top','_self')",
 		);	
 		

@@ -56,7 +56,7 @@
 		public function canDelete($member = null) { return true; }
 		public function canEdit($member = null)   { return true; }
 		public function canView($member = null)   { return true; }
-		
+	
 		function validate()
 		{
 			$result = parent::validate();
@@ -99,8 +99,8 @@
 				new GridFieldDeleteAction(),
 				new GridFieldDetailForm()
 			);
-			$fields->addFieldToTab('Root.Content.FormControls', new GridField('FormRecipients','Form Recipients',$this->FormRecipients(),$recips_config));
-			$fields->addFieldToTab('Root.Content.FormControls', new HTMLEditorField('ThankYouText','Text after form submission'));
+			$fields->addFieldToTab('Root.FormControls', new GridField('FormRecipients','Form Recipients',$this->FormRecipients(),$recips_config));
+			$fields->addFieldToTab('Root.FormControls', new HTMLEditorField('ThankYouText','Text after form submission'));
 			
 			$submits_config = GridFieldConfig::create()->addComponents(
 				new GridFieldSortableHeader(),
@@ -117,7 +117,7 @@
 			{
 				$exportBtn->setExportColumns($export_fields);
 			}
-			$fields->addFieldToTab('Root.Content.FormSubmissions', new GridField($submission_class,'Form Submissions',DataObject::get($submission_class,"FormPageID = ".$this->ID),$submits_config));
+			$fields->addFieldToTab('Root.FormSubmissions', new GridField($submission_class,'Form Submissions',DataObject::get($submission_class,"FormPageID = ".$this->ID),$submits_config));
 			return $fields;
 		}			
 	}	

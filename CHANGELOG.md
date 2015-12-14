@@ -2,6 +2,10 @@
 # Change Log
 
 
+## [1.0.17]
+- Changed AdditionalCode field to Text
+- Updated CMS tab names for SS 3.2
+
 ## [1.0.16]
 - CSS update, changed page_columns from Id attribute to element class
 
