@@ -305,7 +305,7 @@ $(document).ready(function(){
 			
 			if(($as = $this->AutoResponderSubject) && $ab = ($this->AutoResponder))
 			{
-				$utils->SendAutoResponder($as,$ab,$data['Email']);				
+				$utils->SendAutoResponder($as,$ab,$data['Email'],$this->AutoResponderFromEmail);				
 			}
 			
 			$this->extend('onAfterSubmit',$submission);

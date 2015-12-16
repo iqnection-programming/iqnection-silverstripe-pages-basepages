@@ -32,12 +32,12 @@
 			$email->send();
 		}
 		
-		public static function SendAutoResponder($subject=false,$body=false,$EmailFormTo=false)
+		public static function SendAutoResponder($subject=false,$body=false,$EmailFormTo=false,$FromEmail=null)
 		{
 			$arr_path = explode(".", $_SERVER['HTTP_HOST']);
 				
 			$email = new Email(
-				"forms@".$arr_path[1].".".$arr_path[2],
+				($FromEmail) ? $FromEmail : "forms@".$arr_path[1].".".$arr_path[2],
 				$EmailFormTo,
 				$subject
 			);

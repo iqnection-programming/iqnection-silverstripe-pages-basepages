@@ -2,6 +2,9 @@
 # Change Log
 
 
+## [1.0.18]
+- Added functionality for form page auto responder from email
+
 ## [1.0.17]
 - Changed AdditionalCode field to Text
 - Updated CMS tab names for SS 3.2
