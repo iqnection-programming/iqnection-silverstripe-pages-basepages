@@ -1,30 +1,30 @@
-<?
+<?php
 	class ContactPage extends FormPage
 	{
-		private static $db = array(
+	    private static $db = array(
 			"MapZoom" => "Int",
 			"MapType" => "Varchar(255)",
 			"MapAddress" => "Varchar(255)",
 			"MapDirections" => "Boolean"
 		);
 		
-		public function getCMSFields()
-		{
-			$fields = parent::getCMSFields();
+	    public function getCMSFields()
+	    {
+	        $fields = parent::getCMSFields();
 			
-			$fields->addFieldToTab("Root.MapDetails", new TextField("MapZoom", "Map Zoom Level (lower number = farther away)"));
-			$fields->addFieldToTab("Root.MapDetails", new DropdownField("MapType", "Map Display Type", array("ROADMAP"=>"Roadmap","SATELLITE"=>"Satellite","HYBRID"=>"Hybrid","TERRAIN"=>"Terrain"),"Roadmap"));
-			$fields->addFieldToTab("Root.MapDetails", new TextField("MapAddress", "Address for Map"));
-			$fields->addFieldToTab("Root.MapDetails", new CheckboxField("MapDirections", "Display Directions Widget?"));
+	        $fields->addFieldToTab("Root.MapDetails", new TextField("MapZoom", "Map Zoom Level (lower number = farther away)"));
+	        $fields->addFieldToTab("Root.MapDetails", new DropdownField("MapType", "Map Display Type", array("ROADMAP"=>"Roadmap", "SATELLITE"=>"Satellite", "HYBRID"=>"Hybrid", "TERRAIN"=>"Terrain"), "Roadmap"));
+	        $fields->addFieldToTab("Root.MapDetails", new TextField("MapAddress", "Address for Map"));
+	        $fields->addFieldToTab("Root.MapDetails", new CheckboxField("MapDirections", "Display Directions Widget?"));
 
-			return $fields;
-		}	
+	        return $fields;
+	    }
 	}	
 	
-	class ContactPageSubmission extends FormPageSubmission 
+	class ContactPageSubmission extends FormPageSubmission
 	{
 		
-        private static $db = array(
+	    private static $db = array(
             'FirstName' => 'Varchar(255)',
             'LastName' => 'Varchar(255)',
 			'Address' => 'Varchar(255)',
@@ -38,7 +38,7 @@
 			'Comments' => 'Text'
         );
 		
-		private static $summary_fields = array(
+	    private static $summary_fields = array(
 			"Created" => "Date",
 			"FirstName" => "First Name",
 			"LastName" => "Last Name",
@@ -46,7 +46,7 @@
 			"Recipient" => "Recipient"
 		);
 		
-		private static $export_fields = array(
+	    private static $export_fields = array(
 			'Created' => 'Date',
 			'FirstName' => 'First Name',
 			'LastName' => 'Last Name',
@@ -61,25 +61,36 @@
 			'Comments' => 'Comments'
 		);
 		
-		private static $default_sort = "Created DESC";
+	    private static $default_sort = "Created DESC";
 		
-		public function canCreate($member = null) { return false; }
-		public function canDelete($member = null) { return true; }
-		public function canEdit($member = null)   { return true; }
-		public function canView($member = null)   { return true; }
-		
-    }
+	    public function canCreate($member = null)
+	    {
+	        return false;
+	    }
+	    public function canDelete($member = null)
+	    {
+	        return true;
+	    }
+	    public function canEdit($member = null)
+	    {
+	        return true;
+	    }
+	    public function canView($member = null)
+	    {
+	        return true;
+	    }
+	}
 	
 	class ContactPage_Controller extends FormPage_Controller
-	{	
-		private static $allowed_actions = array(
+	{
+	    private static $allowed_actions = array(
 			"directions",
 			"printview"			
 		);	
 		
-		public function FormFields()
-		{
-			$fields = array(
+	    public function FormFields()
+	    {
+	        $fields = array(
 				"FirstName" => array(
 					"FieldType" => "TextField",
 					"Required" => true	
@@ -120,58 +131,58 @@
 				),
 			);	
 			
-			$this->extend('updateFormFields',$fields);
-			return $fields;
-		}
+	        $this->extend('updateFormFields', $fields);
+	        return $fields;
+	    }
 		
-		function FormConfig()
-		{
-			$config = array(
+	    public function FormConfig()
+	    {
+	        $config = array(
 				'useNospam' => true
 			);
-			$this->extend('updateFormConfig',$config);
-			return $config;
-		}
+	        $this->extend('updateFormConfig', $config);
+	        return $config;
+	    }
 				
-		public function init()
-		{
-			parent::init();
-			if($this->MapAddress){
-				Requirements::javascript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAXy4BLGXyLMakRQbrMVrFxS2KiXSj51cM&sensor=false");
-			}
-		}
+	    public function init()
+	    {
+	        parent::init();
+	        if ($this->MapAddress) {
+	            Requirements::javascript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAXy4BLGXyLMakRQbrMVrFxS2KiXSj51cM&sensor=false");
+	        }
+	    }
 		
-		function CustomJS()
-		{
-			$js = parent::CustomJS();
-			$js .= "var MapZoom = ".$this->MapZoom.";
+	    public function CustomJS()
+	    {
+	        $js = parent::CustomJS();
+	        $js .= "var MapZoom = ".$this->MapZoom.";
 					var MapType = '".$this->MapType."';
 					var MapAddress = '".$this->MapAddress."';
 					var MapDirections = ".$this->MapDirections.";
 					var MapLocationTitle = '';
 					var PageLink = '".$this->Link()."';";
-			$this->extend('updateCustomJS',$js);
-			return $js;
-		}
+	        $this->extend('updateCustomJS', $js);
+	        return $js;
+	    }
 		
-		public function directionsAPI()
-		{
-			$addy = urlencode($this->request->param('ID'));
-			$path = "http://maps.googleapis.com/maps/api/directions/json?origin=".$addy."&destination=".urlencode($this->MapAddress)."&sensor=false";
-			$rows = file_get_contents($path,0,null,null);
-			$directions_output = json_decode($rows, true);
-			$ajax_data = false;
+	    public function directionsAPI()
+	    {
+	        $addy = urlencode($this->request->param('ID'));
+	        $path = "http://maps.googleapis.com/maps/api/directions/json?origin=".$addy."&destination=".urlencode($this->MapAddress)."&sensor=false";
+	        $rows = file_get_contents($path, 0, null, null);
+	        $directions_output = json_decode($rows, true);
+	        $ajax_data = false;
 			
-			if($directions_output['routes']){
-				$data = $directions_output['routes'][0]['legs'][0];  //assumes best route and no waypoints
+	        if ($directions_output['routes']) {
+	            $data = $directions_output['routes'][0]['legs'][0];  //assumes best route and no waypoints
 				$i = 1;
-				$steps = "";
-				foreach($data['steps'] as $step){
-					$steps .= "<div class='step'><span class='step_number'>".$i.".</span><span class='step_text'>".$step['html_instructions']."</span><span class='step_distance'>".$step['distance']['text']."</span></div>";	
-					$i++;
-				}
+	            $steps = "";
+	            foreach ($data['steps'] as $step) {
+	                $steps .= "<div class='step'><span class='step_number'>".$i.".</span><span class='step_text'>".$step['html_instructions']."</span><span class='step_distance'>".$step['distance']['text']."</span></div>";	
+	                $i++;
+	            }
 				
-				$ajax_data = array(
+	            $ajax_data = array(
 					"StartAddress" => $data['start_address'],
 					"EndAddress" => $data['end_address'],
 					"Distance" => $data['distance']['text'],
@@ -181,33 +192,31 @@
 					"PageLink" => $this->AbsoluteLink()."directions/".$addy,
 					"Steps" => $steps
 				);
-				
-			}
+	        }
 			
-			return $ajax_data;
-		}
+	        return $ajax_data;
+	    }
 		
-		public function directions()
-		{
-			$ajax_data = $this->directionsAPI();
+	    public function directions()
+	    {
+	        $ajax_data = $this->directionsAPI();
 			
-			if($ajax_data){
-				return Director::is_ajax() ? $this->Customise($ajax_data)->renderWith("ContactPage_directions") : $this->Customise($ajax_data);
-			} else {
-				return "<p>No routes were found from that destination address.</p>";	
-			}
-		}
+	        if ($ajax_data) {
+	            return Director::is_ajax() ? $this->Customise($ajax_data)->renderWith("ContactPage_directions") : $this->Customise($ajax_data);
+	        } else {
+	            return "<p>No routes were found from that destination address.</p>";
+	        }
+	    }
 		
-		public function printview()
-		{
-			$ajax_data = $this->directionsAPI();
+	    public function printview()
+	    {
+	        $ajax_data = $this->directionsAPI();
 			
-			if($ajax_data){
-				return $this->Customise($ajax_data)->renderWith("ContactPage_printview");
-			} else {
-				return "<p>No routes were found from that destination address.</p>";	
-			}
-		}
-		
+	        if ($ajax_data) {
+	            return $this->Customise($ajax_data)->renderWith("ContactPage_printview");
+	        } else {
+	            return "<p>No routes were found from that destination address.</p>";
+	        }
+	    }
 	}
 ?>
