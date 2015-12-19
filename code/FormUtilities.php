@@ -1,58 +1,57 @@
-<?
+<?php
 	class FormUtilities extends DataObject
 	{
-		public static function RequiredFields(&$fields,$requiredFields)
-		{
-			foreach($requiredFields as $requiredField)
-			{
-				if ($field = $fields->dataFieldByName($requiredField))
-				{
-					$field->addExtraClass('required');
-					$fields->replaceField($requiredField, $field);
-				}
-			}
-			return new RequiredFields($requiredFields);
-		}
+	    public static function RequiredFields(&$fields, $requiredFields)
+	    {
+	        foreach ($requiredFields as $requiredField) {
+	            if ($field = $fields->dataFieldByName($requiredField)) {
+	                $field->addExtraClass('required');
+	                $fields->replaceField($requiredField, $field);
+	            }
+	        }
+	        return new RequiredFields($requiredFields);
+	    }
 		
-		public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null){
-			$arr_path = explode(".", $_SERVER['HTTP_HOST']);
+	    public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false, $submission=null)
+	    {
+	        $arr_path = explode(".", $_SERVER['HTTP_HOST']);
 						
-			$email = new Email(
+	        $email = new Email(
 				"forms@".$arr_path[1].".".$arr_path[2],
 				$EmailFormTo,
 				$page->Title." form submission"
 			);
 			
-			$email_body = "<html><body>This is a form submission created by this page on your website:<br /><br />".$_SERVER['HTTP_REFERER']."<br /><br />";
-			$email_body .= self::FormDataToArray($post_vars,null,null,$submission);
-			$email_body .= "</body></html>";
+	        $email_body = "<html><body>This is a form submission created by this page on your website:<br /><br />".$_SERVER['HTTP_REFERER']."<br /><br />";
+	        $email_body .= self::FormDataToArray($post_vars, null, null, $submission);
+	        $email_body .= "</body></html>";
 
-			$email->setBody($email_body);
-			$email->replyTo($post_vars['Email']);
-			$email->send();
-		}
+	        $email->setBody($email_body);
+	        $email->replyTo($post_vars['Email']);
+	        $email->send();
+	    }
 		
-		public static function SendAutoResponder($subject=false,$body=false,$EmailFormTo=false,$FromEmail=null)
-		{
-			$arr_path = explode(".", $_SERVER['HTTP_HOST']);
+	    public static function SendAutoResponder($subject=false, $body=false, $EmailFormTo=false, $FromEmail=null)
+	    {
+	        $arr_path = explode(".", $_SERVER['HTTP_HOST']);
 				
-			$email = new Email(
+	        $email = new Email(
 				($FromEmail) ? $FromEmail : "forms@".$arr_path[1].".".$arr_path[2],
 				$EmailFormTo,
 				$subject
 			);
 			
-			$email_body = "<html><body>";
-			$email_body .= $body;
-			$email_body .= "</body></html>";
+	        $email_body = "<html><body>";
+	        $email_body .= $body;
+	        $email_body .= "</body></html>";
 
-			$email->setBody($email_body);
-			$email->send();
-		}
+	        $email->setBody($email_body);
+	        $email->send();
+	    }
 		
-		public function FormDataToArray($data, $level=0, $hide_empty=0,$submission)
-		{
-			$ignore_keys = array(
+	    public function FormDataToArray($data, $level=0, $hide_empty=0, $submission)
+	    {
+	        $ignore_keys = array(
 				"MAX_FILE_SIZE",
 				"SecurityID",
 				"nospam_codes",
@@ -60,52 +59,45 @@
 				"action_SubmitForm"
 			);
 			
-			$html = "";
-			foreach ($data as $fieldName => $v)
-			{
-				if(!($hide_empty && !$v) && !(in_array($fieldName,$ignore_keys)))
-				{
-					$name = trim(preg_replace("/([A-Z]{1}[a-z]{1})/", " \\1", $fieldName));
-					$html .= "<br />".str_repeat("&nbsp;", ($level * 4)).'<span style="font-weight:bold;">'.htmlspecialchars($name).': </span>';
+	        $html = "";
+	        foreach ($data as $fieldName => $v) {
+	            if (!($hide_empty && !$v) && !(in_array($fieldName, $ignore_keys))) {
+	                $name = trim(preg_replace("/([A-Z]{1}[a-z]{1})/", " \\1", $fieldName));
+	                $html .= "<br />".str_repeat("&nbsp;", ($level * 4)).'<span style="font-weight:bold;">'.htmlspecialchars($name).': </span>';
 					
 					//if (is_array($v))
 					//	$html .= self::FormDataToArray($v, $level+1,$hide_empty,$submission);
 					//else
-					if (!$fieldObject = $submission->relObject($fieldName))
-					{
-						$fieldObject = $submission->getComponent($fieldName);
+					if (!$fieldObject = $submission->relObject($fieldName)) {
+					    $fieldObject = $submission->getComponent($fieldName);
 					}
-					if ($fieldObject instanceof File)
-					{
-						$html .= '<a href="'.$fieldObject->getAbsoluteURL().'">'.$fieldObject->getFilename().'</a>';
-					}
-					else
-					{
-						$html .= $fieldObject;
-					}
-				}
-			}
-			return $html;
-		}
+	                if ($fieldObject instanceof File) {
+	                    $html .= '<a href="'.$fieldObject->getAbsoluteURL().'">'.$fieldObject->getFilename().'</a>';
+	                } else {
+	                    $html .= $fieldObject;
+	                }
+	            }
+	        }
+	        return $html;
+	    }
 		
-		public static function GetCountryName($val)
-		{
-			if ($val)
-			{
-				foreach (IQBaseForm::GetCountriesByContinent() as $continent => $countries)
-				{
-					foreach ($countries as $code => $name)
-					{
-						if ($code == $val) return $name;
-					}
-				}
-			}
-			return "";
-		}
+	    public static function GetCountryName($val)
+	    {
+	        if ($val) {
+	            foreach (IQBaseForm::GetCountriesByContinent() as $continent => $countries) {
+	                foreach ($countries as $code => $name) {
+	                    if ($code == $val) {
+	                        return $name;
+	                    }
+	                }
+	            }
+	        }
+	        return "";
+	    }
 		
-		public static function GetCountriesByContinent()
-		{
-			return array(
+	    public static function GetCountriesByContinent()
+	    {
+	        return array(
 				"Africa" => array(
 					"DZ" => "Algeria",
 					"AO" => "Angola",
@@ -370,11 +362,12 @@
 					"VU" => "Vanuatu",
 					"WF" => "Wallis and Futuna",
 				),
-			);			
-		}
+			);
+	    }
 
-		public static function GetCountries(){
-			return array(
+	    public static function GetCountries()
+	    {
+	        return array(
 			  "US" => "United States",
 			  "GB" => "United Kingdom",
 			  "AF" => "Afghanistan",
@@ -615,23 +608,23 @@
 			  "ZM" => "Zambia",
 			  "ZW" => "Zimbabwe"
 			);
-		}
+	    }
 		
-		public static function GetStateName($val)
-		{
-			if ($val)
-			{
-				foreach (IQBaseForm::GetStates_PlusCanada(true) as $code => $name)
-				{
-					if ($code == $val) return $name;
-				}
-			}
-			return "";
-		}		
+	    public static function GetStateName($val)
+	    {
+	        if ($val) {
+	            foreach (IQBaseForm::GetStates_PlusCanada(true) as $code => $name) {
+	                if ($code == $val) {
+	                    return $name;
+	                }
+	            }
+	        }
+	        return "";
+	    }		
 		
-		public static function GetStates($include_blank=false)
-		{
-			$states = array(
+	    public static function GetStates($include_blank=false)
+	    {
+	        $states = array(
 				"AL" => "Alabama",
 				"AK" => "Alaska",
 				"AZ" => "Arizona",
@@ -685,23 +678,26 @@
 				"WI" => "Wisconsin",
 				"WY" => "Wyoming"
 			);
-			if ($include_blank) $states = array_merge(array("" => " "), $states);
+	        if ($include_blank) {
+	            $states = array_merge(array("" => " "), $states);
+	        }
 			
-			return $states;
-		}
+	        return $states;
+	    }
 		
-		public static function GetStatesBackwards(){
-			$states = IQBaseForm::GetStates();
-			$states_bw = array();
-			foreach($states as $initials => $full){
-				$states_bw[$full] = $initials;
-			}
-			return $states_bw;
-		}
+	    public static function GetStatesBackwards()
+	    {
+	        $states = IQBaseForm::GetStates();
+	        $states_bw = array();
+	        foreach ($states as $initials => $full) {
+	            $states_bw[$full] = $initials;
+	        }
+	        return $states_bw;
+	    }
 		
-		public static function GetStates_International()
-		{
-			return array(
+	    public static function GetStates_International()
+	    {
+	        return array(
 				"International" => "*International*",
 				"AL" => "Alabama",
 				"AK" => "Alaska",
@@ -755,12 +751,12 @@
 				"WV" => "West Virginia",
 				"WI" => "Wisconsin",
 				"WY" => "Wyoming"
-			);			
-		}
+			);
+	    }
 		
-		public static function GetCanadianProvinces()
-		{
-			return array(
+	    public static function GetCanadianProvinces()
+	    {
+	        return array(
 				"AB" => "Alberta",
 				"BC" => "British Columbia",
 				"MB" => "Manitoba",
@@ -774,12 +770,12 @@
 				"QC" => "Quebec",
 				"SK" => "Saskatchewan",
 				"YT" => "Yukon"				
-			);			
-		}
+			);
+	    }
 		
-		public static function GetStates_PlusCanada($include_blank=false)
-		{
-			$states = array(
+	    public static function GetStates_PlusCanada($include_blank=false)
+	    {
+	        $states = array(
 				"AL" => "Alabama",
 				"AK" => "Alaska",
 				"AZ" => "Arizona",
@@ -846,66 +842,69 @@
 				"SK" => "Saskatchewan",
 				"YT" => "Yukon"				
 			);			
-			if ($include_blank) $states = array_merge(array("" => " "), $states);
+	        if ($include_blank) {
+	            $states = array_merge(array("" => " "), $states);
+	        }
 			
-			return $states;
-		}
+	        return $states;
+	    }
 		
-		static function generateCode($word)
-		{
-			$len = strlen($word);
-			$chars = array("@", "#", "*", "$", "!");
+	    public static function generateCode($word)
+	    {
+	        $len = strlen($word);
+	        $chars = array("@", "#", "*", "$", "!");
 			
-			$num1 = intval(substr(md5($word), 5, 1));
-			$num1 = $num1 ? $num1 : 3;
-			$num2 = intval(substr(md5($word), 8, 1));
-			$num2 = $num2 ? $num2 : 6;
-			$num3 = intval(substr(md5($word), 12, 1));
-			$num3 = $num3 ? $num3 : 9;
-			$word = md5($word);
-			$word = substr($word, 0, $num1).strtoupper(substr($word, $num1, 1)).substr($word, $num1+1);
-			$word = substr($word, 0, $num2).($chars[$num2 % count($chars)]).substr($word, $num2+1);
-			$word = substr($word, 0, $num3).strtoupper(substr($word, $num3, 1)).substr($word, $num3+1);
+	        $num1 = intval(substr(md5($word), 5, 1));
+	        $num1 = $num1 ? $num1 : 3;
+	        $num2 = intval(substr(md5($word), 8, 1));
+	        $num2 = $num2 ? $num2 : 6;
+	        $num3 = intval(substr(md5($word), 12, 1));
+	        $num3 = $num3 ? $num3 : 9;
+	        $word = md5($word);
+	        $word = substr($word, 0, $num1).strtoupper(substr($word, $num1, 1)).substr($word, $num1+1);
+	        $word = substr($word, 0, $num2).($chars[$num2 % count($chars)]).substr($word, $num2+1);
+	        $word = substr($word, 0, $num3).strtoupper(substr($word, $num3, 1)).substr($word, $num3+1);
 			
-			while (preg_match("/^\d/", $word)) $word = substr($word, 1);
+	        while (preg_match("/^\d/", $word)) {
+	            $word = substr($word, 1);
+	        }
 	
-			$i = 0;
-			$word = preg_replace("/([a-zA-z])/e", "chr(ord(\\1) + ((strlen(\$word) * (\$i++)) % 20))", $word);
-			$word = preg_replace("/^\W/", chr(preg_match_all("/\d/", $word, $matches) + 97), $word);
+	        $i = 0;
+	        $word = preg_replace("/([a-zA-z])/e", "chr(ord(\\1) + ((strlen(\$word) * (\$i++)) % 20))", $word);
+	        $word = preg_replace("/^\W/", chr(preg_match_all("/\d/", $word, $matches) + 97), $word);
 			
-			$word = substr($word, 0, 14);
-			return ($word);
-		}
+	        $word = substr($word, 0, 14);
+	        return ($word);
+	    }
 		
-		static function referSecurityCheck()
-		{
-			$refer = $_SERVER['HTTP_REFERER'];
-			$server = $_SERVER['SERVER_NAME'];
-			$cr = explode(".", preg_replace("/^http[s]?:\/\/([^\/]+).*$/i", "\\1", $refer));
-			$cs = explode(".", $server);
+	    public static function referSecurityCheck()
+	    {
+	        $refer = $_SERVER['HTTP_REFERER'];
+	        $server = $_SERVER['SERVER_NAME'];
+	        $cr = explode(".", preg_replace("/^http[s]?:\/\/([^\/]+).*$/i", "\\1", $refer));
+	        $cs = explode(".", $server);
 			
-			$r = $cr[count($cr)-2].".".$cr[count($cr)-1];
-			$s = $cs[count($cs)-2].".".$cs[count($cs)-1];
+	        $r = $cr[count($cr)-2].".".$cr[count($cr)-1];
+	        $s = $cs[count($cs)-2].".".$cs[count($cs)-1];
 			
-			return ($r == $s);
-		}
+	        return ($r == $s);
+	    }
 		
-		static function validateAjaxCode()
-		{
-			list($code1, $code2) = explode("|", trim($_REQUEST['nospam_codes']));
-			unset($_REQUEST['nospam_codes'], $_POST['nospam_codes']);
+	    public static function validateAjaxCode()
+	    {
+	        list($code1, $code2) = explode("|", trim($_REQUEST['nospam_codes']));
+	        unset($_REQUEST['nospam_codes'], $_POST['nospam_codes']);
 			
-			list($x, $time) = explode(".", $code1);
+	        list($x, $time) = explode(".", $code1);
 			
-			$time = substr($time, 0, strlen($time)-3);
-			$diff = time() - floatval($time);
+	        $time = substr($time, 0, strlen($time)-3);
+	        $diff = time() - floatval($time);
 		
-			if (self::referSecurityCheck() && $diff < (60 * 60 * 8))	// 8 hour timeout
-			{
+	        if (self::referSecurityCheck() && $diff < (60 * 60 * 8)) {
+	            // 8 hour timeout
+
 				return (self::generateCode($code1) == $code2);
-			}
-				return false;
-		}
-		
+	        }
+	        return false;
+	    }
 	}
-	
