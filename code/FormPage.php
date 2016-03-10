@@ -187,6 +187,8 @@ $(document).ready(function(){
 		{
 			if($form_fields = $this->FormFields())
 			{
+				if (!isset($form_fields['Recipient'])) Debug::showError('Recipient field has not been provided for this form');
+				
 				$fields = new FieldList();
 				if ($form_error = Session::get('FormError'))
 				{
