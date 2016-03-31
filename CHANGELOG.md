@@ -1,6 +1,8 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.19]
+- Bug Fix: Date field format causing validation errors
 
 ## [1.0.18]
 - Added functionality for form page auto responder from email
