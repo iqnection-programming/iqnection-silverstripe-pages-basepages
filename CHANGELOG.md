@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.20]
+- Added option for multiple locations on the ContactPage
+
 ## [1.0.19]
 - Bug Fix: Date field format causing validation errors
 

@@ -1,24 +1,108 @@
 <?
+	class ContactPageLocation extends DataObject
+	{
+		private static $db = array( 
+			"SortOrder" => "Int",
+			"Title" => "Varchar(255)",
+			"Address" => "Varchar(255)",
+			"MapLatitude" => "Varchar(255)",
+			"MapLongitude" => "Varchar(255)"
+		);
+		
+		private static $default_sort = "SortOrder";
+		
+		private static $summary_fields = array(
+			"Title" => "Title",
+			"Address" => "Address"
+		);
+		
+		private static $has_one = array(
+			"ContactPage" => "ContactPage"
+		); 		
+		
+        public function getCMSFields()
+        {
+			return new FieldList(
+				new TextField("Title", "Location Title"),
+				new TextField("Address", "Location Address")
+			);
+        }
+		
+		public function getLocation($address=false){
+			$google = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=";
+			$url = $google.urlencode($address);
+			
+			$resp_json = $this->curl_file_get_contents($url);
+			$resp = json_decode($resp_json, true);
+	
+			if($resp['status']='OK'){
+				return $resp['results'][0]['geometry']['location'];
+			}else{
+				return false;
+			}
+		}
+		
+		private function curl_file_get_contents($URL)
+		{
+			$c = curl_init();
+			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($c, CURLOPT_URL, $URL);
+			$contents = curl_exec($c);
+			curl_close($c);
+	
+			if ($contents) return $contents;
+				else return FALSE;
+		}
+		
+		function onAfterWrite()
+		{
+			parent::onAfterWrite();
+			
+			$location = $this->getLocation($this->Address);
+			if ($location)
+			{
+				$this->MapLatitude = $location['lat'];
+				$this->MapLongitude = $location['lng'];
+				$this->write();
+			}
+		}
+		
+		public function canCreate($member = null) { return true; }
+		public function canDelete($member = null) { return true; }
+		public function canEdit($member = null)   { return true; }
+		public function canView($member = null)   { return true; }
+	}
+
 	class ContactPage extends FormPage
 	{
 		private static $db = array(
-			"MapZoom" => "Int",
 			"MapType" => "Varchar(255)",
-			"MapAddress" => "Varchar(255)",
 			"MapDirections" => "Boolean"
+		);
+		
+		private static $has_many = array(
+			"ContactPageLocations" => "ContactPageLocation"
 		);
 		
 		public function getCMSFields()
 		{
 			$fields = parent::getCMSFields();
-			
-			$fields->addFieldToTab("Root.MapDetails", new TextField("MapZoom", "Map Zoom Level (lower number = farther away)"));
 			$fields->addFieldToTab("Root.MapDetails", new DropdownField("MapType", "Map Display Type", array("ROADMAP"=>"Roadmap","SATELLITE"=>"Satellite","HYBRID"=>"Hybrid","TERRAIN"=>"Terrain"),"Roadmap"));
-			$fields->addFieldToTab("Root.MapDetails", new TextField("MapAddress", "Address for Map"));
+			$locations_config = GridFieldConfig::create()->addComponents(				
+				new GridFieldSortableRows('SortOrder'),
+				new GridFieldToolbarHeader(),
+				new GridFieldAddNewButton('toolbar-header-right'),
+				new GridFieldSortableHeader(),
+				new GridFieldDataColumns(),
+				new GridFieldPaginator(10),
+				new GridFieldEditButton(),
+				new GridFieldDeleteAction(),
+				new GridFieldDetailForm()				
+			);
+			$fields->addFieldToTab('Root.MapDetails', new GridField('Locations','Locations',$this->ContactPageLocations(),$locations_config));
 			$fields->addFieldToTab("Root.MapDetails", new CheckboxField("MapDirections", "Display Directions Widget?"));
-
 			return $fields;
-		}	
+		}			
 	}	
 	
 	class ContactPageSubmission extends FormPageSubmission 
@@ -136,7 +220,7 @@
 		public function init()
 		{
 			parent::init();
-			if($this->MapAddress){
+			if($this->ContactPageLocations()->Count()){
 				Requirements::javascript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAXy4BLGXyLMakRQbrMVrFxS2KiXSj51cM&sensor=false");
 			}
 		}
@@ -144,20 +228,41 @@
 		function CustomJS()
 		{
 			$js = parent::CustomJS();
-			$js .= "var MapZoom = ".$this->MapZoom.";
-					var MapType = '".$this->MapType."';
-					var MapAddress = '".$this->MapAddress."';
-					var MapDirections = ".$this->MapDirections.";
-					var MapLocationTitle = '';
-					var PageLink = '".$this->Link()."';";
-			$this->extend('updateCustomJS',$js);
+			$js .= 'var MapType = "'.$this->MapType.'";
+					var address_objects = [];';
+			if($locations = $this->ContactPageLocations()){
+				foreach($locations as $key => $l){
+					$js .= 'address_objects['.$key.'] = {"Title":"'.$l->Title.'","Address":"'.$l->Address.'","LatLng":['.$l->MapLatitude.','.$l->MapLongitude.']};';
+				}
+			}
+			$js .= 'var Avgs = '.$this->Avgs().';
+					var PageLink = "'.$this->Link().'";';
+			
+			
 			return $js;
+		}
+		
+		public function Avgs(){			
+			$TotalLat = 0;
+			$TotalLong = 0;
+			$Total = 0;
+			if($locations = $this->ContactPageLocations())
+			{
+				foreach($locations as $l){
+					$TotalLat += $l->MapLatitude;
+					$TotalLong += $l->MapLongitude;
+					$Total++;
+				}
+				if($Total)return "[".$TotalLat/$Total.",".$TotalLong/$Total."]";
+			}
+			return false;
 		}
 		
 		public function directionsAPI()
 		{
-			$addy = urlencode($this->request->param('ID'));
-			$path = "http://maps.googleapis.com/maps/api/directions/json?origin=".$addy."&destination=".urlencode($this->MapAddress)."&sensor=false";
+			$to_addy = urlencode($this->request->param('ID'));
+			$from_addy = urlencode($this->request->param('OtherID'));
+			$path = "http://maps.googleapis.com/maps/api/directions/json?origin=".$from_addy."&destination=".$to_addy."&sensor=false";
 			$rows = file_get_contents($path,0,null,null);
 			$directions_output = json_decode($rows, true);
 			$ajax_data = false;
@@ -176,9 +281,9 @@
 					"EndAddress" => $data['end_address'],
 					"Distance" => $data['distance']['text'],
 					"Duration" => $data['duration']['text'],
-					"GoogleLink" => "https://maps.google.com/maps?q=".$addy."+to+".urlencode($this->MapAddress),
-					"PrintLink" => $this->AbsoluteLink()."printview/".$addy,
-					"PageLink" => $this->AbsoluteLink()."directions/".$addy,
+					"GoogleLink" => "https://maps.google.com/maps?q=".$from_addy."+to+".$to_addy,
+					"PrintLink" => $this->AbsoluteLink()."printview/".$from_addy."/".$to_addy,
+					"PageLink" => $this->AbsoluteLink()."directions/".$from_addy."/".$to_addy,
 					"Steps" => $steps
 				);
 				
@@ -209,5 +314,8 @@
 			}
 		}
 		
+		public function NeedLocationsSelect(){
+			return $this->ContactPageLocations()->Count() > 1;	
+		}
 	}
 ?>
