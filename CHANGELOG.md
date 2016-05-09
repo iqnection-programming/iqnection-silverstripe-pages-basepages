@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.21]
+- FormPage.php page after submit provides the page with the submission object, insterad of the submitted data
+
 ## [1.0.20]
 - Added option for multiple locations on the ContactPage
 

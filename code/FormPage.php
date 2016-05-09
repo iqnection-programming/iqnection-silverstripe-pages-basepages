@@ -316,7 +316,7 @@ $(document).ready(function(){
 			if($form_config['PageAfterSubmit'])
 			{
 				$page = $this->ClassName."_".$form_config['PageAfterSubmit'];
-				return $this->customise($data)->renderWith(array($page,'Page'));
+				return $this->customise(array('Submission' => $submission))->renderWith(array($page,'Page'));
 			}
             return $this->redirect($this->Link('thanks'));
         }
