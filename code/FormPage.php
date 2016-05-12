@@ -77,6 +77,9 @@
 		static $icon = "themes/mysite/images/icons/icon-form";
 		
 		private static $db = array(
+			"GAT_Activate" => "Boolean",
+			"GAT_Category" => "Varchar(255)",
+			"GAT_Label" => "Varchar(255)",
 			"ThankYouText" => "HTMLText"
 		);
 		
@@ -119,7 +122,18 @@
 			}
 			$fields->addFieldToTab('Root.FormSubmissions', new GridField($submission_class,'Form Submissions',DataObject::get($submission_class,"FormPageID = ".$this->ID),$submits_config));
 			return $fields;
-		}			
+		}
+		
+		public function getSettingsFields()
+		{
+			$fields = parent::getSettingsFields();
+			$fields->addFieldToTab('Root.GoogleFormTracking', CheckboxField::create('GAT_Activate','Activate Form Tracking') );
+			$fields->addFieldToTab('Root.GoogleFormTracking', TextField::create('GAT_Category','Category') );
+			$fields->addFieldToTab('Root.GoogleFormTracking', TextField::create('GAT_Label','Label') );
+			$fields->addFieldToTab('Root.GoogleFormTracking', ReadonlyField::create('GAT_Value','Value','1') );
+			$fields->addFieldToTab('Root.GoogleFormTracking', ReadonlyField::create('GAT_Action','Action','submit') );
+			return $fields;
+		}
 	}	
 	
 	class FormPage_Controller extends Page_Controller
@@ -166,10 +180,16 @@
 			$JS .= "
 $(document).ready(function(){
 	$(\"#Form_RenderForm\").validate({
-		".(($FormConfig['useNospam']) ? "useNospam: true," : null)."
+		".(($FormConfig['useNospam']) ? "useNospam: true," : null);
+			
+			if ($this->GAT_Activate)
+			{
+				$JS .= "\n\t\ttrackFormSubmit:{category:\"".htmlspecialchars($this->GAT_Category)."\",action:\"submit\",label:\"".htmlspecialchars($this->GAT_Label)."\",value:1},\n";
+			}
+			
+			$JS .= "
 	});
-});
-			";
+});";
 			return $JS;
 		}
 		

@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.22]
+- Added GA form goal tracking, settings are in page/Settings/Google Form tracknig tab
+
 ## [1.0.21]
 - FormPage.php page after submit provides the page with the submission object, insterad of the submitted data
 
