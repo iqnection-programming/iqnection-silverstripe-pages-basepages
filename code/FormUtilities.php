@@ -73,7 +73,7 @@
 					//else
 					if (!$fieldObject = $submission->relObject($fieldName))
 					{
-						$fieldObject = $submission->getComponent($fieldName);
+						$fieldObject = $submission->has_one($fieldName);
 					}
 					if ($fieldObject instanceof File)
 					{

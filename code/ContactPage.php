@@ -228,16 +228,18 @@
 		function CustomJS()
 		{
 			$js = parent::CustomJS();
-			$js .= 'var MapType = "'.$this->MapType.'";
-					var address_objects = [];';
-			if($locations = $this->ContactPageLocations()){
-				foreach($locations as $key => $l){
-					$js .= 'address_objects['.$key.'] = {"Title":"'.$l->Title.'","Address":"'.$l->Address.'","LatLng":['.$l->MapLatitude.','.$l->MapLongitude.']};';
+			if ($this->ContactPageLocations()->Count())
+			{
+				$js .= 'var MapType = "'.$this->MapType.'";
+						var address_objects = [];';
+				if($locations = $this->ContactPageLocations()){
+					foreach($locations as $key => $l){
+						$js .= 'address_objects['.$key.'] = {"Title":"'.$l->Title.'","Address":"'.$l->Address.'","LatLng":['.$l->MapLatitude.','.$l->MapLongitude.']};';
+					}
 				}
+				$js .= 'var Avgs = '.$this->Avgs().';
+						var PageLink = "'.$this->Link().'";';
 			}
-			$js .= 'var Avgs = '.$this->Avgs().';
-					var PageLink = "'.$this->Link().'";';
-			
 			
 			return $js;
 		}

@@ -1,6 +1,12 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.23]
+- ContactPage.js: Fixed JS error when no address provided
+- ContactPage.php: Fixed error when no address provided
+- FormPage.php: Added FileField validation for file extensions. use 'AllowedExtensions' => array('ext1','ext2') in file field config
+- FormUtilities.php: fixed bug
+
 ## [1.0.22]
 - Added GA form goal tracking, settings are in page/Settings/Google Form tracknig tab
 

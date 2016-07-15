@@ -260,6 +260,12 @@ $(document).ready(function(){
 					{
 						$fields->push($field);
 					}
+					
+					// File field
+					if ( ($data['FieldType'] == 'FileField') && (isset($data['AllowedExtensions'])) && (is_array($data['AllowedExtensions'])) )
+					{
+						$field->getValidator()->setAllowedExtensions($data['AllowedExtensions']);
+					}
 				}
 				
 				// update the class on the field groups to properly display the grouped fields horizontally
@@ -331,6 +337,7 @@ $(document).ready(function(){
 				$utils->SendAutoResponder($as,$ab,$data['Email'],$this->AutoResponderFromEmail);				
 			}
 			
+			$this->onAfterSubmit($submission);
 			$this->extend('onAfterSubmit',$submission);
 			
 			if($form_config['PageAfterSubmit'])
@@ -340,6 +347,11 @@ $(document).ready(function(){
 			}
             return $this->redirect($this->Link('thanks'));
         }
+		
+		public function onAfterSubmit($submission=null)
+		{
+			return $submission;
+		}
 		
 		public function RecipientFieldConfig()
 		{
