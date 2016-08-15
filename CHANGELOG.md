@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.24]
+- added ability to modify form before sending to template, use public function updateForm($form){} in extension class
+
 ## [1.0.23]
 - ContactPage.js: Fixed JS error when no address provided
 - ContactPage.php: Fixed error when no address provided

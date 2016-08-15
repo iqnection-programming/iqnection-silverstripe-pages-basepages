@@ -290,6 +290,7 @@ $(document).ready(function(){
 					$form->loadDataFrom($defaults);
 					Session::set("FormInfo.Form_RenderForm.data",false);
 				}
+				$this->extend('updateForm',$form);
 				return $form;
 			}
 			
