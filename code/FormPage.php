@@ -200,6 +200,14 @@ $(document).ready(function(){
 		
 		public function FormConfig()
 		{
+			/*
+			array(
+				'useNospam' => bool,
+				'submitText' => string 'Submit',
+				'HoneyPot => string 'FieldName',
+				'sendToAll => bool
+			)
+			*/
 			return array();
 		}
 		
@@ -278,6 +286,10 @@ $(document).ready(function(){
 				if($config = $this->FormConfig())
 				{
 					$submitText = $config['submitText'] ? $config['submitText'] : $submitText;
+					if ($honeyPotField = $config['HoneyPot'])
+					{
+						$fields->push( TextField::create($honeyPotField)->addExtraClass('hpf') );
+					}
 				}
 
 				$actions = new FieldList(
@@ -308,14 +320,20 @@ $(document).ready(function(){
 				return $this->redirectBack();	
 			}
 			
+			// if honeypot is used, redirect back
+			if ( ($honeyPotField = $form_config['HoneyPot']) && ($data[$honeyPotField]) )
+			{
+				Session::set("FormInfo.Form_RenderForm.data", $data);
+				Session::set("FormError", "Error, your submission has been detected as spam.");
+				return $this->redirectBack();	
+			}
+			
 			$submission_class = $this->ClassName."Submission";
             $submission = new $submission_class;
             $form->saveInto($submission);
 			$submission->FormPageID = $this->ID;
             $submission->write();
-			
-			$form_config = $this->FormConfig();
-			
+						
 			// send email to this address if specified
 			if($form_config['sendToAll']){
 				$EmailFormTo = $this->FormRecipients()->toArray();	

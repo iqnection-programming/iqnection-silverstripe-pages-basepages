@@ -71,7 +71,7 @@
 					//if (is_array($v))
 					//	$html .= self::FormDataToArray($v, $level+1,$hide_empty,$submission);
 					//else
-					if (!$fieldObject = $submission->relObject($fieldName))
+					if (!$fieldObject = $submission->obj($fieldName))
 					{
 						$fieldObject = $submission->has_one($fieldName);
 					}
