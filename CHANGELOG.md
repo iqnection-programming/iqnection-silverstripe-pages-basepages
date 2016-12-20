@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.0.25]
+- added file extensions to form page file field
+
 ## [1.0.24]
 - added ability to modify form before sending to template, use public function updateForm($form){} in extension class
 

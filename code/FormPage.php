@@ -273,6 +273,7 @@ $(document).ready(function(){
 					if ( ($data['FieldType'] == 'FileField') && (isset($data['AllowedExtensions'])) && (is_array($data['AllowedExtensions'])) )
 					{
 						$field->getValidator()->setAllowedExtensions($data['AllowedExtensions']);
+						$field->setDescription('('.implode(', ',$data['AllowedExtensions']).')');
 					}
 				}
 				
