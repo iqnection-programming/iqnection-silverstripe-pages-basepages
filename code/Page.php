@@ -75,11 +75,11 @@
 			);
 			Requirements::combine_files('Base.css', $BaseCSS);
 			
+			Requirements::javascript($dir."/javascript/jquery-1.9.1.min.js");
 			$BaseJS = array(
-				$dir."/javascript/jquery-1.9.1.min.js",
 				$dir."/javascript/scripts.js",
-				$dir."/javascript/dropdowns.js",
-				$dir."/javascript/responsive.js"
+				$dir."/javascript/responsive.js",
+				$dir."/javascript/navigation.js",
 			);
 			Requirements::combine_files('Base.js', $BaseJS);	
 

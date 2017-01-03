@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.1.0]
+- Update for upgraded JS files in IQ installer
+
 ## [1.0.25]
 - added file extensions to form page file field
 
