@@ -140,7 +140,8 @@
 	{	
 		
 		private static $allowed_actions = array(
-			"RenderForm"			
+			"RenderForm",
+			"thanks"
 		);
 		
 		public function init()

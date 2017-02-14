@@ -2,7 +2,7 @@ var map;
 var bounds;
 
 $(window).load(function(){
-	if (typeof google == 'object'){
+	if ((typeof google === 'object') && ($("#map_canvas").length>=1) ){
 		bounds = new google.maps.LatLngBounds();
 		
 		var myOptions = {
@@ -13,7 +13,7 @@ $(window).load(function(){
 		  mapTypeControl:false,
 		  mapTypeId: google.maps.MapTypeId.MapType
 		};
-		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+		map = new google.maps.Map($("#map_canvas")[0], myOptions);
 			
 		for(var i = 0; i < address_objects.length; i++){
 			addMarker(address_objects[i]);
