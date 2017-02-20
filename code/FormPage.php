@@ -237,7 +237,12 @@ $(document).ready(function(){
 
 					$Label = ($data['Group']) ? '' : ($data['Label']?$data['Label']:FormField::name_to_label($FieldName));
 					$field = new $data['FieldType']($FieldName,$Label,($data['Value']?$data['Value']:null),($data['Default']?$data['Default']:null));
-					if ($data['FieldTpye'] == 'DateField') $field->setConfig('m/d/Y');
+					if ($field instanceof DateField) 
+					{
+						$field->setConfig('showcalendar',true);
+						$field->setConfig('dateformat','m/d/yy');
+						$field->setConfig('datevalueformat','Y-m-d');
+					}
 					if($data['ExtraClass'])$field->addExtraClass($data['ExtraClass']);
 					if($data['Config'] && is_array($data['Config']))
 					{

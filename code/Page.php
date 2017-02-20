@@ -1,6 +1,6 @@
 <?php
 	
-class IQBase_Page extends Extension
+class IQBase_Page extends DataExtension
 {				
 	
 	private static $db = array(
@@ -50,14 +50,15 @@ class IQBase_Page extends Extension
 		return $fields;
 	}
 		
-	protected function RefreshCacheVars()
+	public function RefreshCacheVars()
 	{
 		return array(
 			'ID',
 			'ClassName',
 			'ParentID',
 			'Title',
-			'URLSegment'
+			'URLSegment',
+			'ShowInMenus'
 		);
 	}
 	
@@ -89,16 +90,14 @@ class IQBase_Page extends Extension
 	 * Stores it to the site root,
 	 * file is hashed for the current domain so there is a different file for each 
 	 */
-	protected function cacheSiteTree()
+	public function cacheSiteTree()
 	{
 		$cache = array();
 		foreach(Page::get()->filter('ParentID','0') as $page)
 		{
-			$cache['Pages'][$page->ID] = $page->dataForCache();
+			$cache['SiteTree'][$page->ID] = $page->dataForCache();
 		}
-		$cache['SiteConfig'] = SiteConfig::current_site_config()->dataForCache();
 		file_put_contents(BASE_PATH.'/site-tree.json',json_encode($cache));
-		$this->extend('onAfterCacheSiteTree');
 	}
 	
 	/**
@@ -117,23 +116,14 @@ class IQBase_Page extends Extension
 		$cache['BasePath'] = Director::absoluteURL($this->owner->RelativeLink());
 		$cache['ClassName'] = $this->owner->ClassName;
 		$cache['TemplateCacheFilename'] = 'template-cache/page-'.$this->owner->ID.'.json';
-		$this->extend('updateDataForCache',$cache);
 		$cache['Children'] = array();
 		foreach($this->owner->Children() as $child)
 		{
 			$cache['Children'][$child->ID] = $child->dataForCache();
 		}
-		$this->owner->generateTemplateCache();
 		return $cache;
 	}
-	
-	/**
-	 * To make the navigation display the correct "current" link, we need to generate templates for each page that is linked to a category
-	 * this method makes a request to the RenderTemplate URL to generate a page specific cache
-	 * this is really only needed in CartCateogryPage, but we declare it here
-	 */
-	public function generateTemplateCache() {}
-		
+			
 }
 	
 class IQBase_Page_Controller extends Extension 
@@ -304,7 +294,6 @@ class IQBase_Page_Controller extends Extension
 			'additional_head' => $SiteConfig->AdditionalHeaderCode,
 			'additional_foot' => $SiteConfig->AdditionalFooterCode,
 		);
-		$this->extend('updatePageCache',$array);
 		file_put_contents($cachePath,json_encode($array));
 		return json_encode($array);
 	}

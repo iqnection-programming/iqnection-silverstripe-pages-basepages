@@ -94,7 +94,7 @@ class BlogPage_Controller extends Page_Controller
 		{
 			$this->generateTemplateCache();
 		}
-		return Controller::redirect('/'.$this->BlogURL.'/');
+		return $this->redirect('/'.$this->BlogURL.'/');
 	}
 	
 }
