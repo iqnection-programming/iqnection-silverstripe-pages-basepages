@@ -77,12 +77,27 @@ class IQBase_Page extends DataExtension
 		}
 		if ( ($refreshCache) || (!file_exists(BASE_PATH.'/site-tree.json')) ) { $this->owner->cacheSiteTree(); }
 		// remove the template cache file so it's regenerated on next request
-		if ( ($refreshCache) && (file_exists(BASE_PATH.'/template-cache/page-'.$this->owner->ID.'.json')) ) { unlink(BASE_PATH.'/template-cache/page-'.$this->owner->ID.'.json'); }
+		if ($refreshCache)
+		{
+			if (file_exists($this->owner->getTemplateCachePath())) { unlink($this->owner->getTemplateCachePath()); }
+			if (file_exists(dirname($this->owner->getTemplateCachePath())))
+			{
+				foreach(scandir(dirname($this->owner->getTemplateCachePath())) as $file)
+				{
+					if (!preg_match("/^\.|\.$/",$file))
+					{
+						$path = dirname($this->getTemplateCachePath()).'/'.$file;
+						unlink($path);
+					}
+				}
+			}
+		}
+		
 	}
 	
-	public function getTemplateCachePath()
+	public function getTemplateCachePath($absolute=true)
 	{
-		return BASE_PATH.'/template-cache/page-'.$this->owner->ID.'.json';
+		return (($absolute) ? BASE_PATH.'/' : null).'template-cache/page-'.$this->owner->ID.'.json';
 	}
 	
 	/**
@@ -92,6 +107,7 @@ class IQBase_Page extends DataExtension
 	 */
 	public function cacheSiteTree()
 	{
+		if (!SiteConfig::current_site_config()->SiteTreeCacheEnabled) { return;	}
 		$cache = array();
 		foreach(Page::get()->filter('ParentID','0') as $page)
 		{
@@ -115,7 +131,7 @@ class IQBase_Page extends DataExtension
 		$cache['AbsoluteLink'] = $this->owner->AbsoluteLink();
 		$cache['BasePath'] = Director::absoluteURL($this->owner->RelativeLink());
 		$cache['ClassName'] = $this->owner->ClassName;
-		$cache['TemplateCacheFilename'] = 'template-cache/page-'.$this->owner->ID.'.json';
+		$cache['TemplateCacheFilename'] = $this->owner->getTemplateCachePath(false);
 		$cache['Children'] = array();
 		foreach($this->owner->Children() as $child)
 		{
@@ -123,6 +139,7 @@ class IQBase_Page extends DataExtension
 		}
 		return $cache;
 	}
+
 			
 }
 	
@@ -157,8 +174,8 @@ class IQBase_Page_Controller extends Extension
 		Requirements::combine_files('Base.css', $BaseCSS);
 		
 		$BaseJS = array(
-			$dir."/javascript/scripts.js",
 			$dir."/javascript/responsive.js",
+			$dir."/javascript/scripts.js",
 			$dir."/javascript/navigation.js",
 		);
 		Requirements::combine_files('Base.js', $BaseJS);	
@@ -301,7 +318,7 @@ class IQBase_Page_Controller extends Extension
 	public function RenderTemplates()
 	{
 		header('Content-type: application/json');
-		print $this->generateTemplateCache();
+		print $this->owner->generateTemplateCache();
 		die();
 	}
 	

@@ -1,4 +1,4 @@
-<?
+<?php
 
 	class FormPageSubmission extends DataObject
 	{
@@ -215,9 +215,7 @@ $(document).ready(function(){
 		public function RenderForm() 
 		{
 			if($form_fields = $this->FormFields())
-			{
-				if (!isset($form_fields['Recipient'])) Debug::showError('Recipient field has not been provided for this form');
-				
+			{				
 				$fields = new FieldList();
 				if ($form_error = Session::get('FormError'))
 				{
@@ -271,6 +269,7 @@ $(document).ready(function(){
 						${$data['Group']}->FieldCount++;
 					}
 					else
+
 					{
 						$fields->push($field);
 					}
@@ -342,10 +341,13 @@ $(document).ready(function(){
             $submission->write();
 						
 			// send email to this address if specified
-			if($form_config['sendToAll']){
+			if($form_config['sendToAll'])
+			{
 				$EmailFormTo = $this->FormRecipients()->toArray();	
-			}else{
-				$EmailFormTo = $this->FormRecipients()->filter(array("Title" => $data['Recipient']));
+			}
+			elseif ($recipTitle = $data['Recipient'])
+			{
+				$EmailFormTo = $this->FormRecipients()->filter(array("Title" => $recipTitle));
 			}
 			
 			$utils = new FormUtilities();
@@ -421,4 +423,3 @@ $(document).ready(function(){
 		}
 		
 	}
-?>

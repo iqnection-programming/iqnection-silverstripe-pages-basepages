@@ -10,3 +10,6 @@ LeftAndMain:
 Injector:
   MemberLoginForm:
     class: MemberLoginForm_Extension
+SiteConfig:
+  extensions:
+    - BasePages_SiteConfig
