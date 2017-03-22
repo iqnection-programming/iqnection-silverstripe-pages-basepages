@@ -22,6 +22,12 @@ class BlogPage extends Page
 		return $fields;
 	}
 	
+	public function updateRefreshCacheVars(&$vars)
+	{
+		$vars[] = 'BlogURL';
+		return $vars;
+	}
+	
 	function onAfterWrite()
 	{
 		parent::onAfterWrite();

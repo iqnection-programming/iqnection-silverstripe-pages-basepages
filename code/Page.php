@@ -49,10 +49,10 @@ class IQBase_Page extends DataExtension
 		
 		return $fields;
 	}
-		
+	
 	public function RefreshCacheVars()
 	{
-		return array(
+		$vars = array(
 			'ID',
 			'ClassName',
 			'ParentID',
@@ -60,14 +60,18 @@ class IQBase_Page extends DataExtension
 			'URLSegment',
 			'ShowInMenus'
 		);
+		$vars = $this->owner->updateRefreshCacheVars($vars);
+		return $vars;
 	}
+	
+	public function updateRefreshCacheVars($vars) { return $vars; }
 	
 	public function onAfterWrite()
 	{
 		parent::onAfterWrite();
 		
 		$refreshCache = false;
-		foreach($this->owner->RefreshCacheVars() as $var)
+		foreach($this->RefreshCacheVars() as $var)
 		{
 			if ($this->owner->isChanged($var))
 			{
@@ -79,10 +83,10 @@ class IQBase_Page extends DataExtension
 		// remove the template cache file so it's regenerated on next request
 		if ($refreshCache)
 		{
-			if (file_exists($this->owner->getTemplateCachePath())) { unlink($this->owner->getTemplateCachePath()); }
-			if (file_exists(dirname($this->owner->getTemplateCachePath())))
+			if (file_exists($this->getTemplateCachePath())) { unlink($this->getTemplateCachePath()); }
+			if (file_exists(dirname($this->getTemplateCachePath())))
 			{
-				foreach(scandir(dirname($this->owner->getTemplateCachePath())) as $file)
+				foreach(scandir(dirname($this->getTemplateCachePath())) as $file)
 				{
 					if (!preg_match("/^\.|\.$/",$file))
 					{
@@ -95,11 +99,15 @@ class IQBase_Page extends DataExtension
 		
 	}
 	
+	public function updateTemplateCachePath($path,$absolute=true) { return $path; }
+	
 	public function getTemplateCachePath($absolute=true)
 	{
-		return (($absolute) ? BASE_PATH.'/' : null).'template-cache/page-'.$this->owner->ID.'.json';
+		$path = (($absolute) ? BASE_PATH.'/' : null).'template-cache/page-'.$this->owner->ID.'.json';
+		$path = $this->owner->updateTemplateCachePath($path,$absolute);
+		return $path;
 	}
-	
+		
 	/**
 	 * Caches the site tree for use in Pinnacle scripts
 	 * Stores it to the site root,
@@ -113,8 +121,11 @@ class IQBase_Page extends DataExtension
 		{
 			$cache['SiteTree'][$page->ID] = $page->dataForCache();
 		}
+		$cache = $this->owner->updateCachedSiteTree($cache);
 		file_put_contents(BASE_PATH.'/site-tree.json',json_encode($cache));
 	}
+	
+	public function updateCachedSiteTree($cache) { return $cache; }
 	
 	/**
 	 * generates the array of cached data for the current page
@@ -131,14 +142,17 @@ class IQBase_Page extends DataExtension
 		$cache['AbsoluteLink'] = $this->owner->AbsoluteLink();
 		$cache['BasePath'] = Director::absoluteURL($this->owner->RelativeLink());
 		$cache['ClassName'] = $this->owner->ClassName;
-		$cache['TemplateCacheFilename'] = $this->owner->getTemplateCachePath(false);
+		$cache['TemplateCacheFilename'] = $this->getTemplateCachePath(false);
 		$cache['Children'] = array();
 		foreach($this->owner->Children() as $child)
 		{
 			$cache['Children'][$child->ID] = $child->dataForCache();
 		}
+		$cache = $this->owner->updateDataForCache($cache);
 		return $cache;
 	}
+	
+	public function updateDataForCache($cache) { return $cache; }
 
 			
 }
@@ -304,21 +318,23 @@ class IQBase_Page_Controller extends Extension
 			mkdir(BASE_PATH.'/template-cache',0755);
 		}
 		$cachePath = $this->owner->getTemplateCachePath();
-		$SiteConfig = SiteConfig::current_site_config();
-		$array = array(
-			'header' => preg_replace('/\t/','',$this->owner->renderWith('Header')->AbsoluteLinks()),
-			'footer' => preg_replace('/\t/','',$this->owner->renderWith('Footer')->AbsoluteLinks()),
-			'additional_head' => $SiteConfig->AdditionalHeaderCode,
-			'additional_foot' => $SiteConfig->AdditionalFooterCode,
+		$cache = array(
+			'header' => preg_replace('/\t/','',$this->owner->Customise(array('ForCache' => true))->renderWith('Header')->AbsoluteLinks()),
+			'footer' => preg_replace('/\t/','',$this->owner->Customise(array('ForCache' => true))->renderWith('Footer')->AbsoluteLinks())
 		);
-		file_put_contents($cachePath,json_encode($array));
-		return json_encode($array);
+		$cache = $this->owner->updateGeneratedTemplateCache($cache);
+		file_put_contents($cachePath,json_encode($cache));
+		// regenerate SiteConfig cache
+		SiteConfig::current_site_config()->generateTemplateCache();
+		return json_encode($cache);
 	}
+	
+	public function updateGeneratedTemplateCache($cache) { return $cache; }
 	
 	public function RenderTemplates()
 	{
 		header('Content-type: application/json');
-		print $this->owner->generateTemplateCache();
+		print $this->generateTemplateCache();
 		die();
 	}
 	

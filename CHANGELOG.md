@@ -1,6 +1,10 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.1.2]
+- Removed SiteConfig data caching, now in seo module
+- caching improvements
+
 ## [1.1.1]
 - Added caching system I've been working on. Site Tree, Header HTML, Footer HTML, and SiteConfig Additional Code is now cached at site-tree.json and template-cache/page-[ID].json.json
 
