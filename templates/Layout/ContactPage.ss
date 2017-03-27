@@ -18,7 +18,7 @@
                             </div>
                         </div>
                     <% else %>
-                        <input type="hidden" name="to_address" id="to_address" readonly value="<% control ContactPageLocations.First %>{$Title}: $Address<% end_control %>" />
+                        <input type="hidden" name="to_address" id="to_address" readonly value="<% control ContactPageLocations.First %>$Address<% end_control %>" />
                     <% end_if %>
                     <div class="field text">
                         <label class="left">Get Directions:</label>
