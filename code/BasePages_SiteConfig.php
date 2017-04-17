@@ -9,10 +9,8 @@ class BasePages_SiteConfig extends DataExtension
 	
 	public function updateCMSFields(&$fields)
 	{
-		if (Permission::check('ADMIN'))
-		{
-			$fields->addFieldToTab('Root.Caching', CheckboxField::create('SiteTreeCacheEnabled','Cache Site Tree to JSON File')->setDescription('File located at /site-tree.json') );
-		}
+		$tab = $fields->findOrMakeTab('Root.Developer.Caching');
+		$tab->push( CheckboxField::create('SiteTreeCacheEnabled','Cache Site Tree to JSON File')->setDescription('File located at /site-tree.json') );
 	}
 	
 	public function onAfterWrite()

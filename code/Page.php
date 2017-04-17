@@ -21,13 +21,11 @@ class IQBase_Page extends DataExtension
 	
 	public function updateCMSFields(FieldList $fields)
 	{
-		if( permission::check('ADMIN') )
-		{
-			$fields->addFieldToTab('Root.AdditionalCode', $codeField = new CodeEditorField('AdditionalCode','Additional HTML/JS/CSS Code',50) );
-			$codeField->addExtraClass('stacked');
-			$codeField->setRows(45);
-			$codeField->setMode('html');
-		}
+		$tab = $fields->findOrMakeTab('Root.Developer.AdditionalCode');
+		$tab->push( $codeField = new CodeEditorField('AdditionalCode','Additional HTML/JS/CSS Code',50) );
+		$codeField->addExtraClass('stacked');
+		$codeField->setRows(45);
+		$codeField->setMode('html');
 				
 		if($this->owner->ClassName == "Page")
 		{

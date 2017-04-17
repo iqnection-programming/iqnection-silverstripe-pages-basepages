@@ -1,6 +1,12 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.1.3]
+- Moved ADMIN function ality to Developer tabs
+- Removed ADMIN only permissions on some settings
+- Added ability to include submission data in auto responder
+- removed ADMIN only permissions to developer fields throught CMS. Moved fields into Developer tab
+
 ## [1.1.2]
 - Removed SiteConfig data caching, now in seo module
 - caching improvements

@@ -362,7 +362,7 @@ $(document).ready(function(){
 			
 			if(($as = $this->AutoResponderSubject) && $ab = ($this->AutoResponder))
 			{
-				$utils->SendAutoResponder($as,$ab,$data['Email'],$this->AutoResponderFromEmail);				
+				$utils->SendAutoResponder($as,$ab,$data['Email'],$this->AutoResponderFromEmail,$submission,$data,$this->AutoResponderIncludeSubmission);			
 			}
 			
 			$this->onAfterSubmit($submission);

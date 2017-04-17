@@ -32,7 +32,7 @@
 			$email->send();
 		}
 		
-		public static function SendAutoResponder($subject=false,$body=false,$EmailFormTo=false,$FromEmail=null)
+		public static function SendAutoResponder($subject=false,$body=false,$EmailFormTo=false,$FromEmail=null,$submission=null,$post_vars=array(),$includeSubmission=false)
 		{
 			$arr_path = explode(".", $_SERVER['HTTP_HOST']);
 				
@@ -44,6 +44,11 @@
 			
 			$email_body = "<html><body>";
 			$email_body .= $body;
+			if ($submission && $includeSubmission)
+			{
+				$email_body .= '<p>&nbsp;</p><p>&nbsp;</p>';
+				$email_body .= self::FormDataToArray($post_vars,null,null,$submission);
+			}
 			$email_body .= "</body></html>";
 
 			$email->setBody($email_body);
