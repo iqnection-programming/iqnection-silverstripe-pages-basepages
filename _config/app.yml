@@ -13,3 +13,6 @@ Injector:
 SiteConfig:
   extensions:
     - BasePages_SiteConfig
+Director:
+  rules:
+    'cachetemplate//$Action/': 'Page_Controller'

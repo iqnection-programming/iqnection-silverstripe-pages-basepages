@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.1.14]
+- added routing rule to app.yml for generic page caching
+
 ## [1.1.3]
 - Moved ADMIN function ality to Developer tabs
 - Removed ADMIN only permissions on some settings
