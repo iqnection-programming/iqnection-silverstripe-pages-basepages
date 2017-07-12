@@ -875,7 +875,11 @@
 			while (preg_match("/^\d/", $word)) $word = substr($word, 1);
 	
 			$i = 0;
-			$word = preg_replace("/([a-zA-z])/e", "chr(ord(\\1) + ((strlen(\$word) * (\$i++)) % 20))", $word);
+			$word = preg_replace_callback("/([a-zA-Z])/", 
+				function($matches) use (&$word,&$i){ 
+					chr(ord($matches[0]) + ((strlen($word) * ($i++)) % 20));
+				}, $word
+			);
 			$word = preg_replace("/^\W/", chr(preg_match_all("/\d/", $word, $matches) + 97), $word);
 			
 			$word = substr($word, 0, 14);
