@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.1.15]
+- Added validation for BlogPage url, page URL segment cannot be the same as the actual blog path
+
 ## [1.1.14]
 - added routing rule to app.yml for generic page caching
 

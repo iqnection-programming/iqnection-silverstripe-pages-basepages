@@ -21,6 +21,16 @@ class BlogPage extends Page
 		if($this->BlogURL)$fields->addFieldToTab("Root.WordpressLogin", new LiteralField("Desc1", "<div id='wp-login'><h1>WordPress</h1><a href='".Director::AbsoluteBaseURL().$this->BlogURL."/wp-login.php' target='_blank'>Login</a></div>")); 
 		return $fields;
 	}
+
+	public function validate()
+	{
+		$result = parent::validate();
+		if ( ($this->ParentID == 0) && ($this->URLSegment == $this->BlogURL) )
+		{
+			$result->error('The URL Segment for this page may cause an infinite loop if the SilverStripe path is the same as the WordPress directory. I suggest [site-title-blog] format.');
+		}
+		return $result;
+	}
 	
 	public function updateRefreshCacheVars(&$vars)
 	{
