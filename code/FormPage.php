@@ -227,34 +227,34 @@ $(document).ready(function(){
 				$fieldGroups = array();
 				foreach($form_fields as $FieldName => $data)
 				{
-					if ( ($data['Value']) && (is_string($data['Value'])) )
+					if ( (isset($data['Value'])) && ($data['Value']) && (is_string($data['Value'])) )
 					{
 						$method_home = method_exists($this,$data['Value']) ? $this : (method_exists($utils,$data['Value']) ? $utils : false);
 						$data['Value'] = $method_home ? $method_home->$data['Value']() : $data['Value'];
 					}
 
-					$Label = ($data['Group']) ? '' : ($data['Label']?$data['Label']:FormField::name_to_label($FieldName));
-					$field = new $data['FieldType']($FieldName,$Label,($data['Value']?$data['Value']:null),($data['Default']?$data['Default']:null));
+					$Label = (isset($data['Group'])) ? '' : (isset($data['Label'])?$data['Label']:FormField::name_to_label($FieldName));
+					$field = new $data['FieldType']($FieldName,$Label,(isset($data['Value'])?$data['Value']:null),(isset($data['Default'])?$data['Default']:null));
 					if ($field instanceof DateField) 
 					{
 						$field->setConfig('showcalendar',true);
 						$field->setConfig('dateformat','m/d/yy');
 						$field->setConfig('datevalueformat','Y-m-d');
 					}
-					if($data['ExtraClass'])$field->addExtraClass($data['ExtraClass']);
-					if($data['Config'] && is_array($data['Config']))
+					if(isset($data['ExtraClass']))$field->addExtraClass($data['ExtraClass']);
+					if(isset($data['Config']) && is_array($data['Config']))
 					{
 						foreach($data['Config'] as $key => $value)
 						{
 							$field->setConfig($key,$value);
 						}
 					}	
-					if($data['Required'])
+					if(isset($data['Required']))
 					{
 						$validator->addRequiredField($FieldName);
 						$field->addExtraClass('required');
 					}
-					if($data['Group'])
+					if(isset($data['Group']))
 					{
 						if (!isset(${$data['Group']}))
 						{
@@ -263,7 +263,7 @@ $(document).ready(function(){
 							${$data['Group']}->FieldCount = 0;
 							$fieldGroups[] = ${$data['Group']};
 						}
-						$field->setRightTitle((($data['Label'])?$data['Label']:FormField::name_to_label($FieldName)));
+						$field->setRightTitle(((isset($data['Label']))?$data['Label']:FormField::name_to_label($FieldName)));
 
 						${$data['Group']}->push($field);
 						${$data['Group']}->FieldCount++;
@@ -291,8 +291,8 @@ $(document).ready(function(){
 				$submitText = "Submit";
 				if($config = $this->FormConfig())
 				{
-					$submitText = $config['submitText'] ? $config['submitText'] : $submitText;
-					if ($honeyPotField = $config['HoneyPot'])
+					$submitText = isset($config['submitText']) ? $config['submitText'] : $submitText;
+					if ( (isset($config['HoneyPot'])) && ($honeyPotField = $config['HoneyPot']) )
 					{
 						$fields->push( TextField::create($honeyPotField)->addExtraClass('hpf') );
 					}
@@ -327,7 +327,7 @@ $(document).ready(function(){
 			}
 			
 			// if honeypot is used, redirect back
-			if ( ($honeyPotField = $form_config['HoneyPot']) && ($data[$honeyPotField]) )
+			if ( (isset($form_config['HoneyPot'])) && ($honeyPotField = $form_config['HoneyPot']) && ($data[$honeyPotField]) )
 			{
 				Session::set("FormInfo.Form_RenderForm.data", $data);
 				Session::set("FormError", "Error, your submission has been detected as spam.");
@@ -341,7 +341,7 @@ $(document).ready(function(){
             $submission->write();
 						
 			// send email to this address if specified
-			if($form_config['sendToAll'])
+			if( (isset($form_config['sendToAll'])) && ($form_config['sendToAll']) )
 			{
 				$EmailFormTo = $this->FormRecipients()->toArray();	
 			}
@@ -368,7 +368,7 @@ $(document).ready(function(){
 			$this->onAfterSubmit($submission);
 			$this->extend('onAfterSubmit',$submission);
 			
-			if($form_config['PageAfterSubmit'])
+			if ( (isset($form_config['PageAfterSubmit'])) && ($form_config['PageAfterSubmit']) )
 			{
 				$page = $this->ClassName."_".$form_config['PageAfterSubmit'];
 				return $this->customise(array('Submission' => $submission))->renderWith(array($page,'Page'));

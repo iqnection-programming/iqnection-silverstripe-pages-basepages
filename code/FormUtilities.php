@@ -55,7 +55,7 @@
 			$email->send();
 		}
 		
-		public function FormDataToArray($data, $level=0, $hide_empty=0,$submission)
+		public static function FormDataToArray($data, $level=0, $hide_empty=0,$submission)
 		{
 			$ignore_keys = array(
 				"MAX_FILE_SIZE",

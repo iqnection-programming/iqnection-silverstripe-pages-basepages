@@ -25,7 +25,7 @@ class BlogPage extends Page
 	public function validate()
 	{
 		$result = parent::validate();
-		if ( ($this->ParentID == 0) && ($this->URLSegment == $this->BlogURL) )
+		if ( ($this->ParentID == 0) && ($this->URLSegment) && ($this->URLSegment == $this->BlogURL) )
 		{
 			$result->error('The URL Segment for this page may cause an infinite loop if the SilverStripe path is the same as the WordPress directory. I suggest [site-title-blog] format.');
 		}
@@ -66,6 +66,7 @@ class BlogPage extends Page
 		foreach($remove_keys as $key) { unset($curr_data[$key]); }
 		
 		$ss_line = 0;
+		$inside = false;
 		foreach ($curr_data as $line)
 		{
 			if (trim($line) == "### SILVERSTRIPE START ###")

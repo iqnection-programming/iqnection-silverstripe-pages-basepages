@@ -7,7 +7,7 @@ class BasePages_SiteConfig extends DataExtension
 		'SiteTreeCacheEnabled' => 'Boolean'
 	);
 	
-	public function updateCMSFields(&$fields)
+	public function updateCMSFields(FieldList $fields)
 	{
 		$tab = $fields->findOrMakeTab('Root.Developer.Caching');
 		$tab->push( CheckboxField::create('SiteTreeCacheEnabled','Cache Site Tree to JSON File')->setDescription('File located at /site-tree.json') );
@@ -40,7 +40,10 @@ class BasePages_SiteConfig extends DataExtension
 		{
 			foreach($cacheUpdates as $cacheUpdate)
 			{
-				$cache = array_merge($cache,$cacheUpdate);
+				if (is_array($cacheUpdate))
+				{
+					$cache = array_merge($cache,$cacheUpdate);
+				}
 			}
 		}
 		file_put_contents($cachePath,json_encode($cache));
