@@ -291,8 +291,10 @@ class IQBase_Page_Controller extends Extension
 	
 	public function CopyrightName()
 	{
-		$arr_path = explode(".", $_SERVER['HTTP_HOST']);	
-		return $arr_path[1].".".$arr_path[2];
+		$arr_path = explode(".", $_SERVER['HTTP_HOST']);
+		$suffix = array_pop($arr_path);
+		$domain = array_pop($arr_path).'.'.$suffix;
+		return $domain;
 	}
 	
 	public function ColAmount(){

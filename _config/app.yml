@@ -1,3 +1,6 @@
+---
+Name: iqbasepages
+--- 
 Page:
   extensions:
     - IQBase_Page

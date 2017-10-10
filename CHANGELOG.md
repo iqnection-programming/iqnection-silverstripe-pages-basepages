@@ -1,6 +1,11 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.1.16]
+- various SEO imporvements
+- various css changes (back to basics)
+- add error_reporting declaration in config
+
 ## [1.1.15]
 - Added validation for BlogPage url, page URL segment cannot be the same as the actual blog path
 

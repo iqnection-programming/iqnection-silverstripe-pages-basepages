@@ -2,14 +2,18 @@
 
 class BlogPage extends Page
 {
-	static $icon = "themes/mysite/images/icons/icon-blog";
+	private static $icon = "themes/mysite/images/icons/icon-blog";
 	
-	static $db = array(
+	private static $db = array(
 		"BlogURL" => "Varchar(255)"
 	);
 	
-	static $search_config = array(
+	private static $search_config = array(
 		"ignore_in_search" => true
+	);
+	
+	private static $defaults = array(
+		'ShowInSearch' => false
 	);
 	
 	public function getCMSFields()
@@ -38,7 +42,7 @@ class BlogPage extends Page
 		return $vars;
 	}
 	
-	function onAfterWrite()
+	public function onAfterWrite()
 	{
 		parent::onAfterWrite();
 		
