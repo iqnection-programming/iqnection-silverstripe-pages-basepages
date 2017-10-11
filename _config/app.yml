@@ -1,6 +1,9 @@
 ---
-Name: iqbasepages
---- 
+Name: mysite
+After:
+  - 'framework/*'
+  - 'cms/*'
+---
 Page:
   extensions:
     - IQBase_Page
@@ -19,3 +22,4 @@ SiteConfig:
 Director:
   rules:
     'cachetemplate//$Action/': 'Page_Controller'
+---
