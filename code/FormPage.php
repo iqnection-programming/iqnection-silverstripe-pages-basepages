@@ -239,7 +239,7 @@ $(document).ready(function(){
 					{
 						$field->setConfig('showcalendar',true);
 						$field->setConfig('dateformat','m/d/yy');
-						$field->setConfig('datevalueformat','Y-m-d');
+						$field->setConfig('datavalueformat','Y-m-d');
 					}
 					if(isset($data['ExtraClass']))$field->addExtraClass($data['ExtraClass']);
 					if(isset($data['Config']) && is_array($data['Config']))
