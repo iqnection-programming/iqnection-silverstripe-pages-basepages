@@ -52,7 +52,8 @@ class BlogPage extends Page
 		//Silverstripe is bad and should feel bad
 		$page = DataObject::get_by_id('BlogPage',$this->ID, false);		
 					
-		$extra = $page->BlogURL ? "RewriteCond %{REQUEST_URI} !^/".$page->BlogURL : "";
+		$extra = $page->BlogURL ? "RewriteCond %{REQUEST_URI} !^/".$page->BlogURL."$" : "";
+		$extra2 = $page->BlogURL ? "RewriteCond %{REQUEST_URI} !^/".$page->BlogURL."/" : "";
 		
 		$new_file = array();
 		
@@ -64,6 +65,7 @@ class BlogPage extends Page
 			{
 				$remove_keys[] = $key;
 				$remove_keys[] = $key + 1;
+				$remove_keys[] = $key + 2;
 			}
 			
 		}
@@ -89,6 +91,7 @@ class BlogPage extends Page
 			if($inside){
 				$new_file[] = trim("### Blog Redirect ###");
 				$new_file[] = trim($extra);
+				$new_file[] = trim($extra2);
 				$inside = false;
 			}
 			$new_file[] = trim($line);		

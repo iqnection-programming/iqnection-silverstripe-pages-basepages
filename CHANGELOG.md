@@ -1,6 +1,10 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [1.1.17]
+- BlogPage bug fix
+- Included CSS merge fix
+
 ## [1.1.16]
 - various SEO imporvements
 - various css changes (back to basics)

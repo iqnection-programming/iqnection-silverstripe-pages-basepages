@@ -244,7 +244,13 @@ class IQBase_Page_Controller extends Extension
 				$CSSFiles[] = $dir."/css/pages/".$this->owner->ClassName.".css";
 			}
 		}
-		$this->owner->extend('updatePageCSS',$CSSFiles);
+		foreach($this->owner->extend('updatePageCSS',$CSSFiles) as $updates)
+		{
+			$CSSFiles = array_merge(
+				$CSSFiles,
+				$updates
+			);
+		}	
 		return $CSSFiles;
 	}
 	
@@ -259,7 +265,13 @@ class IQBase_Page_Controller extends Extension
 				$CSSFiles[] = $dir."/css/pages/".$this->owner->ClassName."_responsive.css";
 			}
 		}
-		$this->owner->extend('updateResponsiveCSS',$CSSFiles);
+		foreach($this->owner->extend('updateResponsiveCSS',$CSSFiles) as $updates)
+		{
+			$CSSFiles = array_merge(
+				$CSSFiles,
+				$updates
+			);
+		}	
 		return $CSSFiles;
 	}
 	
@@ -273,14 +285,23 @@ class IQBase_Page_Controller extends Extension
 				$JSFiles[] = $dir."/javascript/pages/".$this->owner->ClassName.".js";
 			}
 		}
-		$this->owner->extend('updatePageJS',$JSFiles);
+		foreach($this->owner->extend('updatePageJS',$JSFiles) as $updates)
+		{
+			$JSFiles = array_merge(
+				$JSFiles,
+				$updates
+			);
+		}		
 		return $JSFiles;
 	}
 	
 	function CustomJS()
 	{
 		$js = null;
-		$this->owner->extend('updateCustomJS',$js);
+		foreach($this->owner->extend('updateCustomJS',$js) as $moreJs)
+		{
+			$js .= $moreJs;
+		}
 		return $js;
 	}
 	
