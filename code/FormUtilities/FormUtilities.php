@@ -1,6 +1,12 @@
 <?php
 
-class FormUtilities extends DataObject
+
+namespace IqBasePages\FormUtilities;
+
+use SilverStripe\Forms;
+use SilverStripe\Control\Email\Email;
+
+class FormUtilities
 {
 	public static function RequiredFields(&$fields,$requiredFields)
 	{
@@ -12,15 +18,16 @@ class FormUtilities extends DataObject
 				$fields->replaceField($requiredField, $field);
 			}
 		}
-		return new RequiredFields($requiredFields);
+		return Forms\RequiredFields::create($requiredFields);
 	}
 	
-	public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null){
+	public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null)
+	{
 		$arr_path = explode(".", $_SERVER['HTTP_HOST']);
 		$suffix = array_pop($arr_path);
 		$domain = array_pop($arr_path).'.'.$suffix;
 					
-		$email = new Email(
+		$email = Email::create(
 			"forms@".$domain,
 			$EmailFormTo,
 			$page->Title." form submission"
@@ -31,7 +38,7 @@ class FormUtilities extends DataObject
 		$email_body .= "</body></html>";
 
 		$email->setBody($email_body);
-		$email->replyTo($post_vars['Email']);
+		$email->setReplyTo($post_vars['Email']);
 		$email->send();
 	}
 	
@@ -41,7 +48,7 @@ class FormUtilities extends DataObject
 		$suffix = array_pop($arr_path);
 		$domain = array_pop($arr_path).'.'.$suffix;
 			
-		$email = new Email(
+		$email = Email::create(
 			($FromEmail) ? $FromEmail : "forms@".$domain,
 			$EmailFormTo,
 			$subject
@@ -102,7 +109,7 @@ class FormUtilities extends DataObject
 	{
 		if ($val)
 		{
-			foreach (IQBaseForm::GetCountriesByContinent() as $continent => $countries)
+			foreach (self::GetCountriesByContinent() as $continent => $countries)
 			{
 				foreach ($countries as $code => $name)
 				{
@@ -383,7 +390,8 @@ class FormUtilities extends DataObject
 		);			
 	}
 
-	public static function GetCountries(){
+	public static function GetCountries()
+	{
 		return array(
 		  "US" => "United States",
 		  "GB" => "United Kingdom",
@@ -631,7 +639,7 @@ class FormUtilities extends DataObject
 	{
 		if ($val)
 		{
-			foreach (IQBaseForm::GetStates_PlusCanada(true) as $code => $name)
+			foreach (self::GetStates_PlusCanada(true) as $code => $name)
 			{
 				if ($code == $val) return $name;
 			}
@@ -700,10 +708,12 @@ class FormUtilities extends DataObject
 		return $states;
 	}
 	
-	public static function GetStatesBackwards(){
-		$states = IQBaseForm::GetStates();
+	public static function GetStatesBackwards()
+	{
+		$states = self::GetStates();
 		$states_bw = array();
-		foreach($states as $initials => $full){
+		foreach($states as $initials => $full)
+		{
 			$states_bw[$full] = $initials;
 		}
 		return $states_bw;
@@ -861,7 +871,7 @@ class FormUtilities extends DataObject
 		return $states;
 	}
 	
-	static function generateCode($word)
+	public static function generateCode($word)
 	{
 		$len = strlen($word);
 		$chars = array("@", "#", "*", "$", "!");
@@ -891,20 +901,19 @@ class FormUtilities extends DataObject
 		return ($word);
 	}
 	
-	static function referSecurityCheck()
+	public static function referSecurityCheck()
 	{
 		$refer = $_SERVER['HTTP_REFERER'];
 		$server = $_SERVER['SERVER_NAME'];
 		$cr = explode(".", preg_replace("/^http[s]?:\/\/([^\/]+).*$/i", "\\1", $refer));
 		$cs = explode(".", $server);
-		
+
 		$r = $cr[count($cr)-2].".".$cr[count($cr)-1];
 		$s = $cs[count($cs)-2].".".$cs[count($cs)-1];
-		
 		return ($r == $s);
 	}
 	
-	static function validateAjaxCode()
+	public static function validateAjaxCode()
 	{
 		list($code1, $code2) = explode("|", trim($_REQUEST['nospam_codes']));
 		unset($_REQUEST['nospam_codes'], $_POST['nospam_codes']);
@@ -918,7 +927,7 @@ class FormUtilities extends DataObject
 		{
 			return (self::generateCode($code1) == $code2);
 		}
-			return false;
+		return false;
 	}
 	
 }

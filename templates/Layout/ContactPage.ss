@@ -1,24 +1,24 @@
 <section id="form_page_left">
     <h1>$Title</h1>
     $Content
-    <% if ContactPageLocations %>
+    <% if $ContactPageLocations %>
         <div id="map_wrap"><div id="map_canvas"></div></div>
-        <% if MapDirections %>
+        <% if $MapDirections %>
             <div id="directions_wrap">
                 <form id="frmDD" onsubmit="getDirections();return false;">
-                    <% if NeedLocationsSelect %>
+                    <% if $NeedLocationsSelect %>
                         <div class="field text">
                             <label class="left">Destination:</label>
                             <div class="middleColumn">
                                 <select name="to_address" id="to_address" class="select">
-                                    <% control ContactPageLocations %>
+                                    <% loop $ContactPageLocations %>
                                         <option value="$Address">{$Title}: $Address</option>
-                                    <% end_control %>
+                                    <% end_loop %>
                                 </select>                            	
                             </div>
                         </div>
                     <% else %>
-                        <input type="hidden" name="to_address" id="to_address" readonly value="<% control ContactPageLocations.First %>$Address<% end_control %>" />
+                        <input type="hidden" name="to_address" id="to_address" readonly value="<% with $ContactPageLocations.First %>$Address<% end_with %>" />
                     <% end_if %>
                     <div class="field text">
                         <label class="left">Get Directions:</label>

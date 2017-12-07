@@ -1,0 +1,10 @@
+---
+Name: iqbasepagesroutes
+After:
+  - '#rootroutes'
+  - '#coreroutes'
+---
+SilverStripe\Control\Director:
+  rules:
+    'cachetemplate//$Action/': 'PageController'
+    'nospam//$Action/': 'NoSpamController'

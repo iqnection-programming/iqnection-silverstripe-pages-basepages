@@ -1,6 +1,6 @@
 {
 	"name": "iqnection-pages/basepages",
-	"description": "Base group of SilverStripe 3 PageTypes",
+	"description": "Base group of SilverStripe PageTypes",
 	"type": "silverstripe-module",
 	"keywords": ["iqnection","pages"],
 	"authors": [
@@ -10,9 +10,14 @@
 		}
 	],
 	"require": {
-		"silverstripe/framework": ">=3.0"
+		"silverstripe/framework": "4.*",
+		"undefinedoffset/sortablegridfield": "*",
+		"iqnection-themes/mysite" : "*"
 	},
 	"extra": {
-		"installer-name": "iq-basepages"
+		"installer-name": "iq-basepages",
+        "project-files-installed": [
+            "mysite/_config/mysite.yml"
+		]
 	}
 }

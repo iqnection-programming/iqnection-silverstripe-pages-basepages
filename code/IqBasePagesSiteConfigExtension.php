@@ -1,16 +1,21 @@
 <?php
 
 
-class BasePages_SiteConfig extends DataExtension
+use SilverStripe\ORM;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Forms;
+use SilverStripe\Control\Director;
+
+class IqBasePagesSiteConfigExtension extends ORM\DataExtension
 {
 	private static $db = array(
 		'SiteTreeCacheEnabled' => 'Boolean'
 	);
 	
-	public function updateCMSFields(FieldList $fields)
+	public function updateCMSFields(Forms\FieldList $fields)
 	{
 		$tab = $fields->findOrMakeTab('Root.Developer.Caching');
-		$tab->push( CheckboxField::create('SiteTreeCacheEnabled','Cache Site Tree to JSON File')->setDescription('File located at /site-tree.json') );
+		$tab->push( Forms\CheckboxField::create('SiteTreeCacheEnabled','Cache Site Tree to JSON File')->setDescription('File located at /site-tree.json') );
 	}
 	
 	public function onAfterWrite()
@@ -22,7 +27,7 @@ class BasePages_SiteConfig extends DataExtension
 	
 	public function getTemplateCachePath($absolute=true)
 	{
-		$path = (($absolute) ? BASE_PATH.'/' : null).'template-cache/siteconfig.json';
+		$path = (($absolute) ? Director::baseFolder().'/' : null).'template-cache/siteconfig.json';
 		$this->owner->extend('updateTemplateCachePath',$path);
 		return $path;
 	}
@@ -30,9 +35,10 @@ class BasePages_SiteConfig extends DataExtension
 	public function generateTemplateCache()
 	{
 		// make sure the cache directory exists
-		if (!file_exists(BASE_PATH.'/template-cache'))
+		if (!file_exists(Director::baseFolder().'/template-cache'))
 		{
-			mkdir(BASE_PATH.'/template-cache',0755);
+			mkdir(Director::baseFolder().'/template-cache',0755);
+			file_put_contents(Director::baseFolder().'/template-cache/.htaccess',"Order deny,allow\nDeny from all\nAllow from 127.0.0.1");
 		}
 		$cachePath = $this->owner->getTemplateCachePath();
 		$cache = array();

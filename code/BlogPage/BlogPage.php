@@ -1,8 +1,13 @@
 <?php
 
+
+use SilverStripe\Forms;
+use SilverStripe\Control\Director;
+use SilverStripe\ORM;
+
 class BlogPage extends Page
 {
-	private static $icon = "themes/mysite/images/icons/icon-blog";
+	private static $icon = "iq-basepages/images/icons/icon-blog-file.gif";
 	
 	private static $db = array(
 		"BlogURL" => "Varchar(255)"
@@ -20,9 +25,12 @@ class BlogPage extends Page
 	{
 		$fields = parent::getCMSFields();
 		$fields->removeFieldFromTab("Root", "Content");
-		$fields->addFieldToTab("Root.Main", new TextField("BlogURL", "Blog URL Segment (eg. 'blog', 'news', etc.)")); 
+		$fields->addFieldToTab("Root.Main", Forms\TextField::create("BlogURL", "Blog URL Segment (eg. 'blog', 'news', etc.)")); 
 		
-		if($this->BlogURL)$fields->addFieldToTab("Root.WordpressLogin", new LiteralField("Desc1", "<div id='wp-login'><h1>WordPress</h1><a href='".Director::AbsoluteBaseURL().$this->BlogURL."/wp-login.php' target='_blank'>Login</a></div>")); 
+		if ($this->BlogURL)
+		{
+			$fields->addFieldToTab("Root.WordpressLogin", Forms\LiteralField::create("Desc1", "<div id='wp-login'><h1>WordPress</h1><a href='".Director::AbsoluteBaseURL().$this->BlogURL."/wp-login.php' target='_blank'>Login</a></div>")); 
+		}
 		return $fields;
 	}
 
@@ -48,12 +56,9 @@ class BlogPage extends Page
 		
 		$path = Director::baseFolder()."/.htaccess";
 		$curr_data = @file($path);
-		
-		//Silverstripe is bad and should feel bad
-		$page = DataObject::get_by_id('BlogPage',$this->ID, false);		
 					
-		$extra = $page->BlogURL ? "RewriteCond %{REQUEST_URI} !^/".$page->BlogURL."$" : "";
-		$extra2 = $page->BlogURL ? "RewriteCond %{REQUEST_URI} !^/".$page->BlogURL."/" : "";
+		$extra = $this->BlogURL ? "RewriteCond %{REQUEST_URI} !^/".$this->BlogURL."$" : "";
+		$extra2 = $this->BlogURL ? "RewriteCond %{REQUEST_URI} !^/".$this->BlogURL."/" : "";
 		
 		$new_file = array();
 		
@@ -102,25 +107,6 @@ class BlogPage extends Page
 		fwrite($h, implode("\n", $new_file));
 		@fclose($h);
 	}			
-}
-
-class BlogPage_Controller extends Page_Controller
-{
-	private static $allowed_actions = array(
-		"index"
-	);
-	
-	public function index()
-	{
-		// generate the template cache, if needed
-		$cachePath = $this->getTemplateCachePath();
-		if ( (!file_exists($cachePath)) || (filemtime($cachePath) < strtotime('-1 hour')) )
-		{
-			$this->generateTemplateCache();
-		}
-		return $this->redirect('/'.$this->BlogURL.'/');
-	}
-	
 }
 
 

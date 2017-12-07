@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.0.0]
+- Updated/Rebuilt for SilverStripe 4
+
 ## [1.1.17]
 - BlogPage bug fix
 - Included CSS merge fix

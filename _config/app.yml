@@ -1,25 +1,22 @@
 ---
-Name: mysite
+Name: iqbasepages
 After:
   - 'framework/*'
   - 'cms/*'
 ---
 Page:
   extensions:
-    - IQBase_Page
-Page_Controller:
+    - IqBasePageExtension
+PageController:
   extensions:
-    - IQBase_Page_Controller
-LeftAndMain:
+    - IqBasePageControllerExtension
+SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
     - iq-basepages/css/cms/leftandmainadditions.css
-Injector:
-  MemberLoginForm:
-    class: MemberLoginForm_Extension
-SiteConfig:
+SilverStripe\Code\Injector:
+  SilverStripe\Security\MemberAuthenticator\MemberLoginForm:
+    class: MemberLoginFormExtension
+SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    - BasePages_SiteConfig
-Director:
-  rules:
-    'cachetemplate//$Action/': 'Page_Controller'
+    - IqBasePagesSiteConfigExtension
 ---
