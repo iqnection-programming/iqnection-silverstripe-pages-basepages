@@ -36,7 +36,7 @@ class FormPage extends Page
 			)
 		));
 
-		$fields->addFieldToTab('Root.FormControls', Forms\HTMLEditor\HTMLEditorField::create('ThankYouText','Text after form submission'));
+		$fields->addFieldToTab('Root.FormControls', Forms\HTMLEditor\HTMLEditorField::create('ThankYouText','Text after form submission')->addExtraClass('stacked'));
 
 		$exportBtn = new Forms\GridField\GridFieldExportButton();
 		$submission_class = \SilverStripe\Core\ClassInfo::shortName(get_class($this))."Submissions";

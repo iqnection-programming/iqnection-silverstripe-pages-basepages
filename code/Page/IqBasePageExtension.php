@@ -24,7 +24,7 @@ class IqBasePageExtension extends ORM\DataExtension
 	public function updateCMSFields(Forms\FieldList $fields)
 	{
 		$tab = $fields->findOrMakeTab('Root.Developer.AdditionalCode');
-		$tab->push( $codeField = Forms\TextareaField::create('AdditionalCode','Additional HTML/JS/CSS Code',50) );
+		$tab->push( $codeField = Forms\TextareaField::create('AdditionalCode','Additional HTML/JS/CSS Code Placed before </body> tag',50)->addExtraClass('monotype') );
 		$codeField->addExtraClass('stacked');
 		$codeField->setRows(45);
 //		$codeField->setMode('html');
