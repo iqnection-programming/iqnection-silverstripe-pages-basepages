@@ -15,9 +15,6 @@
 		"iqnection-themes/mysite" : "*"
 	},
 	"extra": {
-		"installer-name": "iq-basepages",
-        "project-files-installed": [
-            "mysite/_config/mysite.yml"
-		]
+		"installer-name": "iq-basepages"
 	}
 }
