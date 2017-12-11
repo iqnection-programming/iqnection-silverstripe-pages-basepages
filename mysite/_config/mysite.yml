@@ -3,3 +3,6 @@ Name: myproject
 ---
 SilverStripe\Core\Manifest\ModuleManifest:
   project: mysite
+SilverStripe\View\SSViewer:
+  themes:
+    - 'mysite'
