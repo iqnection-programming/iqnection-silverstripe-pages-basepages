@@ -121,6 +121,10 @@ class IqBasePageControllerExtension extends Core\Extension
 		);
 		foreach($files as $filePath)
 		{
+			if (!preg_match("/^\//",$filePath))
+			{
+				$filePath = "/".$filePath;
+			}
 			if ($ThemeResourcePath = View\ThemeResourceLoader::inst()->findThemedResource($filePath,View\SSViewer::get_themes()))
 			{
 				$JsFiles[$ThemeResourcePath] = $ThemeResourcePath;

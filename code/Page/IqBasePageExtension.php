@@ -31,10 +31,10 @@ class IqBasePageExtension extends ORM\DataExtension
 				
 		if($this->owner->ClassName == "Page")
 		{
-			$fields->addFieldToTab("Root.Columns", Forms\HTMLEditor\HTMLEditorField::create("LeftColumn", "Left Column Content"));  
-			$fields->addFieldToTab("Root.Columns", Forms\HTMLEditor\HTMLEditorField::create("CenterColumn", "Center Column Content"));  
-			$fields->addFieldToTab("Root.Columns", Forms\HTMLEditor\HTMLEditorField::create("RightColumn", "Right Column Content")); 
-			$fields->addFieldToTab("Root.Sidebar", Forms\HTMLEditor\HTMLEditorField::create("SidebarContent", "Sidebar Content"));
+			$fields->addFieldToTab("Root.Columns", Forms\HTMLEditor\HTMLEditorField::create("LeftColumn", "Left Column Content")->addExtraClass('stacked') );  
+			$fields->addFieldToTab("Root.Columns", Forms\HTMLEditor\HTMLEditorField::create("CenterColumn", "Center Column Content")->addExtraClass('stacked') );
+			$fields->addFieldToTab("Root.Columns", Forms\HTMLEditor\HTMLEditorField::create("RightColumn", "Right Column Content")->addExtraClass('stacked') ); 
+			$fields->addFieldToTab("Root.Sidebar", Forms\HTMLEditor\HTMLEditorField::create("SidebarContent", "Sidebar Content")->addExtraClass('stacked') );
 		}
 			
 		return $fields;
