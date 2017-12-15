@@ -20,7 +20,7 @@ class FormPage extends Page
 		"FormRecipients" => FormRecipient::class
 	];
 	
-	public function CanCreate($member = null, $context = array()) { return (!preg_match('/\\FormPage$/',get_class($this))); }
+	public function CanCreate($member = null, $context = array()) { return (get_class($this) != 'FormPage'); }
 	
 	public function getCMSFields()
 	{	

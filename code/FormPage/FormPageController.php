@@ -40,8 +40,11 @@ class FormPageController extends PageController
 		$JS = parent::CustomJS();
 		$FormConfig = $this->FormConfig();
 		$JS .= "
-$(document).ready(function(){
-$(\"#Form_RenderForm\").validate({
+(function($){
+	\"use strict\";
+	$(document).ready(function(){
+		
+		$(\"#Form_RenderForm\").validate({
 	".(($FormConfig['useNospam']) ? "useNospam: true," : null);
 		
 		if ($this->GAT_Activate)
@@ -50,8 +53,9 @@ $(\"#Form_RenderForm\").validate({
 		}
 		
 		$JS .= "
-});
-});";
+		});
+	});
+}(jQuery))";
 		return $JS;
 	}
 	
@@ -76,7 +80,7 @@ $(\"#Form_RenderForm\").validate({
 	public function RenderForm() 
 	{
 		if($form_fields = $this->FormFields())
-		{				
+		{
 			$fields = Forms\FieldList::create();
 			if ($form_error = $this->request->getSession()->get('FormError'))
 			{
@@ -95,15 +99,23 @@ $(\"#Form_RenderForm\").validate({
 				}
 
 				$Label = (isset($data['Group'])) ? '' : (isset($data['Label']) ? $data['Label'] : Forms\FormField::name_to_label($FieldName));
-
+				if ($data['FieldType'] == 'DateField')
+				{
+					$data['FieldType'] = 'TextField';
+					$data['DatePicker'] = true;
+				}
 				$fieldType = (!preg_match('/(\x92)/',$data['FieldType'])) ? 'SilverStripe\Forms\\'.$data['FieldType'] : $data['FieldType'];
 				$field = $fieldType::create($FieldName,$Label,(isset($data['Value'])?$data['Value']:null),(isset($data['Default'])?$data['Default']:null));
-				if ($field instanceof Forms\DateField) 
+				if ( (isset($data['DatePicker'])) && ($data['DatePicker']) )
 				{
-					$field->setConfig('showcalendar',true);
-					$field->setConfig('dateformat','m/d/yy');
-					$field->setConfig('datavalueformat','Y-m-d');
+					$field->addExtraClass('date datePicker');
 				}
+//				if ($field instanceof Forms\DateField) 
+//				{
+//					$field->setConfig('showcalendar',true);
+//					$field->setConfig('dateformat','m/d/yy');
+//					$field->setConfig('datavalueformat','Y-m-d');
+//				}
 				if(isset($data['ExtraClass']))$field->addExtraClass($data['ExtraClass']);
 				if(isset($data['Config']) && is_array($data['Config']))
 				{

@@ -14,7 +14,7 @@ class FormPageSubmission extends DataObject
 		$fields = parent::getCMSFields();
 		
 		// see if we have any File or Image upload fields
-		foreach($this->has_one() as $relName => $relObj)
+		foreach($this->hasOne() as $relName => $relObj)
 		{
 			if ($relObj == 'File' || $relObj == 'Image')
 			{
