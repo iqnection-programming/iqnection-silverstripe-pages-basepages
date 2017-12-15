@@ -25,11 +25,14 @@ class BlogPage extends Page
 	{
 		$fields = parent::getCMSFields();
 		$fields->removeFieldFromTab("Root", "Content");
+		$fields->removeByName('Metadata');
+		$fields->removeByName('Developer');
 		$fields->addFieldToTab("Root.Main", Forms\TextField::create("BlogURL", "Blog URL Segment (eg. 'blog', 'news', etc.)")); 
 		
 		if ($this->BlogURL)
 		{
-			$fields->addFieldToTab("Root.WordpressLogin", Forms\LiteralField::create("Desc1", "<div id='wp-login'><h1>WordPress</h1><a href='".Director::AbsoluteBaseURL().$this->BlogURL."/wp-login.php' target='_blank'>Login</a></div>")); 
+			$fields->addFieldToTab("Root.Main", Forms\LiteralField::create("Desc1", '<div id="wp-login"><h1><img src="/iq-basepages/images/wordpress-logo.png" alt="WordPress" /></h1>
+			<a href="'.Director::AbsoluteBaseURL().$this->BlogURL.'/wp-login.php" target="_blank"><img src="iq-basepages/images/wordpress-login.png" alt="Login" /></a></div>')); 
 		}
 		return $fields;
 	}

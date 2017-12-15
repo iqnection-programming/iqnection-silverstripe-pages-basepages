@@ -10,7 +10,7 @@
 		}
 	],
 	"require": {
-		"silverstripe/framework": "4.*",
+		"silverstripe/framework": "^4.0",
 		"undefinedoffset/sortablegridfield": "*",
 		"iqnection-themes/mysite" : "*"
 	},

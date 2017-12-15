@@ -140,14 +140,8 @@ class IqBasePageControllerExtension extends Core\Extension
 		$PageType = Core\ClassInfo::shortName($this->owner->dataRecord->getClassName());
 		$CSSFiles["/css/pages/".$PageType.".css"] = "/css/pages/".$PageType.".css";
 		$CSSFiles["/css/pages/".$PageType."_extension.css"] = "/css/pages/".$PageType."_extension.css";
-		return $CSSFiles;
-	}
-	
-	public function PageCSS()
-	{			
-		$CSSFiles = array();
-		// Find a page type specific CSS file
-		foreach($this->owner->extend('updatePageCSS',$CSSFiles) as $updates)
+		$extends = $this->owner->extend('updatePageCSS',$CSSFiles);
+		foreach($extends as $updates)
 		{
 			$CSSFiles = array_merge(
 				$CSSFiles,
@@ -157,19 +151,19 @@ class IqBasePageControllerExtension extends Core\Extension
 		return $CSSFiles;
 	}
 	
+	public function PageCSS()
+	{			
+		return [];
+	}
+	
 	public function PageTypeJS()
 	{
 		$JSFiles = array();
 		$PageType = Core\ClassInfo::shortName($this->owner->dataRecord->getClassName());
 		$JSFiles["/javascript/pages/".$PageType.".js"] = "/javascript/pages/".$PageType.".js";
 		$JSFiles["/javascript/pages/".$PageType."_extension.js"] = "/javascript/pages/".$PageType."_extension.js";
-		return $JSFiles;
-	}
-		
-	public function PageJS()
-	{
-		$JSFiles = array();
-		foreach($this->owner->extend('updatePageJS',$JSFiles) as $updates)
+		$extends = $this->owner->extend('updatePageJS',$JSFiles);
+		foreach($extends as $updates)
 		{
 			$JSFiles = array_merge(
 				$JSFiles,
@@ -177,6 +171,11 @@ class IqBasePageControllerExtension extends Core\Extension
 			);
 		}
 		return $JSFiles;
+	}
+		
+	public function PageJS()
+	{
+		return [];
 	}
 	
 	public function CustomJS()
@@ -225,8 +224,8 @@ class IqBasePageControllerExtension extends Core\Extension
 		}
 		$cachePath = $this->owner->getTemplateCachePath();
 		$cache = array(
-			'header' => preg_replace('/\t/','',$this->owner->Customise(array('ForCache' => true))->renderWith('Header')->AbsoluteLinks()),
-			'footer' => preg_replace('/\t/','',$this->owner->Customise(array('ForCache' => true))->renderWith('Footer')->AbsoluteLinks())
+			'header' => preg_replace('/\t/','',$this->owner->Customise(array('ForCache' => true))->renderWith(['Header','Includes/Header'])->AbsoluteLinks()),
+			'footer' => preg_replace('/\t/','',$this->owner->Customise(array('ForCache' => true))->renderWith(['Footer','Includes/Footer'])->AbsoluteLinks())
 		);
 		$cache = $this->owner->updateGeneratedTemplateCache($cache);
 		file_put_contents($cachePath,json_encode($cache));

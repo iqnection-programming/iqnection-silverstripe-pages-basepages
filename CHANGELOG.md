@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.0.1]
+- file cleanup
+
 ## [2.0.0]
 - Updated/Rebuilt for SilverStripe 4
 
