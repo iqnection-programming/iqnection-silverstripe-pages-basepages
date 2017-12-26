@@ -2,9 +2,8 @@
 // The purpose of this page is simply to redirect to the first
 //	child page, or the home page if there's none
 
-namespace IqBasePages\HeadingPage;
 
-class HeadingPage extends \Page
+class HeadingPage extends Page
 {
 	private static $icon = "iq-basepages/images/icons/icon-heading-file.gif";
 	

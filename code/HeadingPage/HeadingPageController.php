@@ -2,10 +2,9 @@
 // The purpose of this page is simply to redirect to the first
 //	child page, or the home page if there's none
 
-namespace IqBasePages\HeadingPage;
 
 
-class HeadingPageController extends \PageController
+class HeadingPageController extends PageController
 {
 	private static $allowed_actions = array(
 		"index"

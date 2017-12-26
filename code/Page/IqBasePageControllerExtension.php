@@ -36,6 +36,7 @@ class IqBasePageControllerExtension extends Core\Extension
 			"base",
 			"fontawesome/font-awesome.min",
 			"layout",
+			"responsive",
 			"typography"
 		);
 		$baseCssFiles = array();

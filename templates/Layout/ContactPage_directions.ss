@@ -12,6 +12,6 @@
         </ul>
     </div><!--directions_head-->
     <div id="directions_list">
-        $Steps
+        $Steps.RAW
     </div><!--directions_list-->
 </div><!--print_me-->

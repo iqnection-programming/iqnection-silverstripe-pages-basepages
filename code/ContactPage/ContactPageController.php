@@ -2,6 +2,7 @@
 
 use SilverStripe\View;
 use SilverStripe\Control\Director;
+use SilverStripe\Core\Config\Config;
 use IqBasePages\FormPage;
 
 class ContactPageController extends FormPageController
@@ -72,7 +73,12 @@ class ContactPageController extends FormPageController
 		parent::init();
 		if($this->ContactPageLocations()->Count())
 		{
-			View\Requirements::javascript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAXy4BLGXyLMakRQbrMVrFxS2KiXSj51cM&sensor=false");
+			$maps_url = "https://maps.googleapis.com/maps/api/js?sensor=false";
+			if ($key = Config::inst()->get('ContactPage','google_api_key'))
+			{
+				$maps_url .= "&key=".$key;
+			}
+			View\Requirements::javascript($maps_url);
 		}
 	}
 	
@@ -81,52 +87,61 @@ class ContactPageController extends FormPageController
 		$js = parent::CustomJS();
 		if ($this->ContactPageLocations()->Count())
 		{
-			$js .= 'var MapType = "'.$this->MapType.'";
-					var address_objects = [];';
+			$TotalLat = 0;
+			$TotalLong = 0;
+			$Total = 0;
+			$Avgs = [0,0];
+			$addressObjects = [];
 			if($locations = $this->ContactPageLocations())
 			{
 				foreach($locations as $key => $l)
 				{
-					$js .= 'address_objects['.$key.'] = {"Title":"'.$l->Title.'","Address":"'.$l->Address.'","LatLng":['.$l->MapLatitude.','.$l->MapLongitude.']};';
+					$TotalLat += $l->MapLatitude;
+					$TotalLong += $l->MapLongitude;
+					$Total++;
+					$addressObjects[$key] = [
+						'Title' => $l->Title,
+						'Address' => $l->Address,
+						'LatLng' => [
+							$l->MapLatitude,
+							$l->MapLongitude
+						]
+					];
+				}
+				if ( ($Total) && ($TotalLat != 0) && ($TotalLong != 0) )
+				{
+					$Avgs = [$TotalLat/$Total,$TotalLong/$Total];
 				}
 			}
-			$js .= 'var Avgs = '.$this->Avgs().';
-					var PageLink = "'.$this->Link().'";';
+			$js .= '
+var MapType = "'.$this->MapType.'";
+var address_objects = '.json_encode($addressObjects).';
+var Avgs = '.json_encode($Avgs).';
+var PageLink = "'.$this->Link().'";'."\n";
 		}
 		
 		return $js;
 	}
 	
-	public function Avgs(){			
-		$TotalLat = 0;
-		$TotalLong = 0;
-		$Total = 0;
-		if($locations = $this->ContactPageLocations())
-		{
-			foreach($locations as $l){
-				$TotalLat += $l->MapLatitude;
-				$TotalLong += $l->MapLongitude;
-				$Total++;
-			}
-			if($Total)return "[".$TotalLat/$Total.",".$TotalLong/$Total."]";
-		}
-		return false;
-	}
-	
 	public function directionsAPI()
 	{
-		$to_addy = urlencode($this->request->param('ID'));
-		$from_addy = urlencode($this->request->param('OtherID'));
+		$to_addy = urlencode(urldecode($this->request->param('ID')));
+		$from_addy = urlencode(urldecode($this->request->param('OtherID')));
 		$path = "https://maps.googleapis.com/maps/api/directions/json?origin=".$from_addy."&destination=".$to_addy."&sensor=false";
+		if ($key = Config::inst()->get('ContactPage','google_maps_api_key'))
+		{
+			$path .= "&key=".$key;
+		}
 		$rows = file_get_contents($path,0,null,null);
 		$directions_output = json_decode($rows, true);
 		$ajax_data = false;
-		
-		if($directions_output['routes']){
+		if($directions_output['routes'])
+		{
 			$data = $directions_output['routes'][0]['legs'][0];  //assumes best route and no waypoints
 			$i = 1;
 			$steps = "";
-			foreach($data['steps'] as $step){
+			foreach($data['steps'] as $step)
+			{
 				$steps .= "<div class='step'><span class='step_number'>".$i.".</span><span class='step_text'>".$step['html_instructions']."</span><span class='step_distance'>".$step['distance']['text']."</span></div>";	
 				$i++;
 			}
@@ -151,9 +166,12 @@ class ContactPageController extends FormPageController
 	{
 		$ajax_data = $this->directionsAPI();
 		
-		if($ajax_data){
-			return Director::is_ajax() ? $this->Customise($ajax_data)->renderWith("ContactPage_directions") : $this->Customise($ajax_data);
-		} else {
+		if($ajax_data)
+		{
+			return Director::is_ajax() ? $this->Customise($ajax_data)->renderWith("Layout/ContactPage_directions") : $this->Customise($ajax_data);
+		} 
+		else 
+		{
 			return "<p>No routes were found from that destination address.</p>";	
 		}
 	}
@@ -162,9 +180,12 @@ class ContactPageController extends FormPageController
 	{
 		$ajax_data = $this->directionsAPI();
 		
-		if($ajax_data){
-			return $this->Customise($ajax_data)->renderWith("ContactPage_printview");
-		} else {
+		if($ajax_data)
+		{
+			return $this->Customise($ajax_data)->renderWith("Layout/ContactPage_printview");
+		} 
+		else 
+		{
 			return "<p>No routes were found from that destination address.</p>";	
 		}
 	}

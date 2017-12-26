@@ -15,23 +15,23 @@ class FormPageController extends PageController
 	public function PageCSS()
 	{
 		return array_merge(
-			parent::PageCSS(),
-			array(
+			[
 				"javascript/jquery.ui.theme.css",
 				"css/form.css"
-			)
+			],
+			parent::PageCSS()
 		);
 	}
 	
 	public function PageJS()
 	{
 		return array_merge(
-			parent::PageJS(),
-			array(
+			[
 				"javascript/jquery.validate.nospam.js",
 				"javascript/jquery-ui.js",
 				"javascript/additional-methods.js"
-			)
+			],
+			parent::PageJS()
 		);
 	}
 	
@@ -55,7 +55,7 @@ class FormPageController extends PageController
 		$JS .= "
 		});
 	});
-}(jQuery))";
+}(jQuery));\n";
 		return $JS;
 	}
 	
@@ -109,6 +109,10 @@ class FormPageController extends PageController
 				if ( (isset($data['DatePicker'])) && ($data['DatePicker']) )
 				{
 					$field->addExtraClass('date datePicker');
+				}
+				if ( (isset($data['EmptyString'])) && ($emptyString = $data['EmptyString']) )
+				{
+					$field->setEmptyString($emptyString);
 				}
 //				if ($field instanceof Forms\DateField) 
 //				{

@@ -3,11 +3,14 @@
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms;
 use SilverStripe\Control\Director;
+use SilverStripe\Core\Config\Config;
 use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 
 
 class ContactPage extends FormPage
 {
+	private static $google_maps_api_key = 'AIzaSyAXy4BLGXyLMakRQbrMVrFxS2KiXSj51cM';
+	
 	private static $db = array(
 		"MapType" => "Varchar(255)",
 		"MapDirections" => "Boolean"

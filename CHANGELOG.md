@@ -1,6 +1,12 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.0.2]
+- moved base responsive page styling into appropriate Page.css file
+- removed namespacing for page types
+- added configurable variables for Google maps integration
+- various other updates and bug fixes
+
 ## [2.0.1]
 - file cleanup
 

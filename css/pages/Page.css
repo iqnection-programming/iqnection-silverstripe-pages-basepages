@@ -8,5 +8,7 @@
 #page_right						{ float:right; width:27%; padding:0 0 0 2%; border-left:2px solid #ccc; }
 
 @media(max-width:800px){
-	#page_right					{ padding:20px 0 0; margin:20px 0 0; border-left:none; border-top:2px solid #ccc; }
+	#page_left					{ width:100%; float:none; }
+	#page_right					{ width:100%; float:none; min-height:0 !important; padding:20px 0 0; margin:20px 0 0; border-left:none; border-top:2px solid #ccc; }
+	.page_col					{ float:none; width:100%; margin:0; }
 }

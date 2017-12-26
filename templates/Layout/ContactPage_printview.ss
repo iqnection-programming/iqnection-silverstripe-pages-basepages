@@ -4,7 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Printing Driving Directions</title>
 <link rel="stylesheet" type="text/css" href="/themes/mysite/css/base.css" />
-<link rel="stylesheet" type="text/css" href="/themes/mysite/css/layout.css" />
 <link rel="stylesheet" type="text/css" href="/themes/mysite/css/typography.css" />
 <script type="text/javascript" language="javascript">setTimeout( function(){ window.print(); }, 1000);</script> 
 </head>
@@ -18,7 +17,7 @@
             <p><strong>Driving Time:</strong> $Duration</p>
         </div><!--directions_head-->
         <div id="directions_list">
-            $Steps
+            $Steps.RAW
         </div><!--directions_list-->
     </div><!--print_me-->   
 </body>
