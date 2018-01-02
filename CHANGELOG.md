@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.0.3]
+- bug fix on Google Maps API config variable in ContactPageController.php
+
 ## [2.0.2]
 - moved base responsive page styling into appropriate Page.css file
 - removed namespacing for page types
