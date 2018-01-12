@@ -2,13 +2,6 @@
 
 error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 
-/** Use the environment file in /mysite/ to put the system in dev mode **/
-if(file_exists(BASE_PATH.'/mysite/.env'))
-{
-	$loader = new \SilverStripe\Core\EnvironmentLoader();
-	$loader->loadFile(BASE_PATH.'/mysite/.env');
-}
-
 /** Tiny MCE configurations **/
 $editor = \SilverStripe\Forms\HTMLEditor\HTMLEditorConfig::get('cms');
 
@@ -23,8 +16,15 @@ $editor->addButtonsToLine(1,[
 	'hr'
 ]);
 
+$editor->setOption('style_formats', [
+//	['title' => 'clear', 'styles' => ['clear' => 'both']]
+	['title' => 'clear', 'classes' => 'clear']
+]);
+$editor->setOption('style_formats_merge',true);
 $editor->insertButtonsBefore('formatselect','styleselect');
+$editor->removeButtons(['formatselect']);
 $editor->setOption('importcss_selector_filter','.text');
+$editor->setOption('importcss_append',true);
 
 // https://www.tinymce.com/docs/plugins/importcss/
 

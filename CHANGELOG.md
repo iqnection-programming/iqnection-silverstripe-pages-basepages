@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.0.4]
+- finalized _config.php options (i hope)
+
 ## [2.0.3]
 - bug fix on Google Maps API config variable in ContactPageController.php
 
