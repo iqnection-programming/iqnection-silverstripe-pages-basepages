@@ -95,7 +95,7 @@ class FormPageController extends PageController
 				if ( (isset($data['Value'])) && ($data['Value']) && (is_string($data['Value'])) )
 				{
 					$method_home = method_exists($this,$data['Value']) ? $this : (method_exists($utils,$data['Value']) ? $utils : false);
-					$data['Value'] = $method_home ? $method_home->$data['Value']() : $data['Value'];
+					$data['Value'] = $method_home ? $method_home->{$data['Value']}() : $data['Value'];
 				}
 
 				$Label = (isset($data['Group'])) ? '' : (isset($data['Label']) ? $data['Label'] : Forms\FormField::name_to_label($FieldName));

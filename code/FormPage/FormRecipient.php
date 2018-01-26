@@ -39,11 +39,11 @@ class FormRecipient extends DataObject
 		$result = parent::validate();
 		if (empty($this->Email))
 		{
-			$result->error('Please provide an Email address');
+			$result->addError('Please provide an Email address');
 		}
 		if (empty($this->Title))
 		{
-			$result->error('Please provide a Title');
+			$result->addError('Please provide a Title');
 		}
 		return $result;
 	}

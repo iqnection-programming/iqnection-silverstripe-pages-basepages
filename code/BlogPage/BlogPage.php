@@ -42,7 +42,7 @@ class BlogPage extends Page
 		$result = parent::validate();
 		if ( ($this->ParentID == 0) && ($this->URLSegment) && ($this->URLSegment == $this->BlogURL) )
 		{
-			$result->error('The URL Segment for this page may cause an infinite loop if the SilverStripe path is the same as the WordPress directory. I suggest [site-title-blog] format.');
+			$result->addError('The URL Segment for this page may cause an infinite loop if the SilverStripe path is the same as the WordPress directory. I suggest [site-title-blog] format.');
 		}
 		return $result;
 	}

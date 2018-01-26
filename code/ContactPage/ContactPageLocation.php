@@ -44,7 +44,7 @@ class ContactPageLocation extends DataObject
 		$result = parent::validate();
 		if (!$this->Address)
 		{
-			$result->error('Please provide an Address');
+			$result->addError('Please provide an Address');
 		}
 		return $result;
 	}

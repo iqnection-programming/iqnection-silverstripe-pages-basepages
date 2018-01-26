@@ -1,6 +1,10 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.0.5]
+- finalized _config.php options (i really hope)
+- validation bugs
+
 ## [2.0.4]
 - finalized _config.php options (i hope)
 
