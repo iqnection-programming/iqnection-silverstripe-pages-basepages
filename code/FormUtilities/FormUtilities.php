@@ -92,7 +92,7 @@ class FormUtilities
 				{
 					$fieldObject = $submission->has_one($fieldName);
 				}
-				if ($fieldObject instanceof File)
+				if ($fieldObject instanceof \SilverStripe\Assets\File)
 				{
 					$html .= '<a href="'.$fieldObject->getAbsoluteURL().'">'.$fieldObject->getFilename().'</a>';
 				}
@@ -921,6 +921,7 @@ class FormUtilities
 		list($x, $time) = explode(".", $code1);
 		
 		$time = substr($time, 0, strlen($time)-3);
+
 		$diff = time() - floatval($time);
 	
 		if (self::referSecurityCheck() && $diff < (60 * 60 * 8))	// 8 hour timeout
