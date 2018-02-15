@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.0.6]
+- Removed "After" declaration from *.yml files
+
 ## [2.0.5]
 - finalized _config.php options (i really hope)
 - validation bugs

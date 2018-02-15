@@ -1,8 +1,5 @@
 ---
 Name: iqbasepages
-After:
-  - 'framework/*'
-  - 'cms/*'
 ---
 Page:
   extensions:

@@ -1,8 +1,5 @@
 ---
 Name: iqbasepagesroutes
-After:
-  - '#rootroutes'
-  - '#coreroutes'
 ---
 SilverStripe\Control\Director:
   rules:
