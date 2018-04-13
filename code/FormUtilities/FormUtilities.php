@@ -27,11 +27,14 @@ class FormUtilities
 		$suffix = array_pop($arr_path);
 		$domain = array_pop($arr_path).'.'.$suffix;
 					
-		$email = Email::create(
-			"forms@".$domain,
-			$EmailFormTo,
-			$page->Title." form submission"
-		);
+		$email = Email::create()
+			->setFrom("forms@".$domain)
+			->setSubject($page->Title." form submission");
+		
+		foreach(explode(',',$EmailFormTo) as $to)
+		{
+			$email->addTo($to);
+		}
 		
 		$email_body = "<html><body>This is a form submission created by this page on your website:<br /><br />".$_SERVER['HTTP_REFERER']."<br /><br />";
 		$email_body .= self::FormDataToArray($post_vars,null,null,$submission);
@@ -48,11 +51,13 @@ class FormUtilities
 		$suffix = array_pop($arr_path);
 		$domain = array_pop($arr_path).'.'.$suffix;
 			
-		$email = Email::create(
-			($FromEmail) ? $FromEmail : "forms@".$domain,
-			$EmailFormTo,
-			$subject
-		);
+		$email = Email::create()
+			->setFrom(($FromEmail) ? $FromEmail : "forms@".$domain)
+			->setSubject($subject);
+		foreach(explode(',',$EmailFormTo) as $to)
+		{
+			$email->addTo($to);
+		}
 		
 		$email_body = "<html><body>";
 		$email_body .= $body;
