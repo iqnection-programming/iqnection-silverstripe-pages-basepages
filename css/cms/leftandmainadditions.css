@@ -1,6 +1,6 @@
 
 .ss-loading-screen:before					{ content:url('/iq-basepages/images/branding/cms_loading.png') !important; }
-.cms-sitename .cms-sitename__link			{ background-image:url('/iq-basepages/images/branding/cms_logo.png') !important; }
+.cms-sitename .cms-sitename__link			{ content:url('/iq-basepages/images/branding/cms_logo.png') !important; }
 
 #wp-login									{ width:500px; padding:30px; border:1px #aaaaaa solid; background:#eeeeee; text-align:center; }
 #wp-login h1								{ display:block; margin:0 auto 30px; }
