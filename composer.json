@@ -1,7 +1,7 @@
 {
 	"name": "iqnection-pages/basepages",
 	"description": "Base group of SilverStripe PageTypes",
-	"type": "silverstripe-module",
+	"type": "silverstripe-vendormodule",
 	"keywords": ["iqnection","pages"],
 	"license": "BSD-3-Clause",
 	"authors": [
