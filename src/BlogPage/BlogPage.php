@@ -1,13 +1,16 @@
 <?php
 
+namespace IQnection\BlogPage;
 
 use SilverStripe\Forms;
 use SilverStripe\Control\Director;
 use SilverStripe\ORM;
 
-class BlogPage extends Page
+class BlogPage extends \Page
 {
-	private static $icon = "iq-basepages/images/icons/icon-blog-file.gif";
+	private static $table_name = 'BlogPage';
+	
+	private static $icon = "resources/iqnection/iq-basepages/images/icons/icon-blog-file.gif";
 	
 	private static $db = array(
 		"BlogURL" => "Varchar(255)"

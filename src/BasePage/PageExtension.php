@@ -1,12 +1,13 @@
 <?php
 
+namespace IQnection\BasePage;
 
 use SilverStripe\ORM;
 use SilverStripe\Forms;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Control\Director;
 
-class IqBasePageExtension extends ORM\DataExtension
+class PageExtension extends ORM\DataExtension
 {				
 	private static $db = array(
 		"SidebarContent" => "HTMLText",

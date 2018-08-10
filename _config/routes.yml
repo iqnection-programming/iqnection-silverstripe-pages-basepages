@@ -4,4 +4,4 @@ Name: iqbasepagesroutes
 SilverStripe\Control\Director:
   rules:
     'cachetemplate//$Action/': 'PageController'
-    'nospam//$Action/': 'NoSpamController'
+    'nospam//$Action/': IQnection\FormPage\NoSpamController

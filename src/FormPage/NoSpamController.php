@@ -1,6 +1,8 @@
 <?php
 
-use IqBasePages\FormUtilities\FormUtilities;
+namespace IQnection\FormPage;
+
+use IQnection\FormUtilities\FormUtilities;
 use SilverStripe\CMS\Controllers\ContentController;
 
 class NoSpamController extends ContentController

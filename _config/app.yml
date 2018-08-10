@@ -3,17 +3,17 @@ Name: iqbasepages
 ---
 Page:
   extensions:
-    - IqBasePageExtension
+    - IQnection\BasePage\PageExtension
 PageController:
   extensions:
-    - IqBasePageControllerExtension
+    - IQnection\BasePage\PageControllerExtension
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
-    - iq-basepages/css/cms/leftandmainadditions.css
+    - iqnection-pages/basepages:css/leftandmainadditions.css
 SilverStripe\Code\Injector:
   SilverStripe\Security\MemberAuthenticator\MemberLoginForm:
-    class: MemberLoginFormExtension
+    class: IQnection\MemberLoginForm\MemberLoginFormExtension
 SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    - IqBasePagesSiteConfigExtension
+    - Iqnection\BasePage\SiteConfigExtension
 ---

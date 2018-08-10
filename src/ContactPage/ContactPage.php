@@ -1,5 +1,8 @@
 <?php
 
+namespace IQnection\ContactPage;
+
+use IQnection\FormPage\FormPage;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms;
 use SilverStripe\Control\Director;
@@ -9,6 +12,8 @@ use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 
 class ContactPage extends FormPage
 {
+	private static $table_name = 'ContactPage';
+	
 	private static $google_maps_api_key = 'AIzaSyAXy4BLGXyLMakRQbrMVrFxS2KiXSj51cM';
 	
 	private static $db = array(
@@ -17,8 +22,8 @@ class ContactPage extends FormPage
 	);
 	
 	private static $has_many = array(
-		"ContactPageLocations" => ContactPageLocation::class,
-		"ContactPageSubmissions" => ContactPageSubmission::class
+		"ContactPageLocations" => \IQnection\ContactPage\Model\ContactPageLocation::class,
+		"ContactPageSubmissions" => \IQnection\ContactPage\Model\ContactPageSubmission::class
 	);
 	
 	public function getCMSFields()

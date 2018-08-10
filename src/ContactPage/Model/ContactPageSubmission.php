@@ -1,6 +1,8 @@
 <?php
 
+namespace IQnection\ContactPage\Model;
 
+use IQnection\FormPage\Model\FormPageSubmission;
 
 class ContactPageSubmission extends FormPageSubmission 
 {

@@ -3,6 +3,7 @@
 	"description": "Base group of SilverStripe PageTypes",
 	"type": "silverstripe-module",
 	"keywords": ["iqnection","pages"],
+	"license": "BSD-3-Clause",
 	"authors": [
 		{
 			"name": "IQnection",
@@ -10,11 +11,26 @@
 		}
 	],
 	"require": {
-		"silverstripe/framework": "^4.0",
+		"silverstripe/framework": "^4.1",
 		"undefinedoffset/sortablegridfield": "*",
 		"iqnection-themes/mysite" : "*"
 	},
 	"extra": {
-		"installer-name": "iq-basepages"
+		"expose": [
+			"css",
+			"images",
+			"javascript"
+		]
+	},
+	"autoload": {
+		"psr-4": {
+			"IQnection\\BasePage\\": "app/src/",
+			"IQnection\\BlogPage\\": "app/src/",
+			"IQnection\\ContactPage\\": "app/src/",
+			"IQnection\\FormPage\\": "app/src/",
+			"IQnection\\FormUtilities\\": "app/src/",
+			"IQnection\\HeadingPage\\": "app/src/",
+			"IQnection\\MemberLoginForm\\": "app/src/"
+		}
 	}
 }

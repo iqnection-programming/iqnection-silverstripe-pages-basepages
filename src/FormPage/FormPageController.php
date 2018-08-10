@@ -1,11 +1,13 @@
 <?php
 
+namespace IQnection\FormPage;
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms;
 use SilverStripe\Core;
-use IqBasePages\FormUtilities\FormUtilities;
+use IQnection\FormUtilities\FormUtilities;
 
-class FormPageController extends PageController
+class FormPageController extends \PageController
 {	
 	private static $allowed_actions = array(
 		"RenderForm",
@@ -14,32 +16,25 @@ class FormPageController extends PageController
 	
 	public function PageCSS()
 	{
-		return array_merge(
-			[
-				"javascript/jquery.ui.theme.css",
-				"css/form.css"
-			],
-			parent::PageCSS()
-		);
+		return [
+			"javascript/jquery.ui.theme.css",
+			"css/form.css"
+		];
 	}
 	
 	public function PageJS()
 	{
-		return array_merge(
-			[
-				"javascript/jquery.validate.nospam.js",
-				"javascript/jquery-ui.js",
-				"javascript/additional-methods.js"
-			],
-			parent::PageJS()
-		);
+		return [
+			"javascript/jquery.validate.nospam.js",
+			"javascript/jquery-ui.js",
+			"javascript/additional-methods.js"
+		];
 	}
 	
 	public function CustomJS()
 	{
-		$JS = parent::CustomJS();
 		$FormConfig = $this->FormConfig();
-		$JS .= "
+		$JS = "
 (function($){
 	\"use strict\";
 	$(document).ready(function(){
@@ -185,8 +180,8 @@ class FormPageController extends PageController
 			if ($defaults = $this->request->getSession()->get("FormInfo.Form_RenderForm.data"))
 			{
 				$form->loadDataFrom($defaults);
-				$this->request->getSession()->set("FormInfo.Form_RenderForm.data",false);
 			}
+			$this->request->getSession()->clear("FormInfo.Form_RenderForm.data");
 			$this->extend('updateForm',$form);
 			return $form;
 		}
@@ -234,7 +229,7 @@ class FormPageController extends PageController
 		{
 			foreach($EmailFormTo as $email)
 			{
-				FormUtilities::SendSSEmail($this,$email->Email,$data,$submission);
+				FormUtilities::SendSSEmail($this,$email->Email,$data,$submission,$this->FromEmail);
 			}
 		}
 		

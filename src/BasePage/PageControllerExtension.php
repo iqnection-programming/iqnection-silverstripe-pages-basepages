@@ -1,12 +1,13 @@
 <?php
 
+namespace IQnection\BasePage;
 
 use SilverStripe\Core;
 use SilverStripe\View;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Control\Director;
 	
-class IqBasePageControllerExtension extends Core\Extension 
+class PageControllerExtension extends Core\Extension 
 {
 	private static $base_theme_name = 'mysite';
 	
@@ -17,7 +18,7 @@ class IqBasePageControllerExtension extends Core\Extension
 	
 	public function onBeforeInit()
 	{
-		View\Requirements::javascript("iq-basepages/javascript/jquery-1.9.1.min.js");
+		View\Requirements::javascript("resources/iqnection-pages/basepages/javascript/jquery-1.9.1.min.js");
 	}
 		
 	public function onAfterInit() 

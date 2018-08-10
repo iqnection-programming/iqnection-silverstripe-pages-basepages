@@ -1,5 +1,7 @@
 <?php
 
+namespace IQnection\FormPage\Model;
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms;
 use SilverStripe\Assets;
@@ -8,7 +10,7 @@ use SilverStripe\Core\Injector\Injectable;
 class FormPageSubmission extends DataObject
 {
 	private static $has_one = array(
-		'FormPage' => FormPage::class
+		'Page' => \Page::class
 	);
 	
 	public function getCMSFields()
@@ -30,7 +32,7 @@ class FormPageSubmission extends DataObject
 					</div>'));
 			}
 		}
-		$fields->removeByName('FormPageID');
+		$fields->removeByName('PageID');
 		return $fields;
 	}
 	

@@ -1,12 +1,14 @@
 <?php
 
 
+namespace IQnection\BasePage;
+
 use SilverStripe\ORM;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Forms;
 use SilverStripe\Control\Director;
 
-class IqBasePagesSiteConfigExtension extends ORM\DataExtension
+class SiteConfigExtension extends ORM\DataExtension
 {
 	private static $db = array(
 		'SiteTreeCacheEnabled' => 'Boolean'

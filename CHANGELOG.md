@@ -1,6 +1,12 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.1.0]
+- Updated for SilverStripe 4.1
+
+## [2.0.7]
+- Updated FormPageController form session clearing
+
 ## [2.0.6]
 - Removed "After" declaration from *.yml files
 

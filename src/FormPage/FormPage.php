@@ -1,23 +1,28 @@
 <?php
 
+namespace IQnection\FormPage;
+
 use SilverStripe\Forms;
 use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 use SilverStripe\Core\Config\Config;
 
-class FormPage extends Page
+class FormPage extends \Page
 {
-	private static $icon = "iq-basepages/images/icons/icon-form-file.gif";
+	private static $table_name = 'FormPage';
+	
+	private static $icon = "resources/iqnection-pages/basepages/images/icons/icon-form-file.gif";
 	
 	private static $db = array(
 		"GAT_Activate" => "Boolean",
 		"GAT_Category" => "Varchar(255)",
 		"GAT_Label" => "Varchar(255)",
 		"ThankYouText" => "HTMLText",
+		"FromEmail" => 'Varchar(255)',
 		"SendToAll" => 'Boolean'
 	);
 	
 	private static $has_many = [
-		"FormRecipients" => FormRecipient::class
+		"FormRecipients" => \IQnection\FormPage\Model\FormRecipient::class
 	];
 	
 	public function CanCreate($member = null, $context = array()) { return (get_class($this) != 'FormPage'); }
@@ -27,6 +32,7 @@ class FormPage extends Page
 		$fields = parent::getCMSFields();
 		
 		$fields->addFieldToTab('Root.FormControls', Forms\CheckboxField::create('SendToAll','Send Submissions to All Recipients') );
+		$fields->addFieldToTab('Root.FormControls', Forms\EmailField::create('FromEmail','Notification From Email') );
 		$fields->addFieldToTab('Root.FormControls', Forms\GridField\GridField::create(
 			'FormRecipients',
 			'Form Recipients',

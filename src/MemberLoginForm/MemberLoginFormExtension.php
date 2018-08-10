@@ -1,8 +1,10 @@
 <?php
 
-use SilverStripe\Security\MemberAuthenticator\MemberLoginForm;
+namespace IQnection\MemberLoginForm;
 
-class MemberLoginFormExtension extends MemberLoginForm 
+use SilverStripe\Security\MemberAuthenticator;
+
+class MemberLoginFormExtension extends MemberAuthenticator\MemberLoginForm 
 {
 	public function __construct($controller, $name, $fields = null, $actions = null, $checkCurrentUser = true) 
 	{

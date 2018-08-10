@@ -1,5 +1,6 @@
 <?php
 
+namespace IQnection\FormPage\Model;
 
 use SilverStripe\ORM\DataObject;
 
@@ -13,7 +14,7 @@ class FormRecipient extends DataObject
 	);
 	
 	private static $has_one = array(
-		"Page" => Page::class
+		"Page" => \Page::class
 	);
 	
 	private static $summary_fields = array(
@@ -26,6 +27,7 @@ class FormRecipient extends DataObject
 		$fields = parent::getCMSFields();
 		$fields->dataFieldByName('Email')->setTitle('Email Address');
 		$fields->removeByName('SortOrder');
+		$fields->extend('updateFormFields',$fields);
 		return $fields;
 	}
 	

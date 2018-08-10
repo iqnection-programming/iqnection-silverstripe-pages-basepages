@@ -1,9 +1,11 @@
 <?php
 
+namespace IQnection\ContactPage;
+
 use SilverStripe\View;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
-use IqBasePages\FormPage;
+use IQnection\FormPage\FormPageController;
 
 class ContactPageController extends FormPageController
 {	

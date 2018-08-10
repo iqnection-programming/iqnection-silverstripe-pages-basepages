@@ -1,7 +1,7 @@
 <?php
 
 
-namespace IqBasePages\FormUtilities;
+namespace IQnection\FormUtilities;
 
 use SilverStripe\Forms;
 use SilverStripe\Control\Email\Email;
@@ -21,14 +21,14 @@ class FormUtilities
 		return Forms\RequiredFields::create($requiredFields);
 	}
 	
-	public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null)
+	public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null,$FromEmail=null)
 	{
 		$arr_path = explode(".", $_SERVER['HTTP_HOST']);
 		$suffix = array_pop($arr_path);
 		$domain = array_pop($arr_path).'.'.$suffix;
 					
 		$email = Email::create()
-			->setFrom("forms@".$domain)
+			->setFrom(($FromEmail) ? $FromEmail : "forms@".$domain)
 			->setSubject($page->Title." form submission");
 		
 		foreach(explode(',',$EmailFormTo) as $to)

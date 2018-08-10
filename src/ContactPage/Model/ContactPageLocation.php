@@ -1,12 +1,15 @@
 <?php
 
+namespace IQnection\ContactPage\Model;
+
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms;
 use SilverStripe\Core\Config\Config;
-use IqBasePages\FormPage;
 
 class ContactPageLocation extends DataObject
 {
+	private static $table_name = 'ContactPageLocation';
+	
 	private static $db = [
 		"SortOrder" => "Int",
 		"Title" => "Varchar(255)",
@@ -16,7 +19,7 @@ class ContactPageLocation extends DataObject
 	];
 			
 	private static $has_one = [
-		"ContactPage" => ContactPage::class
+		"ContactPage" => \IQnection\ContactPage\ContactPage::class
 	];
 	
 	private static $summary_fields = [

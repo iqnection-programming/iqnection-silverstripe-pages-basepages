@@ -1,8 +1,8 @@
 <?php
 
+namespace IQnection\BlogPage;
 
-
-class BlogPageController extends PageController
+class BlogPageController extends \PageController
 {
 	private static $allowed_actions = array(
 		"index"
