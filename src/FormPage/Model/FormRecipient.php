@@ -7,6 +7,8 @@ use SilverStripe\ORM\DataObject;
 
 class FormRecipient extends DataObject
 {
+	private static $table_name = 'FormRecipient';
+	
 	private static $db = array(
 		'SortOrder' => 'Int',
 		"Title" => "Varchar(255)",

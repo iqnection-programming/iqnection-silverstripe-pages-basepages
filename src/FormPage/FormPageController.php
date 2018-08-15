@@ -94,12 +94,12 @@ class FormPageController extends \PageController
 				}
 
 				$Label = (isset($data['Group'])) ? '' : (isset($data['Label']) ? $data['Label'] : Forms\FormField::name_to_label($FieldName));
-				if ($data['FieldType'] == 'DateField')
+				$fieldType = (preg_match('/\\\/',$data['FieldType'])) ? $data['FieldType'] : '\\SilverStripe\\Forms\\'.$data['FieldType'];
+				if ($data['FieldType'] == \SilverStripe\Forms\DateField::class)
 				{
-					$data['FieldType'] = 'TextField';
+					$data['FieldType'] = \SilverStripe\Forms\TextField::class;
 					$data['DatePicker'] = true;
 				}
-				$fieldType = (!preg_match('/(\x92)/',$data['FieldType'])) ? 'SilverStripe\Forms\\'.$data['FieldType'] : $data['FieldType'];
 				$field = $fieldType::create($FieldName,$Label,(isset($data['Value'])?$data['Value']:null),(isset($data['Default'])?$data['Default']:null));
 				if ( (isset($data['DatePicker'])) && ($data['DatePicker']) )
 				{

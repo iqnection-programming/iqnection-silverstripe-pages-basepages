@@ -9,6 +9,8 @@ use SilverStripe\Core\Injector\Injectable;
 
 class FormPageSubmission extends DataObject
 {
+	private static $table_name = 'FormPageSubmission';
+	
 	private static $has_one = array(
 		'Page' => \Page::class
 	);

@@ -9,7 +9,7 @@ PageController:
     - IQnection\BasePage\PageControllerExtension
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
-    - iqnection-pages/basepages:css/leftandmainadditions.css
+    - iqnection-pages/basepages:css/cms/leftandmainadditions.css
 SilverStripe\Code\Injector:
   SilverStripe\Security\MemberAuthenticator\MemberLoginForm:
     class: IQnection\MemberLoginForm\MemberLoginFormExtension

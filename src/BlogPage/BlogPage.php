@@ -10,7 +10,7 @@ class BlogPage extends \Page
 {
 	private static $table_name = 'BlogPage';
 	
-	private static $icon = "resources/iqnection/iq-basepages/images/icons/icon-blog-file.gif";
+	private static $icon = "iqnection-pages/basepages:images/icons/icon-blog-file.gif";
 	
 	private static $db = array(
 		"BlogURL" => "Varchar(255)"
@@ -59,8 +59,8 @@ class BlogPage extends \Page
 	public function onAfterWrite()
 	{
 		parent::onAfterWrite();
-		
-		$path = Director::baseFolder()."/.htaccess";
+		if (!$this->BlogURL) { return; }
+		$path = Director::baseFolder()."/public/.htaccess";
 		$curr_data = @file($path);
 					
 		$extra = $this->BlogURL ? "RewriteCond %{REQUEST_URI} !^/".$this->BlogURL."$" : "";

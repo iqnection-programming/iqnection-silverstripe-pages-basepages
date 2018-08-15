@@ -18,7 +18,7 @@ class PageControllerExtension extends Core\Extension
 	
 	public function onBeforeInit()
 	{
-		View\Requirements::javascript("resources/iqnection-pages/basepages/javascript/jquery-1.9.1.min.js");
+		View\Requirements::javascript("iqnection-pages/basepages:javascript/jquery-1.9.1.min.js");
 	}
 		
 	public function onAfterInit() 
@@ -142,6 +142,7 @@ class PageControllerExtension extends Core\Extension
 		$PageType = Core\ClassInfo::shortName($this->owner->dataRecord->getClassName());
 		$CSSFiles["/css/pages/".$PageType.".css"] = "/css/pages/".$PageType.".css";
 		$CSSFiles["/css/pages/".$PageType."_extension.css"] = "/css/pages/".$PageType."_extension.css";
+
 		$extends = $this->owner->extend('updatePageCSS',$CSSFiles);
 		foreach($extends as $updates)
 		{

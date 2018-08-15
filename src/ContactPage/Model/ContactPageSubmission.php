@@ -6,6 +6,8 @@ use IQnection\FormPage\Model\FormPageSubmission;
 
 class ContactPageSubmission extends FormPageSubmission 
 {
+	private static $table_name = 'ContactPageSubmission';
+	
 	private static $db = [
 		'FirstName' => 'Varchar(255)',
 		'LastName' => 'Varchar(255)',

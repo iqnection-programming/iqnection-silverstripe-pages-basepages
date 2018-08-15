@@ -30,6 +30,7 @@ $editor->insertButtonsBefore('formatselect','styleselect');
 $editor->removeButtons(['formatselect']);
 $editor->setOption('importcss_selector_filter','.text');
 $editor->setOption('importcss_append',true);
+$editor->setOption('body_class','typography');
 
 // https://www.tinymce.com/docs/plugins/importcss/
 

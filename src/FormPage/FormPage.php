@@ -10,7 +10,7 @@ class FormPage extends \Page
 {
 	private static $table_name = 'FormPage';
 	
-	private static $icon = "resources/iqnection-pages/basepages/images/icons/icon-form-file.gif";
+	private static $icon = "iqnection-pages/basepages:images/icons/icon-form-file.gif";
 	
 	private static $db = array(
 		"GAT_Activate" => "Boolean",
