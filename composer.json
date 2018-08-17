@@ -12,6 +12,7 @@
 	],
 	"require": {
 		"silverstripe/framework": "^4.1",
+		"guzzlehttp/guzzle":"*",
 		"undefinedoffset/sortablegridfield": "*",
 		"iqnection-themes/mysite" : "*"
 	},

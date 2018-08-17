@@ -76,7 +76,7 @@ class ContactPageController extends FormPageController
 		if($this->ContactPageLocations()->Count())
 		{
 			$maps_url = "https://maps.googleapis.com/maps/api/js?sensor=false";
-			if ($key = Config::inst()->get('ContactPage','google_maps_api_key'))
+			if ($key = Config::inst()->get(\IQnection\ContactPage\ContactPage::class,'google_maps_api_key'))
 			{
 				$maps_url .= "&key=".$key;
 			}

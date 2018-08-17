@@ -118,7 +118,7 @@ class PageExtension extends ORM\DataExtension
 	{
 		if (!SiteConfig::current_site_config()->SiteTreeCacheEnabled) { return;	}
 		$cache = array();
-		foreach(Page::get()->filter('ParentID','0') as $page)
+		foreach(\Page::get()->filter('ParentID','0') as $page)
 		{
 			$cache['SiteTree'][$page->ID] = $page->dataForCache();
 		}

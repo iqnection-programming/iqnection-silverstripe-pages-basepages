@@ -32,9 +32,10 @@ class ContactPageLocation extends DataObject
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
+		$fields->removeByName('LinkTracking');
+		$fields->removeByName('FileTracking');
 		$fields->dataFieldByName('Title')->setTitle('Location Title');
 		$fields->dataFieldByName('Address')->setTitle('Location Address');
-		$fields->removeByName('SortOrder');
 		$fields->insertAfter('Address', $coordinates = Forms\FieldGroup::create('Coordinates') );
 		$coordinates->setDescription('Leave empty to retrieve Latitude and Longitude from Google');
 		$coordinates->push( $fields->dataFieldByName('MapLatitude')->setTitle('Latitude') );
