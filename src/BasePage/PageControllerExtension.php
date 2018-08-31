@@ -43,9 +43,18 @@ class PageControllerExtension extends Core\Extension
 		$baseCssFiles = array();
 		foreach($BaseCSS as $cssFile)
 		{
-			if ($CssFilePath = View\ThemeResourceLoader::inst()->findThemedCSS($cssFile,array($themeName)))
+			$cssFile = preg_replace('/\.css|\.scss/','',$cssFile);
+			// searching this way will favor a .scss file over .css
+			foreach(['.css','.scss'] as $ext)
 			{
-				$baseCssFiles[] = $CssFilePath;
+				if ($CssFilePath = View\ThemeResourceLoader::inst()->findThemedResource($cssFile.$ext,array($themeName)))
+				{
+					$baseCssFiles[$cssFile] = $CssFilePath;
+				}
+				elseif ($CssFilePath = View\ThemeResourceLoader::inst()->findThemedResource('css/'.$cssFile.$ext,array($themeName)))
+				{
+					$baseCssFiles[$cssFile] = $CssFilePath;
+				}
 			}
 		}
 		View\Requirements::combine_files('base.css', $baseCssFiles);
@@ -106,9 +115,14 @@ class PageControllerExtension extends Core\Extension
 		);
 		foreach($files as $filePath)
 		{
-			if ($ThemeResourcePath = View\ThemeResourceLoader::inst()->findThemedResource($filePath,View\SSViewer::get_themes()))
+			$filePath = preg_replace('/\.css|\.scss/','',$filePath);
+			// searching this way will favor a .scss file over .css
+			foreach(['.css','.scss'] as $ext)
 			{
-				$CssFiles[$ThemeResourcePath] = $ThemeResourcePath;
+				if ($ThemeResourcePath = View\ThemeResourceLoader::inst()->findThemedResource($filePath.$ext,View\SSViewer::get_themes()))
+				{
+					$CssFiles[$filePath] = $ThemeResourcePath;
+				}
 			}
 		}
 		return $CssFiles;
@@ -140,8 +154,8 @@ class PageControllerExtension extends Core\Extension
 		$CSSFiles = array();
 		// Find a page type specific CSS file
 		$PageType = Core\ClassInfo::shortName($this->owner->dataRecord->getClassName());
-		$CSSFiles["/css/pages/".$PageType.".css"] = "/css/pages/".$PageType.".css";
-		$CSSFiles["/css/pages/".$PageType."_extension.css"] = "/css/pages/".$PageType."_extension.css";
+		$CSSFiles["/css/pages/".$PageType] = "/css/pages/".$PageType;
+		$CSSFiles["/css/pages/".$PageType."_extension"] = "/css/pages/".$PageType."_extension";
 		$extends = $this->owner->extend('updatePageCSS',$CSSFiles);
 		foreach($extends as $updates)
 		{

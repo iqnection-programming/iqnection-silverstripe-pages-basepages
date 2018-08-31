@@ -14,7 +14,8 @@
 		"silverstripe/framework": "^4.1",
 		"guzzlehttp/guzzle":"*",
 		"undefinedoffset/sortablegridfield": "*",
-		"iqnection-themes/mysite" : "*"
+		"iqnection-themes/mysite" : "*",
+		"axllent/silverstripe-scss": "^1.0"
 	},
 	"extra": {
 		"expose": [

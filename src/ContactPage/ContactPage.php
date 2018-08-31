@@ -13,12 +13,11 @@ use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 class ContactPage extends FormPage
 {
 	private static $table_name = 'ContactPage';
-	
-	private static $google_maps_api_key = 'AIzaSyAXy4BLGXyLMakRQbrMVrFxS2KiXSj51cM';
-	
+		
 	private static $db = array(
 		"MapType" => "Varchar(255)",
-		"MapDirections" => "Boolean"
+		"MapDirections" => "Boolean",
+		'GoogleMapsApiKey' => 'Varchar(255)'
 	);
 	
 	private static $has_many = array(
@@ -29,6 +28,7 @@ class ContactPage extends FormPage
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
+		$fields->addFieldToTab('Root.MapDetails', Forms\TextField::create('GoogleMapsApiKey','Google Maps API Key') );
 		$fields->addFieldToTab("Root.MapDetails", Forms\DropdownField::create("MapType", "Map Display Type", array("ROADMAP"=>"Roadmap","SATELLITE"=>"Satellite","HYBRID"=>"Hybrid","TERRAIN"=>"Terrain"),"Roadmap"));
 		$fields->addFieldToTab('Root.MapDetails', Forms\GridField\GridField::create(
 			'Locations',

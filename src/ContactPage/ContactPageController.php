@@ -76,7 +76,7 @@ class ContactPageController extends FormPageController
 		if($this->ContactPageLocations()->Count())
 		{
 			$maps_url = "https://maps.googleapis.com/maps/api/js?sensor=false";
-			if ($key = Config::inst()->get(\IQnection\ContactPage\ContactPage::class,'google_maps_api_key'))
+			if ($key = $this->GoogleMapsApiKey)
 			{
 				$maps_url .= "&key=".$key;
 			}
@@ -130,7 +130,7 @@ var PageLink = "'.$this->Link().'";'."\n";
 		$to_addy = urlencode(urldecode($this->request->param('ID')));
 		$from_addy = urlencode(urldecode($this->request->param('OtherID')));
 		$path = "https://maps.googleapis.com/maps/api/directions/json?origin=".$from_addy."&destination=".$to_addy."&sensor=false";
-		if ($key = Config::inst()->get('ContactPage','google_maps_api_key'))
+		if ($key = $this->GoogleMapsApiKey)
 		{
 			$path .= "&key=".$key;
 		}
@@ -154,8 +154,8 @@ var PageLink = "'.$this->Link().'";'."\n";
 				"Distance" => $data['distance']['text'],
 				"Duration" => $data['duration']['text'],
 				"GoogleLink" => "https://maps.google.com/maps?q=".$from_addy."+to+".$to_addy,
-				"PrintLink" => $this->AbsoluteLink()."printview/".$from_addy."/".$to_addy,
-				"PageLink" => $this->AbsoluteLink()."directions/".$from_addy."/".$to_addy,
+				"PrintLink" => $this->AbsoluteLink("printview/".$from_addy."/".$to_addy),
+				"PageLink" => $this->AbsoluteLink("directions/".$from_addy."/".$to_addy),
 				"Steps" => $steps
 			);
 			

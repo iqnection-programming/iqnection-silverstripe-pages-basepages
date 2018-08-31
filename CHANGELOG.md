@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.1.1]
+- added support for .scss [requires package axllent/silverstripe-scss]
+
 ## [2.1.0]
 - Updated for SilverStripe 4.1
 
