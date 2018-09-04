@@ -208,7 +208,7 @@ class FormPageController extends \PageController
 			return $this->redirectBack();	
 		}
 		
-		$submission_class = $this->ClassName."Submission";
+		$submission_class = $this->getSubmissionClass();
 		$submission = $submission_class::create();
 		$form->saveInto($submission);
 		$submission->FormPageID = $this->ID;

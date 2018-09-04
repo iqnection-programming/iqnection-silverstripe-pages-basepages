@@ -73,5 +73,16 @@ class FormPage extends \Page
 		$fields->addFieldToTab('Root.GoogleFormTracking', Forms\ReadonlyField::create('GAT_Action','Action','submit') );
 		return $fields;
 	}
+	
+	public function getSubmissionClass()
+	{
+		foreach($this->hasMany(true) as $hasMany)
+		{
+			if (preg_match('/Submission/',$hasMany))
+			{
+				return $hasMany;
+			}
+		}
+	}
 }	
 
