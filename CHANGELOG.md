@@ -1,6 +1,10 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.2.0]
+- Google Maps now require your own API key to be entered in the site settings
+- other minor css fixes
+
 ## [2.1.1]
 - added support for .scss [requires package axllent/silverstripe-scss]
 

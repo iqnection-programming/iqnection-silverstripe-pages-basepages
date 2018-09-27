@@ -56,7 +56,7 @@ class ContactPageLocation extends DataObject
 	public function getLocation($address=false)
 	{
 		$maps_url = "https://maps.google.com/maps/api/geocode/json?sensor=false";
-		if ($key = Config::inst()->get('ContactPage','google_maps_api_key'))
+		if ($key = SiteConfig::current_site_config()->GoogleMapsApiKey)
 		{
 			$maps_url .= "&key=".$key;
 		}

@@ -13,6 +13,8 @@
 .cms-tree.jstree-apple li.notinmenu > a, 
 .cms-tree.jstree-apple li.notinmenu > a:link	{ color:#56aae3; }
 
+.cms-tree.jstree-apple li[data-pagetype^="SilverStripe\\ErrorPage"]	{ display:none; }
+
 p.monotype,
 span.monotype,
 input.monotype,

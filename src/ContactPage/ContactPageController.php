@@ -6,6 +6,7 @@ use SilverStripe\View;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use IQnection\FormPage\FormPageController;
+use SilverStripe\SiteConfig\SiteConfig;
 
 class ContactPageController extends FormPageController
 {	
@@ -76,7 +77,7 @@ class ContactPageController extends FormPageController
 		if($this->ContactPageLocations()->Count())
 		{
 			$maps_url = "https://maps.googleapis.com/maps/api/js?sensor=false";
-			if ($key = $this->GoogleMapsApiKey)
+			if ($key = SiteConfig::current_site_config()->GoogleMapsApiKey)
 			{
 				$maps_url .= "&key=".$key;
 			}
@@ -130,7 +131,7 @@ var PageLink = "'.$this->Link().'";'."\n";
 		$to_addy = urlencode(urldecode($this->request->param('ID')));
 		$from_addy = urlencode(urldecode($this->request->param('OtherID')));
 		$path = "https://maps.googleapis.com/maps/api/directions/json?origin=".$from_addy."&destination=".$to_addy."&sensor=false";
-		if ($key = $this->GoogleMapsApiKey)
+		if ($key = SiteConfig::current_site_config()->GoogleMapsApiKey)
 		{
 			$path .= "&key=".$key;
 		}

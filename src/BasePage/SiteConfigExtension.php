@@ -11,13 +11,17 @@ use SilverStripe\Control\Director;
 class SiteConfigExtension extends ORM\DataExtension
 {
 	private static $db = array(
-		'SiteTreeCacheEnabled' => 'Boolean'
+		'SiteTreeCacheEnabled' => 'Boolean',
+		'GoogleMapsApiKey' => 'Varchar(255)'
 	);
 	
 	public function updateCMSFields(Forms\FieldList $fields)
 	{
 		$tab = $fields->findOrMakeTab('Root.Developer.Caching');
 		$tab->push( Forms\CheckboxField::create('SiteTreeCacheEnabled','Cache Site Tree to JSON File')->setDescription('File located at /site-tree.json') );
+		
+		$tab = $fields->findOrMakeTab('Root.Developer.Google');
+		$tab->push( Forms\TextField::create('GoogleMapsApiKey','Google Maps API Key') );
 	}
 	
 	public function onAfterWrite()

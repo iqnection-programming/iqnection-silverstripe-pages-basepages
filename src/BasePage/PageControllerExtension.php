@@ -34,8 +34,9 @@ class PageControllerExtension extends Core\Extension
 		}
 		
 		$BaseCSS = array(
-			"base",
+			"reset",
 			"fontawesome/font-awesome.min",
+			"form",
 			"layout",
 			"responsive",
 			"typography"
@@ -74,12 +75,18 @@ class PageControllerExtension extends Core\Extension
 		}
 		View\Requirements::combine_files('base.js', $baseJsFiles);	
 
-		if ( ($parsedCssFiles = $this->owner->ParsedPageCSS()) && (count($parsedCssFiles)) ) 
+		if ( ($parsedCssFiles = array_diff($this->owner->ParsedPageCSS(),$baseCssFiles)) && (count($parsedCssFiles)) )
+		{ 
 			View\Requirements::combine_files($this->owner->CombinedCssFileName().'.css', $parsedCssFiles);
-		if ( ($parsedJsFiles = $this->owner->ParsedPageJS()) && (count($parsedJsFiles)) )
+		}
+		if ( ($parsedJsFiles = array_diff($this->owner->ParsedPageJS(),$baseJsFiles)) && (count($parsedJsFiles)) )
+		{
 			View\Requirements::combine_files($this->owner->CombinedJsFileName().'.js', $parsedJsFiles);
+		}
 		if ($customJs = $this->owner->CustomJS()) 
+		{
 			View\Requirements::customScript($customJs); 
+		}
 	}
 	
 	public function CombinedCssFileName()
