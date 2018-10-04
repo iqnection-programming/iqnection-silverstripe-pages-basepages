@@ -1,9 +1,10 @@
-<div id="form-page_layout">
-	<section id="form_page_left">
-		<h1>$Title</h1>
+<h1>$Title</h1>
+
+<div id="form-page-layout">
+	<section class="form-page-left">
 		$Content
 	</section>
-	<section id="form_page_right">
+	<section class="form-page-right">
 		$RenderForm
 	</section>
 </div>

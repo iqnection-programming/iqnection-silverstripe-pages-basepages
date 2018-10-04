@@ -171,7 +171,7 @@ var PageLink = "'.$this->Link().'";'."\n";
 		
 		if($ajax_data)
 		{
-			return Director::is_ajax() ? $this->Customise($ajax_data)->renderWith("Layout/ContactPage_directions") : $this->Customise($ajax_data);
+			return Director::is_ajax() ? $this->Customise($ajax_data)->renderWith("IQnection/ContactPage/Layout/ContactPage_directions") : $this->Customise($ajax_data);
 		} 
 		else 
 		{
@@ -185,7 +185,7 @@ var PageLink = "'.$this->Link().'";'."\n";
 		
 		if($ajax_data)
 		{
-			return $this->Customise($ajax_data)->renderWith("Layout/ContactPage_printview");
+			return $this->Customise($ajax_data)->renderWith("IQnection/ContactPage/Layout/ContactPage_printview");
 		} 
 		else 
 		{

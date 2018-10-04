@@ -18,7 +18,8 @@ class FormPageSubmission extends DataObject
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
-
+		$fields->removeByName('LinkTracking');
+		$fields->removeByName('FileTracking');
 		// see if we have any File or Image upload fields
 		foreach($this->hasOne() as $relName => $relObjType)
 		{

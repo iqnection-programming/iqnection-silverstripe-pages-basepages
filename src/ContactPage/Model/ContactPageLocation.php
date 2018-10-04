@@ -5,6 +5,7 @@ namespace IQnection\ContactPage\Model;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\SiteConfig\SiteConfig;
 
 class ContactPageLocation extends DataObject
 {
@@ -34,6 +35,7 @@ class ContactPageLocation extends DataObject
 		$fields = parent::getCMSFields();
 		$fields->removeByName('LinkTracking');
 		$fields->removeByName('FileTracking');
+		$fields->removeByName('SortOrder');
 		$fields->dataFieldByName('Title')->setTitle('Location Title');
 		$fields->dataFieldByName('Address')->setTitle('Location Address');
 		$fields->insertAfter('Address', $coordinates = Forms\FieldGroup::create('Coordinates') );

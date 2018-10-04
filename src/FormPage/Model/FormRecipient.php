@@ -27,8 +27,10 @@ class FormRecipient extends DataObject
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
-		$fields->dataFieldByName('Email')->setTitle('Email Address');
+		$fields->removeByName('LinkTracking');
+		$fields->removeByName('FileTracking');
 		$fields->removeByName('SortOrder');
+		$fields->dataFieldByName('Email')->setTitle('Email Address');
 		$fields->extend('updateFormFields',$fields);
 		return $fields;
 	}

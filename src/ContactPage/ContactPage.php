@@ -17,7 +17,6 @@ class ContactPage extends FormPage
 	private static $db = array(
 		"MapType" => "Varchar(255)",
 		"MapDirections" => "Boolean",
-		'GoogleMapsApiKey' => 'Varchar(255)'
 	);
 	
 	private static $has_many = array(
@@ -28,7 +27,6 @@ class ContactPage extends FormPage
 	public function getCMSFields()
 	{
 		$fields = parent::getCMSFields();
-		$fields->addFieldToTab('Root.MapDetails', Forms\TextField::create('GoogleMapsApiKey','Google Maps API Key') );
 		$fields->addFieldToTab("Root.MapDetails", Forms\DropdownField::create("MapType", "Map Display Type", array("ROADMAP"=>"Roadmap","SATELLITE"=>"Satellite","HYBRID"=>"Hybrid","TERRAIN"=>"Terrain"),"Roadmap"));
 		$fields->addFieldToTab('Root.MapDetails', Forms\GridField\GridField::create(
 			'Locations',
