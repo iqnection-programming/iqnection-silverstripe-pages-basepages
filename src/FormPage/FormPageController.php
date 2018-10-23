@@ -211,7 +211,7 @@ class FormPageController extends \PageController
 		$submission_class = $this->getSubmissionClass();
 		$submission = $submission_class::create();
 		$form->saveInto($submission);
-		$submission->FormPageID = $this->ID;
+		$submission->PageID = $this->ID;
 		$submission->write();
 					
 		// send email to this address if specified

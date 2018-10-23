@@ -24,7 +24,7 @@ class PageControllerExtension extends Core\Extension
 	public function onAfterInit() 
 	{
 		$themeName = $this->owner->Config()->get('base_theme_name');;
-		$dir = View\ThemeResourceLoader::getPath($themeName);
+		$dir = View\ThemeResourceLoader::inst()->getPath($themeName);
 
 		View\Requirements::set_combined_files_folder('combined');
 		

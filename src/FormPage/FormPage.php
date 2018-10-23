@@ -25,14 +25,28 @@ class FormPage extends \Page
 		"FormRecipients" => \IQnection\FormPage\Model\FormRecipient::class
 	];
 	
+	private static $defaults = [
+		'ThankYouText' => '<p>Thank you for your message. Someone will get back to you shortly.</p>'
+	];
+	
 	public function CanCreate($member = null, $context = array()) { return (get_class($this) != 'FormPage'); }
 	
 	public function getCMSFields()
 	{	
 		$fields = parent::getCMSFields();
 		
-		$fields->addFieldToTab('Root.FormControls', Forms\CheckboxField::create('SendToAll','Send Submissions to All Recipients') );
 		$fields->addFieldToTab('Root.FormControls', Forms\EmailField::create('FromEmail','Notification From Email') );
+		$pageController = Injector::inst()->create($this->getControllerName());
+		$formConfig = $pageController->FormConfig();
+		if (!isset($formConfig['sendToAll']))
+		{
+			$fields->addFieldToTab('Root.FormControls', Forms\CheckboxField::create('SendToAll','Send Submissions to All Recipients') );
+		}
+		elseif ($formConfig['sendToAll'])
+		{
+			$fields->addFieldToTab('Root.FormControls', Forms\ReadonlyField::create('SendToAll_message','')
+				->setValue('Submissions will be sent to all Recipients') );
+		}
 		$fields->addFieldToTab('Root.FormControls', Forms\GridField\GridField::create(
 			'FormRecipients',
 			'Form Recipients',
