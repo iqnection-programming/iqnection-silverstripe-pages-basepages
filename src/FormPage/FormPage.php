@@ -5,6 +5,7 @@ namespace IQnection\FormPage;
 use SilverStripe\Forms;
 use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Injector\Injector;
 
 class FormPage extends \Page
 {

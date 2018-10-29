@@ -31,7 +31,7 @@ class FormRecipient extends DataObject
 		$fields->removeByName('FileTracking');
 		$fields->removeByName('SortOrder');
 		$fields->dataFieldByName('Email')->setTitle('Email Address');
-		$fields->extend('updateFormFields',$fields);
+		$fields->extend('updateCMSFields',$fields);
 		return $fields;
 	}
 	
