@@ -21,21 +21,7 @@ class PageExtension extends ORM\DataExtension
 	private static $defaults = array(
 		"Target" => "_self"
 	);
-	
-	private static $indexes = [
-		'SearchFields' => [
-			'type' => 'fulltext',
-			'columns' => [
-				'Title',
-				'Content',
-				'SidebarContent',
-				'LeftColumn',
-				'CenterColumn',
-				'RightColumn'
-			]
-		]
-	];
-	
+		
 	public function updateCMSFields(Forms\FieldList $fields)
 	{
 		$tab = $fields->findOrMakeTab('Root.Developer.AdditionalCode');
