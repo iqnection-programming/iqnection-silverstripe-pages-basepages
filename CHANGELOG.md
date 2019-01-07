@@ -1,7 +1,7 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
-## [2.2.1]
+## [2.2.3]
 - Updated css/scss includes
 - Updated css/scss selection to prefer scss
 
