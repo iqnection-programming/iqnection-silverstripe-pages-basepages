@@ -123,11 +123,13 @@ class PageControllerExtension extends Core\Extension
 		foreach($files as $filePath)
 		{
 			$filePath = preg_replace('/\.css|\.scss/','',$filePath);
+			$hasScss = false;
 			// searching this way will favor a .scss file over .css
-			foreach(['.css','.scss'] as $ext)
+			foreach(['.scss','.css'] as $ext)
 			{
-				if ($ThemeResourcePath = View\ThemeResourceLoader::inst()->findThemedResource($filePath.$ext,View\SSViewer::get_themes()))
+				if ( (!$hasScss) && ($ThemeResourcePath = View\ThemeResourceLoader::inst()->findThemedResource($filePath.$ext,View\SSViewer::get_themes())) )
 				{
+					if ($ext == '.scss') { $hasScss = true; }
 					$CssFiles[$filePath] = $ThemeResourcePath;
 				}
 			}

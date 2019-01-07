@@ -117,10 +117,10 @@ class ContactPageController extends FormPageController
 				}
 			}
 			$js .= '
-var MapType = "'.$this->MapType.'";
-var address_objects = '.json_encode($addressObjects).';
-var Avgs = '.json_encode($Avgs).';
-var PageLink = "'.$this->Link().'";'."\n";
+window.contactPage.MapType = "'.$this->MapType.'";
+window.contactPage.address_objects = '.json_encode($addressObjects).';
+window.contactPage.Avgs = '.json_encode($Avgs).';
+window.contactPage.PageLink = "'.$this->Link().'";'."\n";
 		}
 		
 		return $js;

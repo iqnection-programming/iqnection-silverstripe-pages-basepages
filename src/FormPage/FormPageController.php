@@ -17,8 +17,9 @@ class FormPageController extends \PageController
 	public function PageCSS()
 	{
 		return [
-			"javascript/jquery.ui.theme.css",
-			"css/form.css"
+			"javascript/jquery-ui.min.scss",
+			"javascript/jquery.ui.theme.scss",
+			"css/form.scss"
 		];
 	}
 	
@@ -39,19 +40,46 @@ class FormPageController extends \PageController
 	\"use strict\";
 	$(document).ready(function(){
 		
-		$(\"#Form_RenderForm\").validate({
-	".(($FormConfig['useNospam']) ? "useNospam: true," : null);
-		
+		$(\"#Form_RenderForm\").validate({\n";
+		if ($FormConfig['useNospam'])
+		{
+			$JS .= "useNospam: true,\n";
+		}		
 		if ($this->GAT_Activate)
 		{
-			$JS .= "\n\t\ttrackFormSubmit:{category:\"".htmlspecialchars($this->GAT_Category)."\",action:\"submit\",label:\"".htmlspecialchars($this->GAT_Label)."\",value:1},\n";
+			$JS .= "trackFormSubmit:{category:\"".htmlspecialchars($this->GAT_Category)."\",action:\"submit\",label:\"".htmlspecialchars($this->GAT_Label)."\",value:1},\n";
+		}		
+		$JS .= "
+		});\n";
+		
+		if ($this->hasDateField())
+		{
+			$JS .= "
+		$('input.datePicker').each(function(){
+			$(this).datepicker();
+		});
+";
 		}
 		
 		$JS .= "
-		});
 	});
 }(jQuery));\n";
 		return $JS;
+	}
+	
+	public function hasDateField()
+	{
+		if ($form_fields = $this->FormFields())
+		{
+			foreach($form_fields as $form_field)
+			{
+				if ( (isset($form_field['DatePicker'])) && ($form_field['DatePicker']) )
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public function FormFields()
@@ -99,6 +127,10 @@ class FormPageController extends \PageController
 				{
 					$data['FieldType'] = \SilverStripe\Forms\TextField::class;
 					$data['DatePicker'] = true;
+					if (!isset($data['Attributes']['autocomplete']))
+					{
+						$data['Attributes']['autocomplete'] = 'off';
+					}
 				}
 				$field = $fieldType::create($FieldName,$Label,(isset($data['Value'])?$data['Value']:null),(isset($data['Default'])?$data['Default']:null));
 				if ( (isset($data['DatePicker'])) && ($data['DatePicker']) )
@@ -109,13 +141,14 @@ class FormPageController extends \PageController
 				{
 					$field->setEmptyString($emptyString);
 				}
-//				if ($field instanceof Forms\DateField) 
-//				{
-//					$field->setConfig('showcalendar',true);
-//					$field->setConfig('dateformat','m/d/yy');
-//					$field->setConfig('datavalueformat','Y-m-d');
-//				}
 				if(isset($data['ExtraClass']))$field->addExtraClass($data['ExtraClass']);
+				if(isset($data['Attributes']) && is_array($data['Attributes']))
+				{
+					foreach($data['Attributes'] as $attName => $attValue)
+					{
+						$field->setAttribute($attName,$attValue);
+					}
+				}
 				if(isset($data['Config']) && is_array($data['Config']))
 				{
 					foreach($data['Config'] as $key => $value)
@@ -177,6 +210,7 @@ class FormPageController extends \PageController
 			);
 
 			$form = Forms\Form::create($this, 'RenderForm', $fields, $actions, $validator);
+			$form->setAttribute('autocomplete','off');
 			if ($defaults = $this->request->getSession()->get("FormInfo.Form_RenderForm.data"))
 			{
 				$form->loadDataFrom($defaults);

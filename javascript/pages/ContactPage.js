@@ -1,13 +1,16 @@
 var map;
 var bounds;
-
+window.contactPage = window.contactPage || {};
+window.contactPage.address_objects = window.contactPage.address_objects || [];
+window.contactPage.Avgs = window.contactPage.Avgs || [0,0];
+window.contactPage.PageLink = window.contactPage.PageLink || '';
 $(window).load(function(){
 	if ((typeof google === 'object') && ($("#map_canvas").length>=1) ){
 		bounds = new google.maps.LatLngBounds();
 		
 		var myOptions = {
 		  zoom: 12,
-		  center: new google.maps.LatLng(Avgs[0],Avgs[1]),
+		  center: new google.maps.LatLng(window.contactPage.Avgs[0],window.contactPage.Avgs[1]),
 		  zoomControl:true,
 		  streetViewControl:false,
 		  mapTypeControl:false,
@@ -15,10 +18,10 @@ $(window).load(function(){
 		};
 		map = new google.maps.Map($("#map_canvas")[0], myOptions);
 			
-		for(var i = 0; i < address_objects.length; i++){
-			addMarker(address_objects[i]);
+		for(var i = 0; i < window.contactPage.address_objects.length; i++){
+			addMarker(window.contactPage.address_objects[i]);
 		}	
-		if(address_objects.length>1)map.fitBounds(bounds);
+		if(window.contactPage.address_objects.length>1)map.fitBounds(bounds);
 	}
 });
 
@@ -43,7 +46,7 @@ function addMarker(object) {
 
 function getDirections(){
 	$.ajax({
-			url: PageLink+"directions/"+$('#to_address').val()+"/"+$('#from_address').val(),
+			url: window.contactPage.PageLink+"directions/"+$('#to_address').val()+"/"+$('#from_address').val(),
 			global: false,
 			dataType: "html",
 			async: true,
