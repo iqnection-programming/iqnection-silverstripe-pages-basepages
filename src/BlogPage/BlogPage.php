@@ -93,12 +93,7 @@ class BlogPage extends \Page
 		$finished = false;
 		foreach ($curr_data as $line)
 		{
-			if ( (!$finished) && (trim($line) == "RewriteEngine On") )
-			{
-				$start = true;
-			}
-				
-			if ( ($start) && (trim($line) == "RewriteCond %{REQUEST_FILENAME} !-f") && (!$finished) )
+			if ( (!$finished) && (trim($line) == "RewriteRule ^(.*)$ public/$1") )
 			{
 				$new_file[] = trim("### Blog Redirect ###");
 				$new_file[] = trim($extra);
