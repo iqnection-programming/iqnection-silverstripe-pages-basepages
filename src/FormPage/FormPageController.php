@@ -149,19 +149,19 @@ class FormPageController extends \PageController
 						$field->setAttribute($attName,$attValue);
 					}
 				}
-				if(isset($data['Config']) && is_array($data['Config']))
+				if (isset($data['Config']) && is_array($data['Config']))
 				{
 					foreach($data['Config'] as $key => $value)
 					{
 						$field->setConfig($key,$value);
 					}
 				}	
-				if(isset($data['Required']))
+				if ( (isset($data['Required'])) && ($data['Required']) )
 				{
 					$validator->addRequiredField($FieldName);
 					$field->addExtraClass('required');
 				}
-				if(isset($data['Group']))
+				if (isset($data['Group']))
 				{
 					if (!isset(${$data['Group']}))
 					{

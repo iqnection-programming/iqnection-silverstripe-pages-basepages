@@ -1,4 +1,4 @@
-<% if $SidebarContent %>
+<% if $ShowSidebar %>
 	<div id="sidebar-layout">
 		<section id="page_left">
 		    <h1>$Title</h1>
@@ -6,7 +6,7 @@
 		    <% include Page_columns %>
 		</section>
 		<section id="page_right">
-		    $SidebarContent
+		    <% include PageSidebar %>
 		</section>
 	</div>
 <% else %>

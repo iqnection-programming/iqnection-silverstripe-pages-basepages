@@ -153,5 +153,12 @@ class PageExtension extends ORM\DataExtension
 		return $cache;
 	}
 	
-	public function updateDataForCache($cache) { return $cache; }			
+	public function updateDataForCache($cache) { return $cache; }	
+	
+	public function ShowSidebar()
+	{
+		$show = (bool) strlen($this->owner->SidebarContent);
+		$this->owner->extend('updateShowSidebar',$show);
+		return $show;
+	}		
 }

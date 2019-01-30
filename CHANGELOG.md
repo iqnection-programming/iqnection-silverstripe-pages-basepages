@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.2.4]
+- Better template sidebar support
+
 ## [2.2.3]
 - Updated css/scss includes
 - Updated css/scss selection to prefer scss
