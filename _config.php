@@ -9,7 +9,8 @@ $editor->enablePlugins([
 	'hr',
 	'importcss',
 	'charmap',
-	'advlist'
+	'advlist',
+	'anchor'
 ]);
 $editor->disablePlugins([
 	'contextmenu'
@@ -28,6 +29,7 @@ $editor->addButtonsToLine(1,[
 $editor->setOption('style_formats_merge',true);
 $editor->insertButtonsBefore('code','charmap');
 $editor->insertButtonsBefore('formatselect','styleselect');
+$editor->insertButtonsBefore('sslink','anchor');
 $editor->removeButtons(['formatselect']);
 $editor->setOption('importcss_selector_filter','.text');
 $editor->setOption('importcss_append',true);
