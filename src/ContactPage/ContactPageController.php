@@ -39,7 +39,8 @@ class ContactPageController extends FormPageController
 			"State" => array(
 				"FieldType" => "DropdownField",
 				"Value" => "GetStates",
-				"Default" => "PA"
+				"Default" => "PA",
+				'EmptyString' => '-- Select --',
 			),
 			"ZipCode" => array(
 				"FieldType" => "TextField",
