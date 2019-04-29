@@ -139,8 +139,8 @@ class PageExtension extends ORM\DataExtension
 		$cache = array();
 		$cache['ID'] = $this->owner->ID;
 		$cache['Title'] = $this->owner->Title;
-		$cache['Link'] = $this->owner->Link();
-		$cache['AbsoluteLink'] = $this->owner->AbsoluteLink();
+		$cache['Link'] = preg_replace('/\?.*/','',$this->owner->Link());
+		$cache['AbsoluteLink'] = preg_replace('/\?.*/','',$this->owner->AbsoluteLink());
 		$cache['BasePath'] = Director::absoluteURL($this->owner->RelativeLink());
 		$cache['ClassName'] = $this->owner->ClassName;
 		$cache['TemplateCacheFilename'] = $this->getTemplateCachePath(false);
