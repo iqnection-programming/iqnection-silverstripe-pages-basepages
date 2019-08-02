@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.2.5]
+- expanded NoSpam ability to configure other domains to retrieve codes
+
 ## [2.2.4]
 - Better template sidebar support
 

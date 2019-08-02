@@ -10,7 +10,7 @@ class NoSpamController extends ContentController
 	private static $allowed_actions = [
 		'generate_code'
 	];
-	
+		
 	public function index()
 	{
 		return $this->httpError(404);
@@ -25,6 +25,7 @@ class NoSpamController extends ContentController
 				print FormUtilities::generateCode(trim($code))."|".trim($this->request->requestVar('id'));
 				die();
 			}
+			return $this->httpError(403);
 		}
 		return $this->httpError(404);
 	}

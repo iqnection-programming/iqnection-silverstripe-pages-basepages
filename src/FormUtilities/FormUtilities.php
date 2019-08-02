@@ -5,9 +5,14 @@ namespace IQnection\FormUtilities;
 
 use SilverStripe\Forms;
 use SilverStripe\Control\Email\Email;
+use SilverStripe\Core\Config\Configurable;
 
 class FormUtilities
 {
+	use Configurable;
+	
+	private static $allowed_referrers = [];
+	
 	public static function RequiredFields(&$fields,$requiredFields)
 	{
 		foreach($requiredFields as $requiredField)
@@ -300,6 +305,7 @@ class FormUtilities
 			),
 			"Europe" => array(
 				"AL" => "Albania",
+
 				"AD" => "Andorra",
 				"AT" => "Austria",
 				"BY" => "Belarus",
@@ -909,6 +915,16 @@ class FormUtilities
 	public static function referSecurityCheck()
 	{
 		$refer = $_SERVER['HTTP_REFERER'];
+		$referrer = preg_replace('/((?:https?:\/\/)?[^\/]+).*/','$1',$refer);
+		foreach(self::Config()->get('allowed_referrers') as $allowed_referrer)
+		{		
+			if (strtolower($referrer) == strtolower($allowed_referrer))
+			{
+				header('Access-Control-Allow-Origin: '.$allowed_referrer);
+				return true;
+			}
+		}
+		$referrer = preg_replace('/(?:https?:\/\/)?([^\/]+).*/','$1',$refer);
 		$server = $_SERVER['SERVER_NAME'];
 		$cr = explode(".", preg_replace("/^http[s]?:\/\/([^\/]+).*$/i", "\\1", $refer));
 		$cs = explode(".", $server);
