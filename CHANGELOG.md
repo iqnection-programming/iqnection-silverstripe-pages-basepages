@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.2.6]
+- added <i> element as allowed in WYSIWYG
+
 ## [2.2.5]
 - expanded NoSpam ability to configure other domains to retrieve codes
 

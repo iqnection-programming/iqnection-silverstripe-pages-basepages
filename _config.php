@@ -35,7 +35,7 @@ $editor->setOption('importcss_selector_filter','.text');
 $editor->setOption('importcss_append',true);
 $editor->setOption('body_class','typography');
 $extended_valid_elements = explode(',',$editor->getOption('extended_valid_elements'));
-$extended_valid_elements = array_merge(['-ol[start|class]'],$extended_valid_elements);
+$extended_valid_elements = array_merge(['-ol[start|class]','i[class]'],$extended_valid_elements);
 $editor->setOption('extended_valid_elements',implode(',',$extended_valid_elements));
 
 // https://www.tinymce.com/docs/plugins/importcss/
