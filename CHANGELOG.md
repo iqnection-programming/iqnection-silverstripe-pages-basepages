@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.2.7]
+- Added home page icon in CMS
+
 ## [2.2.6]
 - added <i> element as allowed in WYSIWYG
 
