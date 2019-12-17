@@ -1,6 +1,9 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [2.2.8]
+- Added functionality for new mobile nav in IQnection mysite theme, provides JSON object to page for JavaScript
+
 ## [2.2.7]
 - Added home page icon in CMS
 

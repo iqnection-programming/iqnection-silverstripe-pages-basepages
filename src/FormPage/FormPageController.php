@@ -269,7 +269,7 @@ class FormPageController extends \PageController
 		
 		if(($as = $this->AutoResponderSubject) && ($ab = $this->AutoResponder))
 		{
-			FormUtilities::SendAutoResponder($as,$ab,$data['Email'],$this->AutoResponderFromEmail,$submission,$data,$this->AutoResponderIncludeSubmission);			
+			FormUtilities::SendAutoResponder($as,$this->dbObject('AutoResponder')->forTemplate(),$data['Email'],$this->AutoResponderFromEmail,$submission,$data,$this->AutoResponderIncludeSubmission);
 		}
 		
 		$this->onAfterSubmit($submission);

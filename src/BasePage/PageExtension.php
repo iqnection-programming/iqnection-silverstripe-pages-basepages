@@ -16,11 +16,14 @@ class PageExtension extends ORM\DataExtension
 		"RightColumn" => "HTMLText",
 		'AdditionalCode' => 'Text',
 		"Target" => "Enum('_blank,_new,_parent,_self,_top','_self')",
+		'HideDesktopMenu' => 'Boolean',
+		'HideMobileMenu' => 'Boolean',
 	);	
 	
-	private static $defaults = array(
-		"Target" => "_self"
-	);
+	private static $defaults = [
+		"Target" => "_self",
+		'ShowInMobileMenu' => true
+	];
 		
 	public function updateCMSFields(Forms\FieldList $fields)
 	{
@@ -47,6 +50,9 @@ class PageExtension extends ORM\DataExtension
 			"_self"=>"Same Tab",
 			"_blank"=>"New Tab"
 		)));
+		
+		$fields->insertAfter('ShowInMenus', Forms\CheckboxField::create('HideDesktopMenu','Hide from Dekstop Menu') );
+		$fields->insertAfter('HideDesktopMenu', Forms\CheckboxField::create('HideMobileMenu','Hide from Mobile Menu') );
 		
 		return $fields;
 	}

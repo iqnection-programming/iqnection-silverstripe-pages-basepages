@@ -19,6 +19,36 @@ class PageControllerExtension extends Core\Extension
 	public function onBeforeInit()
 	{
 		View\Requirements::javascript("iqnection-pages/basepages:javascript/jquery-1.9.1.min.js");
+		$mobileNav = [];
+		foreach($this->Menu(1)->Exclude('HideMobileMenu',1) as $page)
+		{
+			$mobileNav[] = [
+				'id' => $page->ID,
+				'title' => $page->MenuTitle,
+				'link' => $page->AbsoluteLink(),
+				'level' => 1,
+				'children' => $this->MobileNavChildren($page, 2)
+			];
+		}
+		$this->owner->extend('updateMobileNav', $mobileNav);
+		Requirements::customScript("window._mobileMenuLinks = ".json_encode($mobileNav).";");
+	}
+	
+	public function MobileNavChildren($page, $level = 2)
+	{
+		$children = [];
+		foreach($page->Children()->Exclude('HideMobileMenu',1) as $child)
+		{
+			$children[] = [
+				'id' => $child->ID,
+				'title' => $child->MenuTitle,
+				'link' => $child->AbsoluteLink(),
+				'level' => $level,
+				'children' => $this->MobileNavChildren($child, $level+1)
+			];
+		}
+		$this->owner->extend('updateMobileNavChildren', $children);
+		return $children;			
 	}
 		
 	public function onAfterInit() 
@@ -267,5 +297,7 @@ class PageControllerExtension extends Core\Extension
 		print $this->generateTemplateCache();
 		die();
 	}
+	
+	
 	
 }
