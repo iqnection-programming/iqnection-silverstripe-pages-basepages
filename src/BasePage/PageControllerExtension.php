@@ -20,7 +20,7 @@ class PageControllerExtension extends Core\Extension
 	{
 		View\Requirements::javascript("iqnection-pages/basepages:javascript/jquery-1.9.1.min.js");
 		$mobileNav = [];
-		foreach($this->Menu(1)->Exclude('HideMobileMenu',1) as $page)
+		foreach($this->owner->Menu(1)->Exclude('HideMobileMenu',1) as $page)
 		{
 			$mobileNav[] = [
 				'id' => $page->ID,
@@ -31,7 +31,7 @@ class PageControllerExtension extends Core\Extension
 			];
 		}
 		$this->owner->extend('updateMobileNav', $mobileNav);
-		Requirements::customScript("window._mobileMenuLinks = ".json_encode($mobileNav).";");
+		View\Requirements::customScript("window._mobileMenuLinks = ".json_encode($mobileNav).";");
 	}
 	
 	public function MobileNavChildren($page, $level = 2)
