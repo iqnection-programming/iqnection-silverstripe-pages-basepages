@@ -10,9 +10,9 @@ use SilverStripe\Core\Config\Configurable;
 class FormUtilities
 {
 	use Configurable;
-	
+
 	private static $allowed_referrers = [];
-	
+
 	public static function RequiredFields(&$fields,$requiredFields)
 	{
 		foreach($requiredFields as $requiredField)
@@ -25,22 +25,27 @@ class FormUtilities
 		}
 		return Forms\RequiredFields::create($requiredFields);
 	}
-	
-	public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null,$FromEmail=null)
+
+	public static function SendSSEmail($page=false, $EmailFormTo=false, $post_vars=false,$submission=null,$FromEmail=null, $subject = null)
 	{
 		$arr_path = explode(".", $_SERVER['HTTP_HOST']);
 		$suffix = array_pop($arr_path);
 		$domain = array_pop($arr_path).'.'.$suffix;
-					
+
+        if (!$subject)
+        {
+            $subject = $page->Title." form submission";
+        }
+
 		$email = Email::create()
 			->setFrom(($FromEmail) ? $FromEmail : "forms@".$domain)
-			->setSubject($page->Title." form submission");
-		
+			->setSubject($subject);
+
 		foreach(explode(',',$EmailFormTo) as $to)
 		{
 			$email->addTo($to);
 		}
-		
+
 		$email_body = "<html><body>This is a form submission created by this page on your website:<br /><br />".$_SERVER['HTTP_REFERER']."<br /><br />";
 		$email_body .= self::FormDataToArray($post_vars,null,null,$submission);
 		$email_body .= "</body></html>";
@@ -49,13 +54,13 @@ class FormUtilities
 		$email->setReplyTo($post_vars['Email']);
 		$email->send();
 	}
-	
+
 	public static function SendAutoResponder($subject=false,$body=false,$EmailFormTo=false,$FromEmail=null,$submission=null,$post_vars=array(),$includeSubmission=false)
 	{
 		$arr_path = explode(".", $_SERVER['HTTP_HOST']);
 		$suffix = array_pop($arr_path);
 		$domain = array_pop($arr_path).'.'.$suffix;
-			
+
 		$email = Email::create()
 			->setFrom(($FromEmail) ? $FromEmail : "forms@".$domain)
 			->setSubject($subject);
@@ -63,7 +68,7 @@ class FormUtilities
 		{
 			$email->addTo($to);
 		}
-		
+
 		$email_body = "<html><body>";
 		$email_body .= $body;
 		if ($submission && $includeSubmission)
@@ -76,7 +81,7 @@ class FormUtilities
 		$email->setBody($email_body);
 		$email->send();
 	}
-	
+
 	public static function FormDataToArray($data, $level=0, $hide_empty=0,$submission)
 	{
 		$ignore_keys = array(
@@ -86,7 +91,7 @@ class FormUtilities
 			"url",
 			"action_SubmitForm"
 		);
-		
+
 		$html = "";
 		foreach ($data as $fieldName => $v)
 		{
@@ -94,7 +99,7 @@ class FormUtilities
 			{
 				$name = trim(preg_replace("/([A-Z]{1}[a-z]{1})/", " \\1", $fieldName));
 				$html .= "<br />".str_repeat("&nbsp;", ($level * 4)).'<span style="font-weight:bold;">'.htmlspecialchars($name).': </span>';
-				
+
 				//if (is_array($v))
 				//	$html .= self::FormDataToArray($v, $level+1,$hide_empty,$submission);
 				//else
@@ -114,7 +119,7 @@ class FormUtilities
 		}
 		return $html;
 	}
-	
+
 	public static function GetCountryName($val)
 	{
 		if ($val)
@@ -129,7 +134,7 @@ class FormUtilities
 		}
 		return "";
 	}
-	
+
 	public static function GetCountriesByContinent()
 	{
 		return array(
@@ -147,7 +152,7 @@ class FormUtilities
 				"KM" => "Comoros",
 				"CG" => "Congo - Brazzaville",
 				"CD" => "Congo - Kinshasa",
-				"CI" => "Côte d'Ivoire",
+				"CI" => "CÃ´te d'Ivoire",
 				"DJ" => "Djibouti",
 				"EG" => "Egypt",
 				"GQ" => "Equatorial Guinea",
@@ -174,7 +179,7 @@ class FormUtilities
 				"NE" => "Niger",
 				"NG" => "Nigeria",
 				"RW" => "Rwanda",
-				"RE" => "Réunion",
+				"RE" => "RÃ©union",
 				"SH" => "Saint Helena",
 				"SN" => "Senegal",
 				"SC" => "Seychelles",
@@ -184,7 +189,7 @@ class FormUtilities
 				"ZA" => "South Africa",
 				"SD" => "Sudan",
 				"SZ" => "Swaziland",
-				"ST" => "São Tomé and Príncipe",
+				"ST" => "SÃ£o TomÃ© and PrÃ­ncipe",
 				"TZ" => "Tanzania",
 				"TG" => "Togo",
 				"TN" => "Tunisia",
@@ -234,7 +239,7 @@ class FormUtilities
 				"PY" => "Paraguay",
 				"PE" => "Peru",
 				"PR" => "Puerto Rico",
-				"BL" => "Saint Barthélemy",
+				"BL" => "Saint BarthÃ©lemy",
 				"KN" => "Saint Kitts and Nevis",
 				"LC" => "Saint Lucia",
 				"MF" => "Saint Martin",
@@ -360,7 +365,7 @@ class FormUtilities
 				"SU" => "Union of Soviet Socialist Republics",
 				"GB" => "United Kingdom",
 				"VA" => "Vatican City",
-				"AX" => "Åland Islands",
+				"AX" => "Ã…land Islands",
 			),
 			"Oceania" => array(
 				"AS" => "American Samoa",
@@ -398,7 +403,7 @@ class FormUtilities
 				"VU" => "Vanuatu",
 				"WF" => "Wallis and Futuna",
 			),
-		);			
+		);
 	}
 
 	public static function GetCountries()
@@ -645,7 +650,7 @@ class FormUtilities
 		  "ZW" => "Zimbabwe"
 		);
 	}
-	
+
 	public static function GetStateName($val)
 	{
 		if ($val)
@@ -656,8 +661,8 @@ class FormUtilities
 			}
 		}
 		return "";
-	}		
-	
+	}
+
 	public static function GetStates($include_blank=false)
 	{
 		$states = array(
@@ -715,10 +720,10 @@ class FormUtilities
 			"WY" => "Wyoming"
 		);
 		if ($include_blank) $states = array_merge(array("" => " "), $states);
-		
+
 		return $states;
 	}
-	
+
 	public static function GetStatesBackwards()
 	{
 		$states = self::GetStates();
@@ -729,7 +734,7 @@ class FormUtilities
 		}
 		return $states_bw;
 	}
-	
+
 	public static function GetStates_International()
 	{
 		return array(
@@ -786,9 +791,9 @@ class FormUtilities
 			"WV" => "West Virginia",
 			"WI" => "Wisconsin",
 			"WY" => "Wyoming"
-		);			
+		);
 	}
-	
+
 	public static function GetCanadianProvinces()
 	{
 		return array(
@@ -804,10 +809,10 @@ class FormUtilities
 			"PE" => "Prince Edward Island",
 			"QC" => "Quebec",
 			"SK" => "Saskatchewan",
-			"YT" => "Yukon"				
-		);			
+			"YT" => "Yukon"
+		);
 	}
-	
+
 	public static function GetStates_PlusCanada($include_blank=false)
 	{
 		$states = array(
@@ -862,7 +867,7 @@ class FormUtilities
 			"WA" => "Washington",
 			"WV" => "West Virginia",
 			"WI" => "Wisconsin",
-			"WY" => "Wyoming",				
+			"WY" => "Wyoming",
 			"AB" => "Alberta",
 			"BC" => "British Columbia",
 			"MB" => "Manitoba",
@@ -875,18 +880,18 @@ class FormUtilities
 			"PE" => "Prince Edward Island",
 			"QC" => "Quebec",
 			"SK" => "Saskatchewan",
-			"YT" => "Yukon"				
-		);			
+			"YT" => "Yukon"
+		);
 		if ($include_blank) $states = array_merge(array("" => " "), $states);
-		
+
 		return $states;
 	}
-	
+
 	public static function generateCode($word)
 	{
 		$len = strlen($word);
 		$chars = array("@", "#", "*", "$", "!");
-		
+
 		$num1 = intval(substr(md5($word), 5, 1));
 		$num1 = $num1 ? $num1 : 3;
 		$num2 = intval(substr(md5($word), 8, 1));
@@ -897,27 +902,27 @@ class FormUtilities
 		$word = substr($word, 0, $num1).strtoupper(substr($word, $num1, 1)).substr($word, $num1+1);
 		$word = substr($word, 0, $num2).($chars[$num2 % count($chars)]).substr($word, $num2+1);
 		$word = substr($word, 0, $num3).strtoupper(substr($word, $num3, 1)).substr($word, $num3+1);
-		
+
 		while (preg_match("/^\d/", $word)) $word = substr($word, 1);
 
 		$i = 0;
-		$word = preg_replace_callback("/([a-zA-Z])/", 
-			function($matches) use (&$word,&$i){ 
+		$word = preg_replace_callback("/([a-zA-Z])/",
+			function($matches) use (&$word,&$i){
 				chr(ord($matches[0]) + ((strlen($word) * ($i++)) % 20));
 			}, $word
 		);
 		$word = preg_replace("/^\W/", chr(preg_match_all("/\d/", $word, $matches) + 97), $word);
-		
+
 		$word = substr($word, 0, 14);
 		return ($word);
 	}
-	
+
 	public static function referSecurityCheck()
 	{
 		$refer = $_SERVER['HTTP_REFERER'];
 		$referrer = preg_replace('/((?:https?:\/\/)?[^\/]+).*/','$1',$refer);
 		foreach(self::Config()->get('allowed_referrers') as $allowed_referrer)
-		{		
+		{
 			if (strtolower($referrer) == strtolower($allowed_referrer))
 			{
 				header('Access-Control-Allow-Origin: '.$allowed_referrer);
@@ -933,23 +938,23 @@ class FormUtilities
 		$s = $cs[count($cs)-2].".".$cs[count($cs)-1];
 		return ($r == $s);
 	}
-	
+
 	public static function validateAjaxCode()
 	{
 		list($code1, $code2) = explode("|", trim($_REQUEST['nospam_codes']));
 		unset($_REQUEST['nospam_codes'], $_POST['nospam_codes']);
-		
+
 		list($x, $time) = explode(".", $code1);
-		
+
 		$time = substr($time, 0, strlen($time)-3);
 
 		$diff = time() - floatval($time);
-	
+
 		if (self::referSecurityCheck() && $diff < (60 * 60 * 8))	// 8 hour timeout
 		{
 			return (self::generateCode($code1) == $code2);
 		}
 		return false;
 	}
-	
+
 }

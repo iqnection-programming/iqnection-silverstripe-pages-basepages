@@ -8,12 +8,12 @@ use SilverStripe\Core;
 use IQnection\FormUtilities\FormUtilities;
 
 class FormPageController extends \PageController
-{	
+{
 	private static $allowed_actions = array(
 		"RenderForm",
 		"thanks"
 	);
-	
+
 	public function PageCSS()
 	{
 		return [
@@ -22,7 +22,7 @@ class FormPageController extends \PageController
 			"css/form.scss"
 		];
 	}
-	
+
 	public function PageJS()
 	{
 		return [
@@ -31,7 +31,7 @@ class FormPageController extends \PageController
 			"javascript/additional-methods.js"
 		];
 	}
-	
+
 	public function CustomJS()
 	{
 		$FormConfig = $this->FormConfig();
@@ -39,19 +39,19 @@ class FormPageController extends \PageController
 (function($){
 	\"use strict\";
 	$(document).ready(function(){
-		
+
 		$(\"#Form_RenderForm\").validate({\n";
 		if ($FormConfig['useNospam'])
 		{
 			$JS .= "useNospam: true,\n";
-		}		
+		}
 		if ($this->GAT_Activate)
 		{
 			$JS .= "trackFormSubmit:{category:\"".htmlspecialchars($this->GAT_Category)."\",action:\"submit\",label:\"".htmlspecialchars($this->GAT_Label)."\",value:1},\n";
-		}		
+		}
 		$JS .= "
 		});\n";
-		
+
 		if ($this->hasDateField())
 		{
 			$JS .= "
@@ -60,13 +60,13 @@ class FormPageController extends \PageController
 		});
 ";
 		}
-		
+
 		$JS .= "
 	});
 }(jQuery));\n";
 		return $JS;
 	}
-	
+
 	public function hasDateField()
 	{
 		if ($form_fields = $this->FormFields())
@@ -81,12 +81,12 @@ class FormPageController extends \PageController
 		}
 		return false;
 	}
-	
+
 	public function FormFields()
 	{
 		return array();
 	}
-	
+
 	public function FormConfig()
 	{
 		/*
@@ -99,8 +99,8 @@ class FormPageController extends \PageController
 		*/
 		return array();
 	}
-	
-	public function RenderForm() 
+
+	public function RenderForm()
 	{
 		if($form_fields = $this->FormFields())
 		{
@@ -155,7 +155,7 @@ class FormPageController extends \PageController
 					{
 						$field->setConfig($key,$value);
 					}
-				}	
+				}
 				if ( (isset($data['Required'])) && ($data['Required']) )
 				{
 					$validator->addRequiredField($FieldName);
@@ -180,7 +180,7 @@ class FormPageController extends \PageController
 				{
 					$fields->push($field);
 				}
-				
+
 				// File field
 				if ( ($data['FieldType'] == 'FileField') && (isset($data['AllowedExtensions'])) && (is_array($data['AllowedExtensions'])) )
 				{
@@ -188,7 +188,7 @@ class FormPageController extends \PageController
 					$field->setDescription('('.implode(', ',$data['AllowedExtensions']).')');
 				}
 			}
-			
+
 			// update the class on the field groups to properly display the grouped fields horizontally
 			foreach($fieldGroups as $fieldGroup)
 			{
@@ -219,11 +219,11 @@ class FormPageController extends \PageController
 			$this->extend('updateForm',$form);
 			return $form;
 		}
-		
+
 		return false;
 	}
-	
-	public function SubmitForm($data, $form) 
+
+	public function SubmitForm($data, $form)
 	{
 		$form_config = $this->FormConfig();
 		// magical spam protection
@@ -231,50 +231,52 @@ class FormPageController extends \PageController
 		{
 			$this->request->getSession()->set("FormInfo.Form_RenderForm.data", $data);
 			$this->request->getSession()->set("FormError", "Error, please enable javascript to use this form.");
-			return $this->redirectBack();	
+			return $this->redirectBack();
 		}
-		
+
 		// if honeypot is used, redirect back
 		if ( (isset($form_config['HoneyPot'])) && ($honeyPotField = $form_config['HoneyPot']) && ($data[$honeyPotField]) )
 		{
 			$this->request->getSession()->set("FormInfo.Form_RenderForm.data", $data);
 			$this->request->getSession()->set("FormError", "Error, your submission has been detected as spam.");
-			return $this->redirectBack();	
+			return $this->redirectBack();
 		}
-		
+
 		$submission_class = $this->getSubmissionClass();
 		$submission = $submission_class::create();
 		$form->saveInto($submission);
 		$submission->PageID = $this->ID;
 		$submission->write();
-					
+
 		// send email to this address if specified
 		if ( ( (isset($form_config['sendToAll'])) && ($form_config['sendToAll']) ) || ($this->SendToAll) )
 		{
-			$EmailFormTo = $this->FormRecipients()->toArray();	
+			$EmailFormTo = $this->FormRecipients()->toArray();
 		}
 		elseif ($recipTitle = $data['Recipient'])
 		{
 			$EmailFormTo = $this->FormRecipients()->filter(array("Title" => $recipTitle));
 		}
-		
+
 		// Email to site Admin
 		if( $EmailFormTo )
 		{
+            $emailSubject = $this->owner->getRecipientEmailSubject($data);
+            $this->extend('updateRecipientEmailSubject', $emailSubject, $data);
 			foreach($EmailFormTo as $email)
 			{
-				FormUtilities::SendSSEmail($this,$email->Email,$data,$submission,$this->FromEmail);
+				FormUtilities::SendSSEmail($this,$email->Email,$data,$submission,$this->FromEmail, $emailSubject);
 			}
 		}
-		
+
 		if(($as = $this->AutoResponderSubject) && ($ab = $this->AutoResponder))
 		{
 			FormUtilities::SendAutoResponder($as,$this->dbObject('AutoResponder')->forTemplate(),$data['Email'],$this->AutoResponderFromEmail,$submission,$data,$this->AutoResponderIncludeSubmission);
 		}
-		
+
 		$this->onAfterSubmit($submission);
 		$this->extend('onAfterSubmit',$submission);
-		
+
 		if ( (isset($form_config['PageAfterSubmit'])) && ($form_config['PageAfterSubmit']) )
 		{
 			$page = $this->ClassName."_".$form_config['PageAfterSubmit'];
@@ -282,12 +284,17 @@ class FormPageController extends \PageController
 		}
 		return $this->redirect($this->Link('thanks'));
 	}
-	
+
+    public function getRecipientEmailSubject($data)
+    {
+        return $this->Title.' Form Submission';
+    }
+
 	public function onAfterSubmit($submission=null)
 	{
 		return $submission;
 	}
-	
+
 	public function RecipientFieldConfig()
 	{
 		$recips = $this->FindRecipients();
@@ -317,7 +324,7 @@ class FormPageController extends \PageController
 		);
 		return $config;
 	}
-	
+
 	public function FindRecipients()
 	{
 		$recips = $this->FormRecipients()->toArray();
@@ -328,5 +335,5 @@ class FormPageController extends \PageController
 		}
 		return $output;
 	}
-	
+
 }
