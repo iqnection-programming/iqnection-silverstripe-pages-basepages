@@ -1,0 +1,23 @@
+
+.ss-loading-screen:before					{ content:url('/_resources/vendor/iqnection-pages/basepages/client/images/branding/cms_loading.png') !important; }
+.cms-sitename .cms-sitename__link			{ content:url('/_resources/vendor/iqnection-pages/basepages/client/images/branding/cms_logo.png') !important; }
+
+.field.optionset ul.vertical li 			{ display:block; float:none; }
+
+.tree-holder.jstree-apple li.notinmenu > a,
+.tree-holder.jstree-apple li.notinmenu > a:link,
+.cms-tree.jstree-apple li.notinmenu > a,
+.cms-tree.jstree-apple li.notinmenu > a:link	{ color:#56aae3; }
+
+.cms-tree.jstree-apple li[data-pagetype^="SilverStripe\\ErrorPage"]	{ display:none; }
+
+/*-- GridField Style Updates --*/
+table.grid-field__table								{ margin-bottom:30px; }
+table.grid-field__table tr.grid-field__title-row		{ background:#efefef; border-top:1px solid #ddd; }
+table.grid-field__table tr.sortable-header			{ background:#ddd; border-bottom:1px solid #fff; }
+table.grid-field__table tr.sortable-header > th		{ border-left:1px solid #fff; }
+table.grid-field__table .sortablerowsheading			{ background:#ddd; }
+table.grid-field__table .bottom-all					{ background:#ddd; }
+
+
+

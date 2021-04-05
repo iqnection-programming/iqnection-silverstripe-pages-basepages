@@ -1,24 +1,25 @@
 <?php
 
-namespace IQnection\BasePage;
+namespace IQnection\Base;
 
-use SilverStripe\Core;
-use SilverStripe\View;
+use SilverStripe\Core\Extension;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\View\Requirements;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ThemeResourceLoader;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Control\Director;
-	
-class PageControllerExtension extends Core\Extension 
+
+class PageControllerExtension extends Extension
 {
 	private static $base_theme_name = 'mysite';
-	
+
 	private static $allowed_actions = array(
-		"thanks",
-		'RenderTemplates'			
+		'RenderTemplates'
 	);
-	
-	public function onBeforeInit()
+
+	public function onAfterInit()
 	{
-		View\Requirements::javascript("iqnection-pages/basepages:javascript/jquery-1.9.1.min.js");
 		$mobileNav = [];
 		foreach($this->owner->Menu(1)->Exclude('HideMobileMenu',1) as $page)
 		{
@@ -27,49 +28,20 @@ class PageControllerExtension extends Core\Extension
 				'title' => $page->MenuTitle,
 				'link' => $page->AbsoluteLink(),
 				'level' => 1,
-				'children' => $this->MobileNavChildren($page, 2)
+				'children' => ($page->hasMethod('MobileNavChildren')) ? $page->MobileNavChildren() : []
 			];
 		}
 		$this->owner->extend('updateMobileNav', $mobileNav);
-		View\Requirements::customScript("window._mobileMenuLinks = ".json_encode($mobileNav).";");
-	}
-	
-	public function MobileNavChildren($page, $level = 2)
-	{
-		$children = [];
-		foreach($page->Children()->Exclude('HideMobileMenu',1) as $child)
-		{
-			$children[] = [
-				'id' => $child->ID,
-				'title' => $child->MenuTitle,
-				'link' => $child->AbsoluteLink(),
-				'level' => $level,
-				'children' => $this->MobileNavChildren($child, $level+1)
-			];
-		}
-		$this->owner->extend('updateMobileNavChildren', $children);
-		return $children;			
-	}
-		
-	public function onAfterInit() 
-	{
-		$themeName = $this->owner->Config()->get('base_theme_name');;
-		$dir = View\ThemeResourceLoader::inst()->getPath($themeName);
+		Requirements::customScript("window._mobileMenuLinks = ".json_encode($mobileNav).";");
 
-		View\Requirements::set_combined_files_folder('combined');
-		
-		if ($fontsCss = View\ThemeResourceLoader::inst()->findThemedCSS('fonts',array($themeName)))
-		{
-			View\Requirements::css($fontsCss);
-		}
-		
+		$themeName = $this->owner->Config()->get('base_theme_name');;
+		$dir = ThemeResourceLoader::inst()->getPath($themeName);
+
+		Requirements::set_combined_files_folder('combined');
+
+
 		$BaseCSS = array(
-			"reset",
-			"fontawesome/font-awesome.min",
-			"form",
-			"layout",
-			"responsive",
-			"typography"
+		    'style'
 		);
 		$baseCssFiles = array();
 		foreach($BaseCSS as $cssFile)
@@ -78,18 +50,22 @@ class PageControllerExtension extends Core\Extension
 			// searching this way will favor a .scss file over .css
 			foreach(['.css','.scss'] as $ext)
 			{
-				if ($CssFilePath = View\ThemeResourceLoader::inst()->findThemedResource($cssFile.$ext,array($themeName)))
+				if ($CssFilePath = ThemeResourceLoader::inst()->findThemedResource($cssFile.$ext,array($themeName)))
 				{
 					$baseCssFiles[$cssFile] = $CssFilePath;
 				}
-				elseif ($CssFilePath = View\ThemeResourceLoader::inst()->findThemedResource('css/'.$cssFile.$ext,array($themeName)))
+				elseif ($CssFilePath = ThemeResourceLoader::inst()->findThemedResource('css/'.$cssFile.$ext,array($themeName)))
 				{
 					$baseCssFiles[$cssFile] = $CssFilePath;
 				}
+                elseif ($CssFilePath = ThemeResourceLoader::inst()->findThemedResource('client/css/'.$cssFile.$ext,array($themeName)))
+                {
+                    $baseCssFiles[$cssFile] = $CssFilePath;
+                }
 			}
 		}
-		View\Requirements::combine_files('base.css', $baseCssFiles);
-		
+		Requirements::combine_files('base.css', $baseCssFiles);
+
 		$BaseJS = array(
 			"responsive",
 			"scripts",
@@ -98,51 +74,51 @@ class PageControllerExtension extends Core\Extension
 		$baseJsFiles = array();
 		foreach($BaseJS as $jsFile)
 		{
-			if ($JsFilePath = View\ThemeResourceLoader::inst()->findThemedJavascript($jsFile,array($themeName)))
+			if ($JsFilePath = ThemeResourceLoader::inst()->findThemedJavascript($jsFile,array($themeName)))
 			{
 				$baseJsFiles[] = $JsFilePath;
 			}
 		}
-		View\Requirements::combine_files('base.js', $baseJsFiles);	
+		Requirements::combine_files('base.js', $baseJsFiles);
 
 		if ( ($parsedCssFiles = array_diff($this->owner->ParsedPageCSS(),$baseCssFiles)) && (count($parsedCssFiles)) )
-		{ 
-			View\Requirements::combine_files($this->owner->CombinedCssFileName().'.css', $parsedCssFiles);
+		{
+			Requirements::combine_files($this->owner->CombinedCssFileName().'.css', $parsedCssFiles);
 		}
 		if ( ($parsedJsFiles = array_diff($this->owner->ParsedPageJS(),$baseJsFiles)) && (count($parsedJsFiles)) )
 		{
-			View\Requirements::combine_files($this->owner->CombinedJsFileName().'.js', $parsedJsFiles);
+			Requirements::combine_files($this->owner->CombinedJsFileName().'.js', $parsedJsFiles);
 		}
-		if ($customJs = $this->owner->CustomJS()) 
+		if ($customJs = $this->owner->CustomJS())
 		{
-			View\Requirements::customScript($customJs); 
+			Requirements::customScript($customJs);
 		}
 	}
-	
+
 	public function CombinedCssFileName()
 	{
-		$fileName = Core\ClassInfo::shortName($this->owner->dataRecord->getClassName());
+		$fileName = ClassInfo::shortName($this->owner->getClassName());
 		$fileName = $this->owner->extend('updateCombinedCssFileName',$fileName);
 		return (is_array($fileName)) ? end($fileName) : $fileName;
 	}
-	
+
 	public function updateCombinedCssFileName($fileName)
 	{
 		return $fileName;
 	}
-	
+
 	public function CombinedJsFileName()
 	{
-		$fileName = Core\ClassInfo::shortName($this->owner->dataRecord->getClassName());
+		$fileName = ClassInfo::shortName($this->owner->getClassName());
 		$fileName = $this->owner->extend('updateCombinedJsFileName',$fileName);
 		return (is_array($fileName)) ? end($fileName) : $fileName;
 	}
-	
+
 	public function updateCombinedJsFileName($fileName)
 	{
 		return $fileName;
 	}
-	
+
 	public function ParsedPageCSS()
 	{
 		$CssFiles = array();
@@ -157,7 +133,7 @@ class PageControllerExtension extends Core\Extension
 			// searching this way will favor a .scss file over .css
 			foreach(['.scss','.css'] as $ext)
 			{
-				if ( (!$hasScss) && ($ThemeResourcePath = View\ThemeResourceLoader::inst()->findThemedResource($filePath.$ext,View\SSViewer::get_themes())) )
+				if ( (!$hasScss) && ($ThemeResourcePath = ThemeResourceLoader::inst()->findThemedResource($filePath.$ext, SSViewer::get_themes())) )
 				{
 					if ($ext == '.scss') { $hasScss = true; }
 					$CssFiles[$filePath] = $ThemeResourcePath;
@@ -166,7 +142,7 @@ class PageControllerExtension extends Core\Extension
 		}
 		return $CssFiles;
 	}
-	
+
 	public function ParsedPageJS()
 	{
 		$JsFiles = array();
@@ -180,20 +156,21 @@ class PageControllerExtension extends Core\Extension
 			{
 				$filePath = "/".$filePath;
 			}
-			if ($ThemeResourcePath = View\ThemeResourceLoader::inst()->findThemedResource($filePath,View\SSViewer::get_themes()))
+			if ($ThemeResourcePath = ThemeResourceLoader::inst()->findThemedResource($filePath, SSViewer::get_themes()))
 			{
 				$JsFiles[$ThemeResourcePath] = $ThemeResourcePath;
 			}
 		}
 		return $JsFiles;
 	}
-	
+
 	public function PageTypeCSS()
 	{
 		$CSSFiles = array();
 		// Find a page type specific CSS file
-		$PageType = Core\ClassInfo::shortName($this->owner->dataRecord->getClassName());
-		$CSSFiles["/css/pages/".$PageType] = "/css/pages/".$PageType;
+		$PageType = ClassInfo::shortName($this->owner->dataRecord->getClassName());
+        $CSSFiles["/css/pages/".$PageType] = "/css/pages/".$PageType;
+		$CSSFiles["/client/css/pages/".$PageType] = "/client/css/pages/".$PageType;
 		$CSSFiles["/css/pages/".$PageType."_extension"] = "/css/pages/".$PageType."_extension";
 		$extends = $this->owner->extend('updatePageCSS',$CSSFiles);
 		foreach($extends as $updates)
@@ -202,20 +179,21 @@ class PageControllerExtension extends Core\Extension
 				$CSSFiles,
 				$updates
 			);
-		}	
+		}
 		return $CSSFiles;
 	}
-	
+
 	public function PageCSS()
-	{			
+	{
 		return [];
 	}
-	
+
 	public function PageTypeJS()
 	{
 		$JSFiles = array();
-		$PageType = Core\ClassInfo::shortName($this->owner->dataRecord->getClassName());
-		$JSFiles["/javascript/pages/".$PageType.".js"] = "/javascript/pages/".$PageType.".js";
+		$PageType = ClassInfo::shortName($this->owner->dataRecord->getClassName());
+        $JSFiles["/javascript/pages/".$PageType.".js"] = "/javascript/pages/".$PageType.".js";
+		$JSFiles["/client/javascript/pages/".$PageType.".js"] = "/client/javascript/pages/".$PageType.".js";
 		$JSFiles["/javascript/pages/".$PageType."_extension.js"] = "/javascript/pages/".$PageType."_extension.js";
 		$extends = $this->owner->extend('updatePageJS',$JSFiles);
 		foreach($extends as $updates)
@@ -227,12 +205,12 @@ class PageControllerExtension extends Core\Extension
 		}
 		return $JSFiles;
 	}
-		
+
 	public function PageJS()
 	{
 		return [];
 	}
-	
+
 	public function CustomJS()
 	{
 		$js = null;
@@ -242,12 +220,12 @@ class PageControllerExtension extends Core\Extension
 		}
 		return $js;
 	}
-	
+
 	public function CopyrightYear()
 	{
 		return date("Y");
 	}
-	
+
 	public function CopyrightName()
 	{
 		$arr_path = explode(".", $_SERVER['HTTP_HOST']);
@@ -255,20 +233,7 @@ class PageControllerExtension extends Core\Extension
 		$domain = array_pop($arr_path).'.'.$suffix;
 		return $domain;
 	}
-	
-	public function ColAmount(){
-		$i = 0;
-		if($this->owner->LeftColumn)$i++;
-		if($this->owner->CenterColumn)$i++;
-		if($this->owner->RightColumn)$i++;
-		return $i;
-	}
-	
-	public function thanks()
-	{
-		return $this->owner->Customise(array());
-	}
-		
+
 	public function generateTemplateCache()
 	{
 		// make sure the cache directory exists
@@ -288,16 +253,16 @@ class PageControllerExtension extends Core\Extension
 		SiteConfig::current_site_config()->generateTemplateCache();
 		return json_encode($cache);
 	}
-	
+
 	public function updateGeneratedTemplateCache($cache) { return $cache; }
-	
+
 	public function RenderTemplates()
 	{
 		header('Content-type: application/json');
 		print $this->generateTemplateCache();
 		die();
 	}
-	
-	
-	
+
+
+
 }

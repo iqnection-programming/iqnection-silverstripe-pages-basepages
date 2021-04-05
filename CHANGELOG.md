@@ -1,6 +1,10 @@
 ## Package: iqnection-silverstripe-3-pages-basepages
 # Change Log
 
+## [3.0.0]
+- Removed page types no longer needed
+- general improvements and updates
+
 ## [2.2.8]
 - Added functionality for new mobile nav in IQnection mysite theme, provides JSON object to page for JavaScript
 

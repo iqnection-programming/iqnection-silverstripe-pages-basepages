@@ -1,9 +1,10 @@
 <?php
 
-error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+use SilverStripe\Forms\HTMLEditor\HTMLEditorConfig;
+use SilverStripe\Admin\CMSMenu;
 
 /** Tiny MCE configurations **/
-$editor = \SilverStripe\Forms\HTMLEditor\HTMLEditorConfig::get('cms');
+$editor = HTMLEditorConfig::get('cms');
 
 $editor->enablePlugins([
 	'hr',
@@ -22,10 +23,6 @@ $editor->addButtonsToLine(1,[
 	'hr'
 ]);
 
-//$editor->setOption('style_formats', [
-////	['title' => 'clear', 'styles' => ['clear' => 'both']]
-//	['title' => 'cleartext', 'classes' => ".clear"]
-//]);
 $editor->setOption('style_formats_merge',true);
 $editor->insertButtonsBefore('code','charmap');
 $editor->insertButtonsBefore('formatselect','styleselect');
@@ -40,5 +37,5 @@ $editor->setOption('extended_valid_elements',implode(',',$extended_valid_element
 
 // https://www.tinymce.com/docs/plugins/importcss/
 
-SilverStripe\Admin\CMSMenu::remove_menu_item('SilverStripe-CampaignAdmin-CampaignAdmin');
+CMSMenu::remove_menu_item('SilverStripe-CampaignAdmin-CampaignAdmin');
 

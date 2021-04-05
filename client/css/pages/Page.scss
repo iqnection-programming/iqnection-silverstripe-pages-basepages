@@ -1,0 +1,12 @@
+.sidebar-layout					{ display:flex; justify-content:space-between; align-items:stretch;
+	> *							{ display:block; width:100%; }
+	& &--left		   			{ max-width:70%; }
+	& &--right					{ max-width:27%; padding:0 0 0 2%; border-left:2px solid #ccc; }
+}
+
+@media(max-width:800px){
+	.sidebar-layout				{ flex-direction:column;
+		& &--left				{ max-width:none; }
+		& &--right				{ max-width:none; padding:20px 0 0; margin:20px 0 0; border-left:none; border-top:2px solid #ccc; }
+	}
+}

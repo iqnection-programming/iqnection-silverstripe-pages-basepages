@@ -1,38 +1,30 @@
 {
 	"name": "iqnection-pages/basepages",
-	"description": "Base group of SilverStripe PageTypes",
+	"description": "Base group of SilverStripe Page Types",
 	"type": "silverstripe-vendormodule",
 	"keywords": ["iqnection","pages"],
 	"license": "BSD-3-Clause",
 	"authors": [
 		{
 			"name": "IQnection",
-            "homepage": "http://www.iqnection.com"
+            "homepage": "https://www.iqnection.com"
 		}
 	],
 	"require": {
-		"silverstripe/framework": "^4.1",
+		"silverstripe/framework": "^4.3",
 		"guzzlehttp/guzzle":"*",
-		"undefinedoffset/sortablegridfield": "*",
-		"iqnection-themes/mysite" : "*",
-		"axllent/silverstripe-scss": "^1.0"
+		"axllent/silverstripe-scss": "^1.0",
+        "jinjie/codeeditorfield": "*"
 	},
 	"extra": {
 		"expose": [
-			"css",
-			"images",
-			"javascript"
+			"client"
 		]
 	},
 	"autoload": {
 		"psr-4": {
-			"IQnection\\BasePage\\": "app/src/",
-			"IQnection\\BlogPage\\": "app/src/",
-			"IQnection\\ContactPage\\": "app/src/",
-			"IQnection\\FormPage\\": "app/src/",
-			"IQnection\\FormUtilities\\": "app/src/",
-			"IQnection\\HeadingPage\\": "app/src/",
-			"IQnection\\MemberLoginForm\\": "app/src/"
+			"IQnection\\Base\\": "src/Base/",
+			"IQnection\\FormUtilities\\": "src/FormUtilities/"
 		}
 	}
 }
