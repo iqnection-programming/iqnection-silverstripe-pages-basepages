@@ -12,8 +12,8 @@
 	],
 	"require": {
 		"silverstripe/framework": "^4.3",
-		"guzzlehttp/guzzle":"*",
 		"axllent/silverstripe-scss": "^1.0",
+        "axllent/silverstripe-minifier": "^1.0",
         "jinjie/codeeditorfield": "*"
 	},
 	"extra": {
