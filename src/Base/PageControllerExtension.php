@@ -66,6 +66,10 @@ class PageControllerExtension extends Extension
 		}
 		Requirements::combine_files('base.css', $baseCssFiles);
 
+        if ($jQueryFilePath = ThemeResourceLoader::inst()->findThemedJavascript('jquery-1.9.1.min.js',array($themeName)))
+        {
+            Requirements::javascript($jQueryFilePath);
+        }
 		$BaseJS = array(
 			"responsive",
 			"scripts",
@@ -219,11 +223,6 @@ class PageControllerExtension extends Extension
 			$js .= $moreJs;
 		}
 		return $js;
-	}
-
-	public function CopyrightYear()
-	{
-		return date("Y");
 	}
 
 	public function CopyrightName()
